@@ -5,20 +5,20 @@
 
 ## Project information:
 
-- **Team**: XXX-Y
-- **Client**: ......
-- **Subject**: ......
+- **Team**: KRE-C
+- **Client**: Kathleen Renders
+- **Subject**: Feest op tafel
 
 ## Team members:
 
 | Role          | Name | Email | Github Username |
 |:--------------|:-----|:------|:----------------|
-| Scrum Master  | .... | ....  | ....            |
-| Document lead | .... | ....  | ....            |
-| Member        | .... | ....  | ....            |
-| Member        | .... | ....  | ....            |
-| Member        | .... | ....  | ....            |
-| Member        | .... | ....  | ....            |
+| Scrum Master  | Wesley Breemans | r1038608@student.thomasmore.be | WesleyBreemans |
+| Member        | Ferre Kerkhofs | r0997833@student.thomasmore.be  | HenkieFK |
+| Member        | Eddy Leucea | r1037354@student.thomasmore.be  | EddyLeucea |
+| Member        | Tijs cluyts | r0983582@student.thomasmore.be  | tijscluyts |
+| Member        | Luís Mourao Prazelos | r1037221@student.thomasmore.be  | LuisPrazelos |
+
 
 ## Hosting:
 
