@@ -36,6 +36,7 @@ class DatabaseSeeder extends Seeder
             NotificationPreferenceSeeder::class,
             DessertSeeder::class,
             SurplusSeeder::class,
+            PriceEvolutionSeeder::class,
         ]);
     }
 }
