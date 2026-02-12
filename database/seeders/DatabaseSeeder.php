@@ -36,6 +36,8 @@ class DatabaseSeeder extends Seeder
             NotificationPreferenceSeeder::class,
             DessertSeeder::class,
             SurplusSeeder::class,
+            WorkshopSeeder::class,
+            WorkshopUserSeeder::class,
         ]);
     }
 }

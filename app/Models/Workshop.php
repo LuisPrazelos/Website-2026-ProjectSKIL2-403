@@ -12,14 +12,15 @@ class Workshop extends Model
     // Omdat de primary key 'workshopId' heet in plaats van 'id'
     protected $primaryKey = 'workshopId';
 
+    // English field names (translated from Dutch)
     protected $fillable = [
-        'naam',
-        'datum',
-        'prijsVolwassenen',
-        'prijsKinderen',
-        'beschrijving',
-        'locatie',
-        'tijdsduur',
-        'maxDeelnemers',
+        'name',
+        'date',
+        'price_adults',
+        'price_children',
+        'description',
+        'location',
+        'duration_minutes',
+        'max_participants',
     ];
 }
