@@ -20,9 +20,13 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
         'email',
         'password',
+        'phone_number',
+        'role_id',
+        'is_active',
     ];
 
     /**
@@ -40,12 +44,18 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
-    protected function casts(): array
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+        'is_active' => 'boolean',
+    ];
+
+    /**
+     * Compatibility accessor: virtual `name` attribute (concatenates first and last name).
+     */
+    public function getNameAttribute(): string
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return trim(($this->first_name ?? '') . ' ' . ($this->last_name ?? ''));
     }
 
     /**
@@ -55,6 +65,7 @@ class User extends Authenticatable
     {
         return Str::of($this->name)
             ->explode(' ')
+            ->filter()
             ->take(2)
             ->map(fn ($word) => Str::substr($word, 0, 1))
             ->implode('');
