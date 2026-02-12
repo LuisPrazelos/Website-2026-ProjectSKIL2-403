@@ -29,15 +29,5 @@ class DatabaseSeeder extends Seeder
             'is_active' => true,
         ]);
 
-        // Seed notification categories/channels/preferences and domain data
-        $this->call([
-            NotificationChannelSeeder::class,
-            NotificationCategorySeeder::class,
-            NotificationPreferenceSeeder::class,
-            DessertSeeder::class,
-            SurplusSeeder::class,
-            WorkshopSeeder::class,
-            WorkshopUserSeeder::class,
-        ]);
     }
 }
