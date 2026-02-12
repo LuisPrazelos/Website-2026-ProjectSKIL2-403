@@ -12,11 +12,20 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
+            // Use English column names matching the Persona model
             $table->id();
-            $table->string('name');
+            // first_name and last_name are required
+            $table->string('first_name');
+            $table->string('last_name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            // phone number optional
+            $table->string('phone_number')->nullable();
+            // role_id as foreign key placeholder
+            $table->unsignedBigInteger('role_id')->default(1);
+            // is_active boolean with default true
+            $table->boolean('is_active')->default(true);
             $table->rememberToken();
             $table->timestamps();
         });
