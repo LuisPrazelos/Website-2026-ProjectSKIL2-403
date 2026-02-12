@@ -13,7 +13,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Ensure roles are seeded first so users can reference role_id = 1
+        $this->call([
+            RoleSeeder::class,
+        ]);
+
+        // Create a single test user
         User::factory()->create([
             'first_name' => 'Test',
             'last_name' => 'User',
@@ -22,6 +27,15 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password'),
             'role_id' => 1,
             'is_active' => true,
+        ]);
+
+        // Seed notification categories/channels/preferences and domain data
+        $this->call([
+            NotificationChannelSeeder::class,
+            NotificationCategorySeeder::class,
+            NotificationPreferenceSeeder::class,
+            DessertSeeder::class,
+            SurplusSeeder::class,
         ]);
     }
 }
