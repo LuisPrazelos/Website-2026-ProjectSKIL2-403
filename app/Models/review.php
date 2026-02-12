@@ -15,8 +15,8 @@ class review extends Model
 
     protected $fillable = [
         'score',
-        'inhoud',
-        'datum',
+        'content',
+        'date',
         'userId',
         'desssertId',
         'workshopId',

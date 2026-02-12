@@ -22,8 +22,8 @@ class ReviewFactory extends Factory
     {
         return [
             'score' => fake()->numberBetween(1, 10),
-            'inhoud' => fake()->paragraph(),
-            'datum' => fake()->date(),
+            'content' => fake()->paragraph(),
+            'date' => fake()->date(),
             'userId' => User::factory(),
             'desssertId' => fake()->optional()->numberBetween(1, 100),
             'workshopId' => fake()->optional()->numberBetween(1, 100),
