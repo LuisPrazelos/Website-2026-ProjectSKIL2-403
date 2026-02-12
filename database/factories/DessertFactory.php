@@ -28,7 +28,13 @@ class DessertFactory extends Factory
             'name' => fake()->words(2, true),
             'price' => fake()->randomFloat(2, 0, 50),
             'description' => fake()->optional()->sentence(),
+            'preparation_method' => fake()->optional()->paragraph(),
+            'notes' => fake()->optional()->sentence(),
+            // image URL (optional) - you can store a path instead if you prefer
+            'image' => fake()->optional()->imageUrl(640, 480),
+            // portion size and measurement unit id (FK)
+            'portion_size' => fake()->randomFloat(2, 0.1, 10),
+            'measurement_unit_id' => 1,
         ];
     }
 }
-
