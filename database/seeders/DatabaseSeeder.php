@@ -13,7 +13,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Ensure roles are seeded first so users can reference role_id = 1
+        $this->call([
+            RoleSeeder::class,
+        ]);
+
+        // Create a single test user
         User::factory()->create([
             'first_name' => 'Test',
             'last_name' => 'User',

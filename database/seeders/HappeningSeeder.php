@@ -2,18 +2,18 @@
 
 namespace Database\Seeders;
 
-use App\Models\Order;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Happening;
 use Illuminate\Database\Seeder;
 
-class OrderSeeder extends Seeder
+class HappeningSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        Order::factory()->count(50)->create();
-
+        Happening::factory()
+            ->count(10)
+            ->create();
     }
 }
