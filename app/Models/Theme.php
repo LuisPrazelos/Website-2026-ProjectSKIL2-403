@@ -7,15 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class Theme extends Model
 {
-    /** @use HasFactory<\Database\Factories\ThemeFactory> */
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
     protected $fillable = [
         'name',
     ];
+
+    /**
+     * A theme can have many decorations
+     */
+    public function decorations()
+    {
+        return $this->hasMany(Decoration::class, 'themeId');
+    }
 }
