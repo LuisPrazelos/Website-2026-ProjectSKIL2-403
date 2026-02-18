@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Dessert;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\ShoppingCart;
