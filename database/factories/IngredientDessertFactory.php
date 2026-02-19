@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Dessert;
+use App\Models\Ingredient;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,8 +19,10 @@ class IngredientDessertFactory extends Factory
     public function definition(): array
     {
         return [
-            'dessertId' => Dessert::query()->inRandomOrder()->value('id') ?? Dessert::factory(),
-            'ingredientId' => fake()->numberBetween(1, 100), // Assuming ingredientId refers to an external or not-yet-created Ingredient model
+            // Pick an existing Dessert id or create one
+            'dessertId' => Dessert::query()->inRandomOrder()->value('id') ?? Dessert::factory()->create()->id,
+            // Pick an existing Ingredient id (uses ingredientId PK) or create one
+            'ingredientId' => Ingredient::query()->inRandomOrder()->value('ingredientId') ?? Ingredient::factory()->create()->ingredientId,
             'amount' => fake()->randomFloat(2, 1, 500),
         ];
     }
