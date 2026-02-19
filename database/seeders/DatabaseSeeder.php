@@ -29,5 +29,17 @@ class DatabaseSeeder extends Seeder
             'is_active' => true,
         ]);
 
+        $this->call([
+            ReviewSeeder::class,
+            AllergySeeder::class,
+            MeasurementUnitSeeder::class,
+            IngredientSeeder::class,
+            OrderSeeder::class,
+            DessertSeeder::class,
+            SurplusSeeder::class,
+            WorkshopSeeder::class,
+            ShoppinglistSeeder::class,
+            ShoppinglistItemSeeder::class,
+        ]);
     }
 }

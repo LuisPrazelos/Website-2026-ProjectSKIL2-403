@@ -2,22 +2,26 @@
 
 namespace Database\Factories;
 
-use App\Models\PriceEvolution;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\PriceEvolution>
+ */
 class PriceEvolutionFactory extends Factory
 {
-    protected $model = PriceEvolution::class;
-
-    public function definition()
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+    public function definition(): array
     {
         return [
-            // Assuming the ingredients table is populated by someone else, we pick a random ID.
-            'ingredientId' => $this->faker->numberBetween(1, 50),
-            'price' => $this->faker->randomFloat(2, 0.5, 100),
-            'amount' => $this->faker->randomFloat(2, 0.1, 10),
-            'date' => $this->faker->date(),
-            'source' => $this->faker->company,
+            'ingredientId' => fake()->numberBetween(1, 50),
+            'price' => fake()->randomFloat(2, 0.50, 20.00),
+            'amount' => fake()->randomFloat(2, 0.1, 5.0),
+            'date' => fake()->dateTimeBetween('-1 year', 'now'),
+            'source' => fake()->company(),
         ];
     }
 }

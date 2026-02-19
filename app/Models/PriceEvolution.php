@@ -9,12 +9,9 @@ class PriceEvolution extends Model
 {
     use HasFactory;
 
-    protected $table = 'price_evolutions';
     protected $primaryKey = 'priceEvolutionId';
-    public $timestamps = false;
 
     protected $fillable = [
-        'priceEvolutionId',
         'ingredientId',
         'price',
         'amount',
@@ -22,9 +19,9 @@ class PriceEvolution extends Model
         'source',
     ];
 
-    public function ingredient()
-    {
-        // Referencing the model by string to avoid direct dependency if the file is managed elsewhere
-        return $this->belongsTo('App\Models\Ingredient', 'ingredientId');
-    }
+    protected $casts = [
+        'date' => 'date',
+        'price' => 'float',
+        'amount' => 'float',
+    ];
 }

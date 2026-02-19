@@ -16,11 +16,11 @@ class Ingredient extends Model
 
     public function standardUnit()
     {
-        return $this->belongsTo(Meeteenheid::class, 'standardUnitId');
+        return $this->belongsTo(MeasurementUnit::class, 'standardUnitId');
     }
 
     public function ingredientAllergies()
     {
-        return $this->hasMany(IngredientAllergie::class, 'ingredientId');
+        return $this->hasMany(IngredientAllergy::class, 'ingredientId');
     }
 }

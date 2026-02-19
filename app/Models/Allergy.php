@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Allergie extends Model
+class Allergy extends Model
 {
     protected $primaryKey = 'allergyId';
 
@@ -14,7 +14,7 @@ class Allergie extends Model
 
     public function ingredientAllergies()
     {
-        return $this->hasMany(IngredientAllergie::class, 'allergyId');
+        return $this->hasMany(IngredientAllergy::class, 'allergyId');
     }
 
     public function workshopAllergies()
