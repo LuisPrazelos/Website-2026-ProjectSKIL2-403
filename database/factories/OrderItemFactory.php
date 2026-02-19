@@ -6,6 +6,7 @@ use App\Models\Dessert;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\ShoppingCart;
+use App\Models\Surplus;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class OrderItemFactory extends Factory
@@ -24,7 +25,7 @@ class OrderItemFactory extends Factory
                 : null,
 
             'leftoverId' => !$isDessert
-                ? Leftover::factory()
+                ? Surplus::factory()
                 : null,
 
             'amount' => $this->faker->numberBetween(1, 10),

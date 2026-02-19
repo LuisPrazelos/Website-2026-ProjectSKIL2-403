@@ -29,17 +29,42 @@ class DatabaseSeeder extends Seeder
             'is_active' => true,
         ]);
 
-        // Seed the rest of the data. ReviewSeeder must run after desserts and workshops
-        // so foreign keys in reviews (desssertId/workshopId) reference existing rows.
+        // Seed the rest of the data in an order that satisfies foreign key dependencies.
         $this->call([
-            AllergySeeder::class,
+            // Basic reference data
             MeasurementUnitSeeder::class,
+            StateSeeder::class,
+            ThemeSeeder::class,
+            AllergySeeder::class,
+            DecorationSeeder::class,
+
+            // Core domain data
             IngredientSeeder::class,
             DessertSeeder::class,
+            IngredientDessertSeeder::class,
+            PriceEvolutionSeeder::class,
+
+            // Workshops/happenings
             WorkshopSeeder::class,
+            HappeningSeeder::class,
+            WorkshopUserSeeder::class,
+
+            // Reviews depend on users + desserts/workshops
             ReviewSeeder::class,
+
+            // Orders and order items
             OrderSeeder::class,
+            OrderItemSeeder::class,
+
+            // Surpluses (depend on desserts)
             SurplusSeeder::class,
+
+            // Notifications (categories/channels before preferences)
+            NotificationCategorySeeder::class,
+            NotificationChannelSeeder::class,
+            NotificationPreferenceSeeder::class,
+
+            // Shopping lists and items (shopping lists before items)
             ShoppinglistSeeder::class,
             ShoppinglistItemSeeder::class,
         ]);

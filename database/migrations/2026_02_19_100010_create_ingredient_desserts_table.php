@@ -26,6 +26,7 @@ return new class extends Migration
 
             $table->index(['dessertId', 'ingredientId']);
             $table->index('ingredientId');
+            $table->timestamps();
         });
     }
 
@@ -34,4 +35,3 @@ return new class extends Migration
         Schema::dropIfExists('ingredient_desserts');
     }
 };
-

@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Happening;
-use App\Models\Status;
+use App\Models\State;
 use App\Models\Theme;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -27,7 +27,7 @@ class HappeningFactory extends Factory
             'price_per_person' => fake()->randomFloat(2, 25, 250),
             'user_id' => User::query()->inRandomOrder()->value('id') ?? User::factory(),
             'theme_id' => Theme::query()->inRandomOrder()->value('id'),
-            'status_id' => Status::query()->inRandomOrder()->value('id'),
+            'status_id' => State::query()->inRandomOrder()->value('id'),
         ];
     }
 }
