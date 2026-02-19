@@ -6,14 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Meeteenheid extends Model
 {
-    protected $primaryKey = 'meeteenheidId';
+    protected $primaryKey = 'measurementUnitId';
 
     protected $fillable = [
-        'eenheidNaam',
+        'unitName',
     ];
 
     public function ingredients()
     {
-        return $this->hasMany(Ingredient::class, 'standaardEenheidId');
+        return $this->hasMany(Ingredient::class, 'standardUnitId');
     }
 }

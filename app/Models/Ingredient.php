@@ -9,14 +9,14 @@ class Ingredient extends Model
     protected $primaryKey = 'ingredientId';
 
     protected $fillable = [
-        'ingredientNaam',
-        'standaardEenheidId',
-        'minimumAantal',
+        'ingredientName',
+        'standardUnitId',
+        'minimumAmount',
     ];
 
-    public function standaardEenheid()
+    public function standardUnit()
     {
-        return $this->belongsTo(StandaardEenheid::class, 'standaardEenheidId');
+        return $this->belongsTo(Meeteenheid::class, 'standardUnitId');
     }
 
     public function ingredientAllergies()

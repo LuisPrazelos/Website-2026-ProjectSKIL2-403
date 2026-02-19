@@ -17,14 +17,14 @@ class WorkshopFactory extends Factory
     public function definition(): array
     {
         return [
-            'naam' => fake()->sentence(3), // Een korte zin als naam
-            'datum' => fake()->dateTimeBetween('now', '+1 year'), // Datum in de toekomst
-            'prijsVolwassenen' => fake()->randomFloat(2, 10, 100), // Prijs tussen 10.00 en 100.00
-            'prijsKinderen' => fake()->randomFloat(2, 5, 50),      // Prijs tussen 5.00 en 50.00
-            'beschrijving' => fake()->paragraph(), // Een alinea tekst
-            'locatie' => fake()->address(), // Een nep adres
-            'tijdsduur' => fake()->numberBetween(60, 240), // Tussen 1 en 4 uur (in minuten)
-            'maxDeelnemers' => fake()->numberBetween(5, 30), // Tussen 5 en 30 deelnemers
+            'name' => fake()->sentence(3), // short title
+            'date' => fake()->dateTimeBetween('now', '+1 year'), // future date
+            'price_adults' => fake()->randomFloat(2, 10, 100), // price between 10.00 and 100.00
+            'price_children' => fake()->randomFloat(2, 5, 50),  // price between 5.00 and 50.00
+            'description' => fake()->paragraph(), // a paragraph
+            'location' => fake()->address(), // fake address
+            'duration_minutes' => fake()->numberBetween(60, 240), // between 1 and 4 hours (minutes)
+            'max_participants' => fake()->numberBetween(5, 30), // between 5 and 30 participants
         ];
     }
 }

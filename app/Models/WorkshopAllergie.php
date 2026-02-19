@@ -6,20 +6,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class WorkshopAllergie extends Model
 {
-    protected $primaryKey = 'workshopAllergieId';
+    protected $primaryKey = 'workshopAllergyId';
 
     protected $fillable = [
-        'allergieId',
-        'workshopid',
+        'allergyId',
+        'workshopId',
     ];
 
-    public function allergie()
+    public function allergy()
     {
-        return $this->belongsTo(Allergie::class, 'allergieId');
+        return $this->belongsTo(Allergie::class, 'allergyId');
     }
 
     public function workshop()
     {
-        return $this->belongsTo(Workshop::class, 'workshopid');
+        return $this->belongsTo(Workshop::class, 'workshopId');
     }
 }
