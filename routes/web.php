@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SurplusController;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
@@ -32,6 +33,9 @@ Route::middleware(['auth'])->group(function () {
             ),
         )
         ->name('two-factor.show');
+
+    // Route for the surplus shop (for buying)
+    Route::get('/surplus-shop', [SurplusController::class, 'shopIndex'])->name('userSurplusShop.index');
 });
 
 require __DIR__.'/auth.php';
