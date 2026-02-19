@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Dessert;
 use App\Models\Surplus;
 use Illuminate\Http\Request;
 
@@ -32,6 +33,8 @@ class SurplusController extends Controller
             ->orderBy('date', 'desc')
             ->paginate(10);
 
-        return view('surpluses.owner', compact('surpluses'));
+        $desserts = Dessert::orderBy('name')->get();
+
+        return view('surpluses.owner', compact('surpluses', 'desserts'));
     }
 }
