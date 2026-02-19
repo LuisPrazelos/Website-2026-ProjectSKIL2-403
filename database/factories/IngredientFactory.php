@@ -13,9 +13,9 @@ class IngredientFactory extends Factory
     public function definition(): array
     {
         return [
-            'ingredientNaam' => fake()->word(),
-            'standaardEenheidId' => Meeteenheid::factory(),
-            'minimumAantal' => fake()->randomFloat(2, 0, 100),
+            'ingredientName' => fake()->word(),
+            'standardUnitId' => Meeteenheid::factory(),
+            'minimumAmount' => fake()->randomFloat(2, 0, 100),
         ];
     }
 }

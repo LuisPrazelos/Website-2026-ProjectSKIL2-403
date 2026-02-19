@@ -12,7 +12,7 @@ class MeeteenheidFactory extends Factory
     public function definition(): array
     {
         return [
-            'eenheidNaam' => fake()->word(),
+            'unitName' => fake()->word(),
         ];
     }
 }

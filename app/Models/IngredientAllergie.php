@@ -6,12 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class IngredientAllergie extends Model
 {
-    protected $primaryKey = ['ingredientId', 'allergie'];
+    protected $primaryKey = ['ingredientId', 'allergyId'];
     public $incrementing = false;
 
     protected $fillable = [
         'ingredientId',
-        'allergie',
+        'allergyId',
     ];
 
     public function ingredient()
@@ -19,8 +19,8 @@ class IngredientAllergie extends Model
         return $this->belongsTo(Ingredient::class, 'ingredientId');
     }
 
-    public function allergie()
+    public function allergy()
     {
-        return $this->belongsTo(Allergie::class, 'allergie');
+        return $this->belongsTo(Allergie::class, 'allergyId');
     }
 }
