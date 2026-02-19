@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class IngredientAllergie extends Model
+class IngredientAllergy extends Model
 {
     protected $primaryKey = ['ingredientId', 'allergyId'];
     public $incrementing = false;
@@ -21,6 +21,6 @@ class IngredientAllergie extends Model
 
     public function allergy()
     {
-        return $this->belongsTo(Allergie::class, 'allergyId');
+        return $this->belongsTo(Allergy::class, 'allergyId');
     }
 }

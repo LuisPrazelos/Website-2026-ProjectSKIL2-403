@@ -2,12 +2,12 @@
 
 namespace Database\Factories;
 
-use App\Models\Meeteenheid;
+use App\Models\MeasurementUnit;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class MeeteenheidFactory extends Factory
+class MeasurementUnitFactory extends Factory
 {
-    protected $model = Meeteenheid::class;
+    protected $model = MeasurementUnit::class;
 
     public function definition(): array
     {

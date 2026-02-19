@@ -15,7 +15,7 @@ class WorkshopAllergie extends Model
 
     public function allergy()
     {
-        return $this->belongsTo(Allergie::class, 'allergyId');
+        return $this->belongsTo(Allergy::class, 'allergyId');
     }
 
     public function workshop()

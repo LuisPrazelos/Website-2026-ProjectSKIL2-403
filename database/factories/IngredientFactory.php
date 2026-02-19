@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Ingredient;
-use App\Models\Meeteenheid;
+use App\Models\MeasurementUnit;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class IngredientFactory extends Factory
@@ -14,7 +14,7 @@ class IngredientFactory extends Factory
     {
         return [
             'ingredientName' => fake()->word(),
-            'standardUnitId' => Meeteenheid::factory(),
+            'standardUnitId' => MeasurementUnit::factory(),
             'minimumAmount' => fake()->randomFloat(2, 0, 100),
         ];
     }

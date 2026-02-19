@@ -2,12 +2,12 @@
 
 namespace Database\Factories;
 
-use App\Models\Allergie;
+use App\Models\Allergy;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class AllergieFactory extends Factory
+class AllergyFactory extends Factory
 {
-    protected $model = Allergie::class;
+    protected $model = Allergy::class;
 
     public function definition(): array
     {

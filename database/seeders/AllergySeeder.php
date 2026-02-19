@@ -2,13 +2,13 @@
 
 namespace Database\Seeders;
 
-use App\Models\Allergie;
+use App\Models\Allergy;
 use Illuminate\Database\Seeder;
 
-class AllergieSeeder extends Seeder
+class AllergySeeder extends Seeder
 {
     public function run(): void
     {
-        Allergie::factory(5)->create();
+        Allergy::factory(5)->create();
     }
 }
