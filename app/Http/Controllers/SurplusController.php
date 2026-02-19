@@ -21,4 +21,17 @@ class SurplusController extends Controller
 
         return view('surpluses.shop', compact('surpluses'));
     }
+
+    /**
+     * Display a listing of the resource for the owner (management view).
+     */
+    public function ownerIndex()
+    {
+        // For the owner we show all surpluses (paginated) with their related dessert
+        $surpluses = Surplus::with('dessert')
+            ->orderBy('date', 'desc')
+            ->paginate(10);
+
+        return view('surpluses.owner', compact('surpluses'));
+    }
 }

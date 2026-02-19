@@ -36,6 +36,9 @@ Route::middleware(['auth'])->group(function () {
 
     // Route for the surplus shop (for buying)
     Route::get('/surplus-shop', [SurplusController::class, 'shopIndex'])->name('userSurplusShop.index');
+
+    // Owner management view for surpluses
+    Route::get('/owner/surpluses', [SurplusController::class, 'ownerIndex'])->name('owner.surpluses.index');
 });
 
 require __DIR__.'/auth.php';
