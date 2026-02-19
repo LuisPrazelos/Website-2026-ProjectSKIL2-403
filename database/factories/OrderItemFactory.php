@@ -2,16 +2,20 @@
 
 namespace Database\Factories;
 
+use App\Models\Dessert;
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\ShoppingCart;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class ShoppingCartFactory extends Factory
+class OrderItemFactory extends Factory
 {
-    protected $model = ShoppingCart::class;
+    protected $model = OrderItem::class;
 
     public function definition(): array
     {
+        // Decide if this cart item is a dessert or a leftover
+        $isDessert = $this->faker->boolean();
         return [
             'orderId' => Order::factory(),
 

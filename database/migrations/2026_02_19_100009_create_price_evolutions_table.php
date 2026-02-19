@@ -1,0 +1,33 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('price_evolutions', function (Blueprint $table) {
+            $table->id('priceEvolutionId');
+            $table->unsignedBigInteger('ingredientId');
+            $table->decimal('price', 10, 4)->default(0);
+            $table->decimal('amount', 10, 4)->default(0);
+            $table->date('date');
+            $table->string('source')->nullable();
+            $table->timestamps();
+
+            $table->foreign('ingredientId')
+                ->references('ingredientId')
+                ->on('ingredients')
+                ->onDelete('cascade');
+
+            $table->index('ingredientId');
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('price_evolutions');
+    }
+};

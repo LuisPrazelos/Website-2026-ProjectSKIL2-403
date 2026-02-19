@@ -29,13 +29,17 @@ class DatabaseSeeder extends Seeder
             'is_active' => true,
         ]);
 
-        // Seed notification categories/channels/preferences and domain data
         $this->call([
-            NotificationChannelSeeder::class,
-            NotificationCategorySeeder::class,
-            NotificationPreferenceSeeder::class,
+            ReviewSeeder::class,
+            AllergySeeder::class,
+            MeasurementUnitSeeder::class,
+            IngredientSeeder::class,
+            OrderSeeder::class,
             DessertSeeder::class,
             SurplusSeeder::class,
+            WorkshopSeeder::class,
+            ShoppinglistSeeder::class,
+            ShoppinglistItemSeeder::class,
         ]);
     }
 }
