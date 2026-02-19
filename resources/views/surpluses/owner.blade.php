@@ -1,27 +1,24 @@
-<x-layouts.app.sidebar :title="__('Overschotten beheren')">
-    <div class="app-main">
-        <header class="page-header py-6">
-            <div class="container mx-auto px-4">
-                <h1 class="text-2xl font-semibold">{{ __('Overschotten beheren') }}</h1>
-                <p class="text-sm text-gray-600 mt-1">{{ __('Beheer je overschotten hier: zoek, voeg toe, bewerk of verwijder items.') }}</p>
-            </div>
-        </header>
-
-        <main class="page-content container mx-auto px-4 py-6">
-            <div class="flex items-center justify-between mb-4">
-                <div class="w-1/2">
-                    <label for="search" class="sr-only">{{ __('Zoek') }}</label>
-                    <input id="search" name="search" type="search" placeholder="Zoek dessert..." class="w-full" />
+<x-layouts.app :title="__('Overschotten beheren')">
+    <div x-data="{ showModal: false }" class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
+        <div class="relative h-full flex-1 overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700 p-6 bg-transparent">
+            <!-- Header area inside big container (teruggezet zoals dashboard) -->
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h1 class="text-2xl font-semibold">{{ __('Overschotten beheren') }}</h1>
+                    <p class="text-sm text-gray-600 mt-1">{{ __('Beheer je overschotten hier: zoek, voeg toe, bewerk of verwijder items.') }}</p>
                 </div>
 
                 <div>
-                    <a href="#" class="inline-flex items-center px-4 py-2 border rounded-md text-sm bg-brown-700 text-white">
-                        + {{ __('Overschot toevoegen') }}
-                    </a>
+                    <button @click="showModal = true" class="inline-flex items-center px-4 py-2 border rounded-md text-sm bg-black text-white">+ {{ __('Overschot toevoegen') }}</button>
                 </div>
             </div>
 
-            <div class="overflow-x-auto bg-white rounded-md shadow-sm">
+            <div class="mb-6">
+                <label for="search" class="sr-only">{{ __('Zoek') }}</label>
+                <input id="search" name="search" type="search" placeholder="{{ __('Zoek dessert...') }}" class="w-1/3 px-3 py-2 rounded-md border" />
+            </div>
+
+            <div class="overflow-x-auto bg-white dark:bg-zinc-900 rounded-md shadow-sm p-4">
                 <table class="min-w-full text-left">
                     <thead>
                         <tr>
@@ -41,14 +38,12 @@
                                     @php
                                         $date = $surplus->date ?? $surplus->expiration_date ?? $surplus->created_at ?? null;
                                     @endphp
-                                    {{ $date ? $date->format('d-m-Y') : __('-') }}
+                                    {{ $date ? (\Illuminate\Support\Carbon::parse($date))->format('d-m-Y') : __('-') }}
                                 </td>
                                 <td class="px-4 py-3">{{ $surplus->total_amount ?? '-' }}</td>
                                 <td class="px-4 py-3">{{ $surplus->discount ?? $surplus->discount_percentage ?? ($surplus->sale_percentage ?? '-') }}</td>
                                 <td class="px-4 py-3">
-                                    @php
-                                        $status = $surplus->status ?? null;
-                                    @endphp
+                                    @php $status = $surplus->status ?? null; @endphp
 
                                     @if($status === 'available' || $status === 'beschikbaar')
                                         <span class="inline-block px-2 py-1 rounded-full bg-green-100 text-green-800">{{ __('Beschikbaar') }}</span>
@@ -83,7 +78,6 @@
                 </div>
 
                 <div>
-                    {{-- Placeholder pagination links (assuming $surpluses is a LengthAwarePaginator) --}}
                     @if(method_exists($surpluses, 'links'))
                         {{ $surpluses->links() }}
                     @endif
@@ -91,7 +85,39 @@
             </div>
 
             <p class="mt-6 text-sm text-gray-400">{{ __('Bij het bevestigen van een overschot ontvangen geïnteresseerde klanten automatisch een melding.') }}</p>
-        </main>
-    </div>
+        </div>
 
-</x-layouts.app.sidebar>
+        <!-- Modal -->
+        <div x-show="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center" style="display: none;">
+            <div @click.away="showModal = false" class="bg-white dark:bg-zinc-800 p-8 rounded-lg shadow-lg w-1/3">
+                <h2 class="text-2xl font-semibold mb-4">{{ __('Overschot toevoegen') }}</h2>
+                <form>
+                    <div class="mb-4">
+                        <label for="dessert" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('Dessert') }}</label>
+                        <x-layouts.app.dropdown name="dessert" :options="$desserts" />
+                    </div>
+                    <div class="mb-4">
+                        <label for="date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('Datum') }}</label>
+                        <input type="date" id="date" name="date" class="mt-1 block w-full px-3 py-2 bg-white dark:bg-zinc-700 border border-gray-300 dark:border-zinc-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    </div>
+                    <div class="mb-4">
+                        <label for="quantity" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('Aantal beschikbaar') }}</label>
+                        <input type="number" id="quantity" name="quantity" class="mt-1 block w-full px-3 py-2 bg-white dark:bg-zinc-700 border border-gray-300 dark:border-zinc-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    </div>
+                    <div class="mb-4">
+                        <label for="discount" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('Korting (%)') }}</label>
+                        <input type="number" id="discount" name="discount" class="mt-1 block w-full px-3 py-2 bg-white dark:bg-zinc-700 border border-gray-300 dark:border-zinc-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    </div>
+                    <div class="mb-4">
+                        <label for="notes" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('Extra opmerking') }}</label>
+                        <textarea id="notes" name="notes" rows="3" class="mt-1 block w-full px-3 py-2 bg-white dark:bg-zinc-700 border border-gray-300 dark:border-zinc-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
+                    </div>
+                    <div class="flex justify-end">
+                        <button type="button" @click="showModal = false" class="mr-2 inline-flex items-center px-4 py-2 border rounded-md text-sm">{{ __('Annuleren') }}</button>
+                        <button type="submit" class="inline-flex items-center px-4 py-2 border rounded-md text-sm bg-black text-white">{{ __('Toevoegen') }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</x-layouts.app>
