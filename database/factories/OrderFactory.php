@@ -3,6 +3,8 @@
 namespace Database\Factories;
 
 use App\Models\Order;
+use App\Models\User;
+use App\Models\Availability;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class OrderFactory extends Factory
@@ -12,34 +14,20 @@ class OrderFactory extends Factory
     public function definition(): array
     {
         return [
-            'personId' => Person::factory(),
+            // match orders table: user_id (foreign key to users)
+            'user_id' => User::factory(),
 
-            'orderDate' => $this->faker->date(),
+            // monetary and status fields
+            'total_price' => $this->faker->randomFloat(2, 0, 500),
+            'status' => $this->faker->randomElement(['pending', 'paid', 'cancelled', 'preparing', 'completed']),
 
-            // nullable foreign keys
-            'availability' => $this->faker->boolean(70)
+            // availability foreign key (nullable)
+            'availability_id' => $this->faker->boolean(70)
                 ? Availability::factory()
                 : null,
 
-            'requestProposalId' => $this->faker->boolean(50)
-                ? RequestProposal::factory()
-                : null,
-
-            'decorationId' => $this->faker->boolean(50)
-                ? Decoration::factory()
-                : null,
-
-            // fields
-            'deliveryAddress' => $this->faker->optional()->address(),
-
-            'isProposal' => $this->faker->boolean(),
-            'isOrdered' => $this->faker->boolean(),
-            'isPrepared' => $this->faker->boolean(),
-            'isPickedUp' => $this->faker->boolean(),
-            'isCancelled' => $this->faker->boolean(),
-            'hasToBeDelivered' => $this->faker->boolean(),
-
-            'internalComment' => $this->faker->optional()->sentence(),
+            // placed_at timestamp
+            'placed_at' => $this->faker->optional()->dateTimeBetween('-2 years', 'now'),
         ];
     }
 }

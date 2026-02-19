@@ -4,6 +4,8 @@ namespace Database\Factories;
 
 use App\Models\review;
 use App\Models\User;
+use App\Models\Dessert;
+use App\Models\Workshop;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -25,8 +27,18 @@ class ReviewFactory extends Factory
             'content' => fake()->paragraph(),
             'date' => fake()->date(),
             'userId' => User::factory(),
-            'desssertId' => fake()->optional()->numberBetween(1, 100),
-            'workshopId' => fake()->optional()->numberBetween(1, 100),
+
+            // Use an existing dessert ID when available, otherwise create one.
+            'desssertId' => function () {
+                $id = Dessert::query()->inRandomOrder()->value('id');
+                return $id ?: Dessert::factory();
+            },
+
+            // Use an existing workshop ID when available, otherwise create one.
+            'workshopId' => function () {
+                $id = Workshop::query()->inRandomOrder()->value('workshopId');
+                return $id ?: Workshop::factory();
+            },
         ];
     }
 }
