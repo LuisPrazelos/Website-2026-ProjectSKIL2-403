@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
 
         // Seed the rest of the data in an order that satisfies foreign key dependencies.
         $this->call([
-            // Basic reference data
+            // Seed dependencies first
             MeasurementUnitSeeder::class,
             StateSeeder::class,
             ThemeSeeder::class,
@@ -40,33 +40,16 @@ class DatabaseSeeder extends Seeder
 
             // Core domain data
             IngredientSeeder::class,
+            AllergySeeder::class,
             DessertSeeder::class,
-            IngredientDessertSeeder::class,
-            PriceEvolutionSeeder::class,
-
-            // Workshops/happenings
             WorkshopSeeder::class,
-            HappeningSeeder::class,
-            WorkshopUserSeeder::class,
 
-            // Reviews depend on users + desserts/workshops
+            // Then seed items that depend on the above
             ReviewSeeder::class,
-
-            // Orders and order items
-            OrderSeeder::class,
-            OrderItemSeeder::class,
-
-            // Surpluses (depend on desserts)
             SurplusSeeder::class,
-
-            // Notifications (categories/channels before preferences)
-            NotificationCategorySeeder::class,
-            NotificationChannelSeeder::class,
-            NotificationPreferenceSeeder::class,
-
-            // Shopping lists and items (shopping lists before items)
+            OrderSeeder::class,
             ShoppinglistSeeder::class,
-            ShoppinglistItemSeeder::class,
+            // ShoppinglistItemSeeder::class, // Table does not exist yet
         ]);
     }
 }

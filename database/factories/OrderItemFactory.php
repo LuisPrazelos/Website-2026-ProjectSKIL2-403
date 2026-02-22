@@ -16,7 +16,7 @@ class OrderItemFactory extends Factory
     public function definition(): array
     {
         // Decide if this cart item is a dessert or a leftover
-        $isDessert = $this->faker->boolean();
+        $isDessert = fake()->boolean();
         return [
             'orderId' => Order::factory(),
 
@@ -25,10 +25,10 @@ class OrderItemFactory extends Factory
                 : null,
 
             'leftoverId' => !$isDessert
-                ? Surplus::factory()
+                ? null // Leftover::factory()
                 : null,
 
-            'amount' => $this->faker->numberBetween(1, 10),
+            'amount' => fake()->numberBetween(1, 10),
         ];
     }
 }

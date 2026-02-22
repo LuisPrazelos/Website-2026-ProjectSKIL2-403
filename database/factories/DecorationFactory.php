@@ -13,12 +13,12 @@ class DecorationFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => ucfirst($this->faker->words(2, true)),
-            'price' => $this->faker->randomFloat(2, 5, 250),
-            'content' => $this->faker->optional()->sentence(),
+            'name' => ucfirst(fake()->words(2, true)),
+            'price' => fake()->randomFloat(2, 5, 250),
+            'content' => fake()->optional()->sentence(),
 
             // theme is optional (0..1)
-            'themeId' => $this->faker->boolean(70)
+            'themeId' => fake()->boolean(70)
                 ? Theme::factory()
                 : null,
         ];

@@ -2,18 +2,18 @@
 
 namespace Database\Factories;
 
-use App\Models\review;
+use App\Models\Review;
 use App\Models\User;
 use App\Models\Dessert;
 use App\Models\Workshop;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\review>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Review>
  */
 class ReviewFactory extends Factory
 {
-    protected $model = review::class;
+    protected $model = Review::class;
 
     /**
      * Define the model's default state.
@@ -22,23 +22,17 @@ class ReviewFactory extends Factory
      */
     public function definition(): array
     {
+        // Get existing dessert and workshop IDs, or null if they don't exist
+        $dessertId = Dessert::inRandomOrder()->first()?->id;
+        $workshopId = Workshop::inRandomOrder()->first()?->workshopId;
+
         return [
             'score' => fake()->numberBetween(1, 10),
             'content' => fake()->paragraph(),
             'date' => fake()->date(),
             'userId' => User::factory(),
-
-            // Use an existing dessert ID when available, otherwise create one.
-            'desssertId' => function () {
-                $id = Dessert::query()->inRandomOrder()->value('id');
-                return $id ?: Dessert::factory();
-            },
-
-            // Use an existing workshop ID when available, otherwise create one.
-            'workshopId' => function () {
-                $id = Workshop::query()->inRandomOrder()->value('workshopId');
-                return $id ?: Workshop::factory();
-            },
+            'dessertId' => fake()->optional()->passthrough($dessertId),
+            'workshopId' => fake()->optional()->passthrough($workshopId),
         ];
     }
 }
