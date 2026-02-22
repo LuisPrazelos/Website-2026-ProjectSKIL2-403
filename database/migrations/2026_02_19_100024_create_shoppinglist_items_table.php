@@ -8,15 +8,18 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('ingredient_desserts', function (Blueprint $table) {
+        Schema::create('shoppinglist_items', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('dessertId');
+            $table->unsignedBigInteger('shoppinglistId');
             $table->unsignedBigInteger('ingredientId');
-            $table->decimal('amount', 10, 4)->default(0);
+            $table->integer('quantity')->default(1);
+            $table->string('unit')->nullable();
+            $table->boolean('isChecked')->default(false);
+            $table->timestamps();
 
-            $table->foreign('dessertId')
+            $table->foreign('shoppinglistId')
                 ->references('id')
-                ->on('desserts')
+                ->on('shopping_lists')
                 ->onDelete('cascade');
 
             $table->foreign('ingredientId')
@@ -24,14 +27,12 @@ return new class extends Migration
                 ->on('ingredients')
                 ->onDelete('cascade');
 
-            $table->index(['dessertId', 'ingredientId']);
-            $table->index('ingredientId');
-            $table->timestamps();
+            $table->index(['shoppinglistId', 'ingredientId']);
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('ingredient_desserts');
+        Schema::dropIfExists('shoppinglist_items');
     }
 };

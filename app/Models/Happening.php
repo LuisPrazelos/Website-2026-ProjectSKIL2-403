@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\State;
 
 class Happening extends Model
 {
@@ -25,18 +26,10 @@ class Happening extends Model
         'status_id',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'event_date' => 'datetime',
-            'price_per_person' => 'float',
-        ];
-    }
+    protected $casts = [
+        'event_date' => 'datetime',
+        'price_per_person' => 'float',
+    ];
 
     /*
     |--------------------------------------------------------------------------
@@ -56,6 +49,6 @@ class Happening extends Model
 
     public function status()
     {
-        return $this->belongsTo(Status::class);
+        return $this->belongsTo(State::class, 'status_id');
     }
 }

@@ -6,6 +6,7 @@ use App\Models\Dessert;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\ShoppingCart;
+use App\Models\Surplus;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class OrderItemFactory extends Factory

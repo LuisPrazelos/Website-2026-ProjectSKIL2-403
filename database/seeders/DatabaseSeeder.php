@@ -29,9 +29,16 @@ class DatabaseSeeder extends Seeder
             'is_active' => true,
         ]);
 
+        // Seed the rest of the data in an order that satisfies foreign key dependencies.
         $this->call([
             // Seed dependencies first
             MeasurementUnitSeeder::class,
+            StateSeeder::class,
+            ThemeSeeder::class,
+            AllergySeeder::class,
+            DecorationSeeder::class,
+
+            // Core domain data
             IngredientSeeder::class,
             AllergySeeder::class,
             DessertSeeder::class,
