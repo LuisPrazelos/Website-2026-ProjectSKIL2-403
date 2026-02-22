@@ -13,7 +13,7 @@
                 </div>
             </div>
 
-            <x-layouts.app.search :action="route('owner.surpluses.index')" :value="$search ?? ''" placeholder="{{ __('Zoek dessert...') }}" />
+            <x-layouts.search :action="route('owner.surpluses.index')" :value="$search ?? ''" placeholder="{{ __('Zoek dessert...') }}" />
 
             <div class="overflow-x-auto bg-white dark:bg-zinc-900 rounded-md shadow-sm p-4">
                 <table class="min-w-full text-left">
