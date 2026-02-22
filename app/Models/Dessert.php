@@ -16,7 +16,7 @@ class Dessert extends Model
         'description',
         'preparation_method',
         'notes',
-        'image',
+        'picture_id',
         'portion_size',
         'measurement_unit_id',
     ];
@@ -33,4 +33,10 @@ class Dessert extends Model
     {
         return $this->hasMany(Surplus::class, 'dessert_id');
     }
+
+    public function picture()
+    {
+        return $this->belongsTo(Picture::class, 'picture_id');
+    }
+
 }

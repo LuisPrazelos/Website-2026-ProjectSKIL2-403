@@ -4,10 +4,11 @@
 
     {{-- Dessert afbeelding --}}
     <img
-        src="{{ asset('storage/' . $surplus->dessert->image) }}"
+        src="{{ $surplus->dessert->picture?->hash ?? '/table_pictures/cover.png' }}"
         alt="{{ $surplus->dessert->name }}"
         class="w-24 h-24 object-cover rounded-lg"
-    >
+    />
+
 
     <div class="flex-1">
 
@@ -28,7 +29,7 @@
 
         {{-- Houdbaar --}}
         <p class="text-gray-600">
-            Houdbaar tot: {{ \Carbon\Carbon::parse($surplus->expiration_date)->format('d/m/Y') }}
+            Houdbaar tot: {{ $surplus->expiration_date }}
         </p>
 
         {{-- Quantity controls --}}

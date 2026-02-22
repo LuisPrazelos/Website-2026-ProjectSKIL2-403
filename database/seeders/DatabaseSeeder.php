@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             // Basic reference data
             MeasurementUnitSeeder::class,
+            TablePictureSeeder::class,
             StateSeeder::class,
             ThemeSeeder::class,
             AllergySeeder::class,

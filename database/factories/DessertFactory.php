@@ -4,6 +4,8 @@ namespace Database\Factories;
 
 use App\Models\Dessert;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\Picture;
+
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Dessert>
@@ -31,7 +33,7 @@ class DessertFactory extends Factory
             'preparation_method' => fake()->optional()->paragraph(),
             'notes' => fake()->optional()->sentence(),
             // image URL (optional) - you can store a path instead if you prefer
-            'image' => fake()->optional()->imageUrl(640, 480),
+            'picture_id' => Picture::inRandomOrder()->value('id'),
             // portion size and measurement unit id (FK)
             'portion_size' => fake()->randomFloat(2, 0.1, 10),
             'measurement_unit_id' => 1,
