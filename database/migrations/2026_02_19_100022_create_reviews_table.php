@@ -14,7 +14,7 @@ return new class extends Migration
             $table->text('content')->nullable();
             $table->date('date')->nullable();
             $table->unsignedBigInteger('userId')->nullable();
-            $table->unsignedBigInteger('desssertId')->nullable();
+            $table->unsignedBigInteger('dessertId')->nullable();
             $table->unsignedBigInteger('workshopId')->nullable();
             $table->timestamps();
 
@@ -23,7 +23,7 @@ return new class extends Migration
                 ->on('users')
                 ->onDelete('set null');
 
-            $table->foreign('desssertId')
+            $table->foreign('dessertId')
                 ->references('id')
                 ->on('desserts')
                 ->onDelete('set null');
@@ -33,7 +33,7 @@ return new class extends Migration
                 ->on('workshops')
                 ->onDelete('set null');
 
-            $table->index(['userId', 'desssertId', 'workshopId']);
+            $table->index(['userId', 'dessertId', 'workshopId']);
         });
     }
 
@@ -42,4 +42,3 @@ return new class extends Migration
         Schema::dropIfExists('reviews');
     }
 };
-

@@ -27,11 +27,11 @@ class SurplusFactory extends Factory
         return [
             'date' => fake()->date(),
             'total_amount' => fake()->numberBetween(1, 200),
-            'sale' => fake()->randomFloat(2, 0, 500),
+            'sale' => fake()->randomFloat(2, 0, 100),
+            'status' => fake()->randomElement(['available', 'reserved', 'picked_up']),
             'expiration_date' => fake()->optional()->date(),
             'dessert_id' => 1,
             'comment' => fake()->optional()->sentence(),
         ];
     }
 }
-

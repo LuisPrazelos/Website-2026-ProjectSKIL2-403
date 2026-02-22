@@ -13,10 +13,7 @@
                 </div>
             </div>
 
-            <div class="mb-6">
-                <label for="search" class="sr-only">{{ __('Zoek') }}</label>
-                <input id="search" name="search" type="search" placeholder="{{ __('Zoek dessert...') }}" class="w-1/3 px-3 py-2 rounded-md border" />
-            </div>
+            <x-layouts.app.search :action="route('owner.surpluses.index')" :value="$search ?? ''" placeholder="{{ __('Zoek dessert...') }}" />
 
             <div class="overflow-x-auto bg-white dark:bg-zinc-900 rounded-md shadow-sm p-4">
                 <table class="min-w-full text-left">
@@ -41,9 +38,9 @@
                                     {{ $date ? (\Illuminate\Support\Carbon::parse($date))->format('d-m-Y') : __('-') }}
                                 </td>
                                 <td class="px-4 py-3">{{ $surplus->total_amount ?? '-' }}</td>
-                                <td class="px-4 py-3">{{ $surplus->discount ?? $surplus->discount_percentage ?? ($surplus->sale_percentage ?? '-') }}</td>
+                                <td class="px-4 py-3">{{ $surplus->sale ?? '-' }}</td>
                                 <td class="px-4 py-3">
-                                    @php $status = $surplus->status ?? null; @endphp
+                                    @php $status = $surplus->status ?? 'available'; @endphp
 
                                     @if($status === 'available' || $status === 'beschikbaar')
                                         <span class="inline-block px-2 py-1 rounded-full bg-green-100 text-green-800">{{ __('Beschikbaar') }}</span>
@@ -52,7 +49,7 @@
                                     @elseif($status === 'picked_up' || $status === ' opgehaald' || $status === 'opgehaald')
                                         <span class="inline-block px-2 py-1 rounded-full bg-gray-100 text-gray-800">{{ __('Opgehaald') }}</span>
                                     @else
-                                        <span class="inline-block px-2 py-1 rounded-full bg-gray-50 text-gray-600">{{ __('-') }}</span>
+                                        <span class="inline-block px-2 py-1 rounded-full bg-gray-50 text-gray-600">{{ $status }}</span>
                                     @endif
                                 </td>
                                 <td class="px-4 py-3">
@@ -91,7 +88,8 @@
         <div x-show="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center" style="display: none;">
             <div @click.away="showModal = false" class="bg-white dark:bg-zinc-800 p-8 rounded-lg shadow-lg w-1/3">
                 <h2 class="text-2xl font-semibold mb-4">{{ __('Overschot toevoegen') }}</h2>
-                <form>
+                <form action="{{ route('owner.surpluses.store') }}" method="POST">
+                    @csrf
                     <div class="mb-4">
                         <label for="dessert" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('Dessert') }}</label>
                         <x-layouts.app.dropdown name="dessert" :options="$desserts" />

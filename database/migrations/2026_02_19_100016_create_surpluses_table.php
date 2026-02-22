@@ -13,6 +13,7 @@ return new class extends Migration
             $table->date('date');
             $table->integer('total_amount')->default(0);
             $table->decimal('sale', 10, 2)->default(0);
+            $table->string('status')->default('available');
             $table->date('expiration_date')->nullable();
             $table->unsignedBigInteger('dessert_id');
             $table->text('comment')->nullable();

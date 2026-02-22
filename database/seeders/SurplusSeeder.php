@@ -25,6 +25,7 @@ class SurplusSeeder extends Seeder
             'date' => now()->toDateString(),
             'total_amount' => 12,
             'sale' => 3.50,
+            'status' => 'available',
             'expiration_date' => now()->addDays(7)->toDateString(),
             'dessert_id' => $dessert->id,
             'comment' => 'Seeded surplus record',

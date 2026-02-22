@@ -30,16 +30,19 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call([
-            ReviewSeeder::class,
-            AllergySeeder::class,
+            // Seed dependencies first
             MeasurementUnitSeeder::class,
             IngredientSeeder::class,
-            OrderSeeder::class,
+            AllergySeeder::class,
             DessertSeeder::class,
-            SurplusSeeder::class,
             WorkshopSeeder::class,
+
+            // Then seed items that depend on the above
+            ReviewSeeder::class,
+            SurplusSeeder::class,
+            OrderSeeder::class,
             ShoppinglistSeeder::class,
-            ShoppinglistItemSeeder::class,
+            // ShoppinglistItemSeeder::class, // Table does not exist yet
         ]);
     }
 }

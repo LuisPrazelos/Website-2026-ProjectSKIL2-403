@@ -22,6 +22,7 @@ class Surplus extends Model
         'date',
         'total_amount',
         'sale',
+        'status',
         'expiration_date',
         'dessert_id',
         'comment',

@@ -12,11 +12,11 @@ class AvailabilityFactory extends Factory
     public function definition(): array
     {
         // random date in the next 30 days
-        $date = $this->faker->dateTimeBetween('now', '+30 days');
+        $date = fake()->dateTimeBetween('now', '+30 days');
 
         // pickup window on that date
         $start = (clone $date)->setTime(
-            $this->faker->numberBetween(8, 12),
+            fake()->numberBetween(8, 12),
             0
         );
 
@@ -25,8 +25,8 @@ class AvailabilityFactory extends Factory
             'date' => $date->format('Y-m-d'),
 
             // exception is optional
-            'exceptionAvailabilityDate' => $this->faker->boolean(30)
-                ? $this->faker->dateTimeBetween('now', '+30 days')
+            'exceptionAvailabilityDate' => fake()->boolean(30)
+                ? fake()->dateTimeBetween('now', '+30 days')
                 : null,
 
             'pickUpTimeStart' => $start,
