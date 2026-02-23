@@ -19,7 +19,7 @@ class DessertSeeder extends Seeder
             'description' => 'Sample dessert created by DessertSeeder',
             'preparation_method' => 'Ready to serve',
             'notes' => 'Seed data',
-            'image' => null,
+            'picture_id' => null,
             'portion_size' => 1.0,
             'measurement_unit_id' => 1,
         ]);

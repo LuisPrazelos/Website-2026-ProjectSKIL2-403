@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             // Seed dependencies first
             MeasurementUnitSeeder::class,
+            TablePictureSeeder::class,
             StateSeeder::class,
             ThemeSeeder::class,
             AllergySeeder::class,
