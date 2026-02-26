@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\SurplusController;
+use App\Http\Middleware\AdminMiddleware;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
@@ -27,7 +28,7 @@ Route::middleware(['auth'])->group(function () {
         ->middleware(
             when(
                 Features::canManageTwoFactorAuthentication()
-                    && Features::optionEnabled(Features::twoFactorAuthentication(), 'confirmPassword'),
+                && Features::optionEnabled(Features::twoFactorAuthentication(), 'confirmPassword'),
                 ['password.confirm'],
                 [],
             ),
@@ -37,9 +38,12 @@ Route::middleware(['auth'])->group(function () {
     // Route for the surplus shop (for buying)
     Route::get('/surplus-shop', [SurplusController::class, 'shopIndex'])->name('userSurplusShop.index');
 
-    // Owner management view for surpluses
-    Route::get('/owner/surpluses', [SurplusController::class, 'ownerIndex'])->name('owner.surpluses.index');
-    Route::post('/owner/surpluses', [SurplusController::class, 'store'])->name('owner.surpluses.store');
+    Route::middleware([AdminMiddleware::class])->group(function () {
+
+        // Owner management view for surpluses
+        Route::get('/owner/surpluses', [SurplusController::class, 'ownerIndex'])->name('owner.surpluses.index');
+        Route::post('/owner/surpluses', [SurplusController::class, 'store'])->name('owner.surpluses.store');
+    });
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
