@@ -9,13 +9,13 @@
             </div>
 
             <div class="bg-white dark:bg-zinc-800 p-8 rounded-lg shadow-lg w-full">
-                <form action="{{ route('owner.ingredients.update', $ingredient->ingredientId) }}" method="POST" autocomplete="off">
+                <form action="{{ route('owner.ingredients.update', $ingredient->id) }}" method="POST" autocomplete="off">
                     @csrf
                     @method('PUT') {{-- Use PUT method for updates --}}
 
                     <div class="mb-4">
                         <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('Naam ingrediënt') }}</label>
-                        <input type="text" id="name" name="name" value="{{ old('name', $ingredient->ingredientName) }}" class="mt-1 block w-full px-3 py-2 bg-white dark:bg-zinc-700 border border-gray-300 dark:border-zinc-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" autocomplete="off">
+                        <input type="text" id="name" name="name" value="{{ old('name', $ingredient->name) }}" class="mt-1 block w-full px-3 py-2 bg-white dark:bg-zinc-700 border border-gray-300 dark:border-zinc-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" autocomplete="off">
                         @error('name')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
                     </div>
 
@@ -23,7 +23,7 @@
                         <label for="unit" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('Eenheid') }}</label>
                         <select id="unit" name="unit_id" class="mt-1 block w-full px-3 py-2 bg-white dark:bg-zinc-700 border border-gray-300 dark:border-zinc-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                             @foreach($units as $unit)
-                                <option value="{{ $unit->measurementUnitId }}" @selected(old('unit_id', $ingredient->standardUnitId) == $unit->measurementUnitId)>{{ $unit->unitName }}</option>
+                                <option value="{{ $unit->id }}" @selected(old('unit_id', $ingredient->measurement_unit_id) == $unit->id)>{{ $unit->name }}</option>
                             @endforeach
                         </select>
                         @error('unit_id')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
