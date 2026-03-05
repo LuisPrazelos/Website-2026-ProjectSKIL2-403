@@ -1,9 +1,9 @@
-<x-layouts.app title="Eten op tafel">
+<x-layouts.app title="Feest op tafel">
     <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
         <!-- Header with Background Image -->
         <div class="relative w-full overflow-hidden rounded-xl bg-cover bg-center h-64" style="background-image: url('/pictures/Gebakjes.jpg');">
             <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
-                <h1 class="text-4xl font-bold text-white drop-shadow-lg">Eten op tafel</h1>
+                <h1 class="text-4xl font-bold text-white drop-shadow-lg">Feest op tafel</h1>
             </div>
         </div>
 

@@ -10,7 +10,11 @@ use App\Livewire\Settings\Profile;
 use App\Livewire\Settings\TwoFactor;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
-use App\Models\Dessert; // Import the Dessert model
+use App\Models\Ingredient;
+use App\Models\PriceEvolution;
+use App\Models\Dessert;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 Route::get('/', function () {
     return view('welcome');
