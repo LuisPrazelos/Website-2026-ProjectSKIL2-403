@@ -13,9 +13,7 @@ use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use App\Models\Ingredient;
 use App\Models\PriceEvolution;
-use App\Models\Dessert;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 Route::get('/', function () {
     return view('welcome');
@@ -36,7 +34,7 @@ Route::middleware(['auth'])->group(function () {
         ->middleware(
             when(
                 Features::canManageTwoFactorAuthentication()
-                && Features::optionEnabled(Features::twoFactorAuthentication(), 'confirmPassword'),
+                    && Features::optionEnabled(Features::twoFactorAuthentication(), 'confirmPassword'),
                 ['password.confirm'],
                 [],
             ),
@@ -71,10 +69,11 @@ Route::middleware(['auth'])->group(function () {
         return view('deserts.index', compact('deserts'));
     })->name('deserts.index');
 
-    Route::middleware([AdminMiddleware::class])->group(function () {
-        // Owner management view for surpluses
-        Route::get('/owner/surpluses', [SurplusController::class, 'ownerIndex'])->name('owner.surpluses.index');
-        Route::post('/owner/surpluses', [SurplusController::class, 'store'])->name('owner.surpluses.store');
+    Route::get('/price-evolution', function (Request $request) {
+        $ingredientId = $request->input('ingredient');
+        $priceEvolutions = null;
+        $ingredientName = null;
+        $ingredients = Ingredient::orderBy('ingredientName')->get();
 
         // Owner management view for ingredients
         Route::get('/owner/ingredients', [IngredientController::class, 'ownerIndex'])->name('owner.ingredients.index');
@@ -90,4 +89,4 @@ Route::middleware(['auth'])->group(function () {
     });
 });
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';
