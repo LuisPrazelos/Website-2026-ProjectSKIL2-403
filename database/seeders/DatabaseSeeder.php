@@ -29,6 +29,17 @@ class DatabaseSeeder extends Seeder
             'is_active' => true,
         ]);
 
+        // Create an admin user
+        User::factory()->create([
+            'first_name' => 'Admin',
+            'last_name' => 'User',
+            'email' => 'admin@example.com',
+            'phone_number' => '9876543210', // Example phone number
+            'password' => '1234',
+            'role_id' => 2, // Admin role_id
+            'is_active' => true,
+        ]);
+
         // Seed the rest of the data in an order that satisfies foreign key dependencies.
         $this->call([
             // Seed dependencies first

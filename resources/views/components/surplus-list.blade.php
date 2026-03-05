@@ -6,8 +6,7 @@
     <img
         src="{{ $surplus->dessert->picture?->hash ?? '/table_pictures/cover.png' }}"
         alt="{{ $surplus->dessert->name }}"
-        class="w-24 h-24 object-cover rounded-lg"
-    />
+        class="w-24 h-24 object-cover rounded-lg">
 
 
     <div class="flex-1">
