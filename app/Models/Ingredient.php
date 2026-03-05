@@ -25,16 +25,16 @@ class Ingredient extends Model
 
     public function ingredientAllergies()
     {
-        return $this->hasMany(IngredientAllergy::class);
+        return $this->hasMany(IngredientAllergy::class, 'ingredient_id');
     }
 
     /**
      * Define the relationship with PriceEvolution.
-     * The foreign key on the price_evolutions table is 'ingredientId'.
+     * The foreign key on the price_evolutions table is 'ingredient_id'.
      * The local key on the ingredients table is 'id'.
      */
     public function priceEvolutions()
     {
-        return $this->hasMany(PriceEvolution::class, 'ingredientId', 'id');
+        return $this->hasMany(PriceEvolution::class, 'ingredient_id', 'id');
     }
 }
