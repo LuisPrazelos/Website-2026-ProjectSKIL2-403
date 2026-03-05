@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use App\Models\Ingredient;
 use App\Models\PriceEvolution;
+use App\Models\Dessert;
 use Illuminate\Http\Request;
 
 Route::get('/', function () {
@@ -34,7 +35,7 @@ Route::middleware(['auth'])->group(function () {
         ->middleware(
             when(
                 Features::canManageTwoFactorAuthentication()
-                    && Features::optionEnabled(Features::twoFactorAuthentication(), 'confirmPassword'),
+                && Features::optionEnabled(Features::twoFactorAuthentication(), 'confirmPassword'),
                 ['password.confirm'],
                 [],
             ),
@@ -51,29 +52,46 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
 
     // Checkout route
-    Route::get('checkout', function() {
+    Route::get('checkout', function () {
         // Placeholder for checkout logic
         return 'Checkout page';
     })->name('checkout');
 
     // Payment route
-    Route::get('payment', function() {
+    Route::get('payment', function () {
         return view('surpluses.payment');
     })->name('payment.page');
 
-
-    Route::middleware([AdminMiddleware::class])->group(function () {
     // User overview for deserts
     Route::get('/deserts', function () {
         $deserts = Dessert::with('picture')->get(); // Eager load the picture relationship
         return view('deserts.index', compact('deserts'));
     })->name('deserts.index');
 
-    Route::get('/price-evolution', function (Request $request) {
-        $ingredientId = $request->input('ingredient');
-        $priceEvolutions = null;
-        $ingredientName = null;
-        $ingredients = Ingredient::orderBy('ingredientName')->get();
+    Route::middleware([AdminMiddleware::class])->group(function () {
+        Route::get('/price-evolution', function (Request $request) {
+            $ingredientId = $request->input('ingredient');
+            $priceEvolutions = null;
+            $ingredientName = null;
+            $ingredients = Ingredient::orderBy('ingredientName')->get();
+
+            if ($ingredientId) {
+                $ingredient = Ingredient::find($ingredientId);
+                if ($ingredient) {
+                    $ingredientName = $ingredient->ingredientName;
+                    $priceEvolutions = PriceEvolution::where('ingredientId', $ingredient->ingredientId)
+                        ->orderBy('date', 'asc')
+                        ->get();
+                }
+            }
+
+            return view('price-evolution', [
+                'ingredients' => $ingredients,
+                'priceEvolutions' => $priceEvolutions,
+                'ingredientName' => $ingredientName,
+                'selectedIngredient' => $ingredientId,
+            ]);
+        })->name('price-evolution');
 
         // Owner management view for ingredients
         Route::get('/owner/ingredients', [IngredientController::class, 'ownerIndex'])->name('owner.ingredients.index');
@@ -89,4 +107,4 @@ Route::middleware(['auth'])->group(function () {
     });
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
