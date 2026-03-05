@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\SurplusController;
 use App\Http\Controllers\IngredientController; // Import the new controller
@@ -45,6 +46,25 @@ Route::middleware(['auth'])->group(function () {
     // Route for the surplus shop (for buying)
     Route::get('/surplus-shop', [SurplusController::class, 'shopIndex'])->name('userSurplusShop.index');
 
+    // Cart routes
+    Route::get('cart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
+    Route::patch('cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
+    Route::delete('cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
+
+    // Checkout route
+    Route::get('checkout', function() {
+        // Placeholder for checkout logic
+        return 'Checkout page';
+    })->name('checkout');
+
+    // Payment route
+    Route::get('payment', function() {
+        return view('surpluses.payment');
+    })->name('payment.page');
+
+
+    Route::middleware([AdminMiddleware::class])->group(function () {
     // User overview for deserts
     Route::get('/deserts', function () {
         $deserts = Dessert::with('picture')->get(); // Eager load the picture relationship
