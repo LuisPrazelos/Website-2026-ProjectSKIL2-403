@@ -18,8 +18,8 @@ class IngredientController extends Controller
      */
     public function ownerIndex(): View
     {
-        // Fetch ingredients with their standard unit and allergies
-        $ingredients = Ingredient::with('standardUnit', 'ingredientAllergies.allergy')->paginate(10);
+        // Fetch ingredients with their measurement unit and allergies
+        $ingredients = Ingredient::with('measurementUnit', 'ingredientAllergies.allergy')->paginate(10);
 
         // Fetch all measurement units and allergies for the form
         $units = MeasurementUnit::all();
@@ -35,22 +35,22 @@ class IngredientController extends Controller
     {
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
-            'unit_id' => 'required|exists:measurement_units,measurementUnitId', // Use measurementUnitId
+            'unit_id' => 'required|exists:measurement_units,id', // Use id
             'allergens' => 'nullable|array',
-            'allergens.*' => 'exists:allergies,allergyId', // Use allergyId
+            'allergens.*' => 'exists:allergies,id', // Use id
         ]);
 
         DB::transaction(function () use ($validatedData) {
             $ingredient = Ingredient::create([
-                'ingredientName' => $validatedData['name'],
-                'standardUnitId' => $validatedData['unit_id'],
+                'name' => $validatedData['name'],
+                'measurement_unit_id' => $validatedData['unit_id'],
                 // 'minimumAmount' => 0, // Assuming a default or not required for now
             ]);
 
             if (isset($validatedData['allergens'])) {
                 foreach ($validatedData['allergens'] as $allergyId) {
                     IngredientAllergy::create([
-                        'ingredientId' => $ingredient->ingredientId,
+                        'ingredientId' => $ingredient->id,
                         'allergyId' => $allergyId,
                     ]);
                 }
@@ -79,15 +79,15 @@ class IngredientController extends Controller
     {
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
-            'unit_id' => 'required|exists:measurement_units,measurementUnitId',
+            'unit_id' => 'required|exists:measurement_units,id',
             'allergens' => 'nullable|array',
-            'allergens.*' => 'exists:allergies,allergyId',
+            'allergens.*' => 'exists:allergies,id',
         ]);
 
         DB::transaction(function () use ($ingredient, $validatedData) {
             $ingredient->update([
-                'ingredientName' => $validatedData['name'],
-                'standardUnitId' => $validatedData['unit_id'],
+                'name' => $validatedData['name'],
+                'measurement_unit_id' => $validatedData['unit_id'],
             ]);
 
             // Sync allergens
@@ -95,7 +95,7 @@ class IngredientController extends Controller
             if (isset($validatedData['allergens'])) {
                 foreach ($validatedData['allergens'] as $allergyId) {
                     IngredientAllergy::create([
-                        'ingredientId' => $ingredient->ingredientId,
+                        'ingredientId' => $ingredient->id,
                         'allergyId' => $allergyId,
                     ]);
                 }
