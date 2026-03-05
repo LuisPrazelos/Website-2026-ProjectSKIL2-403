@@ -8,6 +8,7 @@ use App\Livewire\Settings\Profile;
 use App\Livewire\Settings\TwoFactor;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
+use App\Models\Dessert; // Import the Dessert model
 
 Route::get('/', function () {
     return view('welcome');
@@ -38,11 +39,22 @@ Route::middleware(['auth'])->group(function () {
     // Route for the surplus shop (for buying)
     Route::get('/surplus-shop', [SurplusController::class, 'shopIndex'])->name('userSurplusShop.index');
 
-    Route::middleware([AdminMiddleware::class])->group(function () {
+    // User overview for deserts
+    Route::get('/deserts', function () {
+        $deserts = Dessert::with('picture')->get(); // Eager load the picture relationship
+        return view('deserts.index', compact('deserts'));
+    })->name('deserts.index');
 
+    Route::middleware([AdminMiddleware::class])->group(function () {
         // Owner management view for surpluses
         Route::get('/owner/surpluses', [SurplusController::class, 'ownerIndex'])->name('owner.surpluses.index');
         Route::post('/owner/surpluses', [SurplusController::class, 'store'])->name('owner.surpluses.store');
+
+        // Owner management view for deserts
+        Route::get('/owner/deserts', function () {
+            $deserts = Dessert::with('picture')->paginate(10); // Paginate for better performance
+            return view('deserts.owner-index', compact('deserts'));
+        })->name('owner.deserts.index');
     });
 });
 
