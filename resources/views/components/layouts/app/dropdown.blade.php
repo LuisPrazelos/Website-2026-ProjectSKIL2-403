@@ -1,5 +1,5 @@
 @props([
-    'name',
+    'name' => null,
     'id' => null,
     'options' => [],
     'valueField' => 'id',
@@ -15,7 +15,11 @@
     @if($placeholder)
         <option value="">{{ $placeholder }}</option>
     @endif
-    @foreach($options as $option)
-        <option value="{{ $option->$valueField }}">{{ $option->$labelField }}</option>
+    @foreach($options as $key => $option)
+        @if(is_object($option))
+            <option value="{{ $option->{$valueField} }}">{{ $option->{$labelField} }}</option>
+        @else
+            <option value="{{ $key }}">{{ $option }}</option>
+        @endif
     @endforeach
 </select>

@@ -10,22 +10,9 @@ return new class extends Migration
     {
         Schema::create('ingredient_desserts', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('dessertId');
-            $table->unsignedBigInteger('ingredientId');
+            $table->foreignId('dessert_id')->constrained()->onDelete('cascade');
+            $table->foreignId('ingredient_id')->constrained()->onDelete('cascade');
             $table->decimal('amount', 10, 4)->default(0);
-
-            $table->foreign('dessertId')
-                ->references('id')
-                ->on('desserts')
-                ->onDelete('cascade');
-
-            $table->foreign('ingredientId')
-                ->references('ingredientId')
-                ->on('ingredients')
-                ->onDelete('cascade');
-
-            $table->index(['dessertId', 'ingredientId']);
-            $table->index('ingredientId');
             $table->timestamps();
         });
     }

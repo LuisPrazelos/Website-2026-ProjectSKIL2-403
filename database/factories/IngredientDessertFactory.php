@@ -19,10 +19,8 @@ class IngredientDessertFactory extends Factory
     public function definition(): array
     {
         return [
-            // Pick an existing Dessert id or create one
-            'dessertId' => Dessert::query()->inRandomOrder()->value('id') ?? Dessert::factory()->create()->id,
-            // Pick an existing Ingredient id (uses ingredientId PK) or create one
-            'ingredientId' => Ingredient::query()->inRandomOrder()->value('ingredientId') ?? Ingredient::factory()->create()->ingredientId,
+            'dessert_id' => Dessert::query()->inRandomOrder()->value('id') ?? Dessert::factory()->create()->id,
+            'ingredient_id' => Ingredient::query()->inRandomOrder()->value('id') ?? Ingredient::factory()->create()->id,
             'amount' => fake()->randomFloat(2, 1, 500),
         ];
     }

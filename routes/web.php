@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\SurplusController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Livewire\Settings\Appearance;
