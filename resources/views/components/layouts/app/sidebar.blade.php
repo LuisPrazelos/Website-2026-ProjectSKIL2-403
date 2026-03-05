@@ -74,12 +74,7 @@
                 <flux:menu.separator/>
 
                 <flux:menu.radio.group>
-<<<<<<< FK-Desserten-bekijken
                     <flux:menu.item :href="route('settings.profile')" icon="cog" wire:navigate>{{ __('Settings') }}</flux:menu.menu.item>
-=======
-                    <flux:menu.item :href="route('settings.profile')" icon="cog"
-                                    wire:navigate>{{ __('Settings') }}</flux:menu.item>
->>>>>>> main
                 </flux:menu.radio.group>
 
                 <flux:menu.separator/>
@@ -126,8 +121,6 @@
                     </div>
                 </div>
                 </flux:menu.radio.group>
-
-<<<<<<< FK-Desserten-bekijken
                 <flux:menu.separator />
 
                 <flux:menu.radio.group>
@@ -144,25 +137,7 @@
                 </form>
             </flux:menu>
         </flux:dropdown>
-=======
-            <flux:menu.separator/>
 
-            <flux:menu.radio.group>
-                <flux:menu.item :href="route('settings.profile')" icon="cog"
-                                wire:navigate>{{ __('Settings') }}</flux:menu.item>
-            </flux:menu.radio.group>
-
-            <flux:menu.separator/>
-
-            <form method="POST" action="{{ route('logout') }}" class="w-full">
-                @csrf
-                <flux:menu.item as="button" type="submit" icon="arrow-right-start-on-rectangle" class="w-full">
-                    {{ __('Log Out') }}
-                </flux:menu.item>
-            </form>
-        </flux:menu>
-    </flux:dropdown>
->>>>>>> main
 </flux:header>
 
 {{ $slot }}
