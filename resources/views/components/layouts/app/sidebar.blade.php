@@ -30,6 +30,9 @@
                 <flux:navlist.item icon="cog" :href="route('owner.surpluses.index')"
                                    :current="request()->routeIs('owner.surpluses.index')"
                                    wire:navigate>{{ __('Owner') }}</flux:navlist.item>
+                <flux:navlist.item icon="cog" :href="route('owner.ingredients.index')"
+                                   :current="request()->routeIs('owner.ingredients.index')"
+                                   wire:navigate>{{ __('Ingredients') }}</flux:navlist.item>
             @endif
         </flux:navlist.group>
     </flux:navlist>
@@ -119,7 +122,7 @@
 
             <flux:menu.radio.group>
                 <flux:menu.item :href="route('settings.profile')" icon="cog"
-                                wire:navigate>{{ __('Settings') }}</flux:menu.item>
+                                wire:navigate>{{ __('Settings') }}</flux:navlist.item>
             </flux:menu.radio.group>
 
             <flux:menu.separator/>

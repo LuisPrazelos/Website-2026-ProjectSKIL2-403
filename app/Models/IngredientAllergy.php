@@ -8,6 +8,7 @@ class IngredientAllergy extends Model
 {
     protected $primaryKey = ['ingredientId', 'allergyId'];
     public $incrementing = false;
+    public $timestamps = false; // Disable timestamps for this pivot table
 
     protected $fillable = [
         'ingredientId',
