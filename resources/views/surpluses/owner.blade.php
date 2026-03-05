@@ -52,9 +52,13 @@
                                         <span class="inline-block px-2 py-1 rounded-full bg-gray-50 text-gray-600">{{ $status }}</span>
                                     @endif
                                 </td>
-                                <td class="px-4 py-3">
-                                    <a href="#" title="{{ __('Bewerken') }}" class="mr-2">✏️</a>
-                                    <a href="#" title="{{ __('Verwijderen') }}" class="text-red-600">🗑️</a>
+                                <td class="px-4 py-3 flex items-center">
+                                    <a href="{{ route('owner.surpluses.edit', $surplus->id) }}" title="{{ __('Bewerken') }}" class="mr-2">✏️</a>
+                                    <form action="{{ route('owner.surpluses.destroy', $surplus->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this surplus?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" title="{{ __('Verwijderen') }}" class="text-red-600">🗑️</button>
+                                    </form>
                                 </td>
                             </tr>
                         @empty

@@ -104,6 +104,13 @@ Route::middleware(['auth'])->group(function () {
             $deserts = Dessert::with('picture')->paginate(10); // Paginate for better performance
             return view('deserts.owner-index', compact('deserts'));
         })->name('owner.deserts.index');
+
+        // Owner management view for surpluses
+        Route::get('/owner/surpluses', [SurplusController::class, 'ownerIndex'])->name('owner.surpluses.index');
+        Route::post('/owner/surpluses', [SurplusController::class, 'store'])->name('owner.surpluses.store');
+        Route::get('/owner/surpluses/{surplus}/edit', [SurplusController::class, 'edit'])->name('owner.surpluses.edit');
+        Route::put('/owner/surpluses/{surplus}', [SurplusController::class, 'update'])->name('owner.surpluses.update');
+        Route::delete('/owner/surpluses/{surplus}', [SurplusController::class, 'destroy'])->name('owner.surpluses.destroy');
     });
 });
 
