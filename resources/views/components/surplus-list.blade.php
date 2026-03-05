@@ -1,5 +1,6 @@
 @props(['surplus'])
 
+
 <div class="bg-white/70 backdrop-blur-md rounded-xl p-4 flex flex-col gap-4 shadow-lg">
 
     {{-- Header: Afbeelding, Naam en Details --}}
@@ -25,6 +26,7 @@
             <p class="text-gray-600">
                 Houdbaar tot: {{ $surplus->expiration_date->format('d-m-Y') }}
             </p>
+
         </div>
     </div>
 

@@ -6,17 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class IngredientAllergy extends Model
 {
-    protected $primaryKey = ['ingredientId', 'allergyId'];
+    protected $primaryKey = ['ingredient_id', 'allergyId'];
     public $incrementing = false;
+    public $timestamps = false; // Disable timestamps for this pivot table
 
     protected $fillable = [
-        'ingredientId',
+        'ingredient_id',
         'allergyId',
     ];
 
     public function ingredient()
     {
-        return $this->belongsTo(Ingredient::class, 'ingredientId');
+        return $this->belongsTo(Ingredient::class);
     }
 
     public function allergy()

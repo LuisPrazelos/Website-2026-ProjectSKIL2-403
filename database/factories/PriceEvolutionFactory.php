@@ -18,7 +18,7 @@ class PriceEvolutionFactory extends Factory
     public function definition(): array
     {
         return [
-            'ingredientId' => Ingredient::query()->inRandomOrder()->value('ingredientId') ?? Ingredient::factory()->create()->ingredientId,
+            'ingredientId' => Ingredient::query()->inRandomOrder()->value('id') ?? Ingredient::factory()->create()->id,
             'price' => fake()->randomFloat(2, 0.50, 20.00),
             'amount' => fake()->randomFloat(2, 0.1, 5.0),
             'date' => fake()->dateTimeBetween('-1 year', 'now'),

@@ -16,8 +16,8 @@ class IngredientDessert extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'dessertId',
-        'ingredientId',
+        'dessert_id',
+        'ingredient_id',
         'amount',
     ];
 
