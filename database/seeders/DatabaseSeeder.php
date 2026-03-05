@@ -40,7 +40,9 @@ class DatabaseSeeder extends Seeder
             DecorationSeeder::class,
 
             // Core domain data
+            CategorySeeder::class,
             IngredientSeeder::class,
+            PriceEvolutionSeeder::class,
             AllergySeeder::class,
             DessertSeeder::class,
             WorkshopSeeder::class,

@@ -9,15 +9,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('ingredient_allergies', function (Blueprint $table) {
-            $table->unsignedBigInteger('ingredientId');
+            $table->foreignId('ingredient_id')->constrained()->onDelete('cascade');
             $table->unsignedBigInteger('allergyId');
 
-            $table->primary(['ingredientId', 'allergyId']);
-
-            $table->foreign('ingredientId')
-                ->references('ingredientId')
-                ->on('ingredients')
-                ->onDelete('cascade');
+            $table->primary(['ingredient_id', 'allergyId']);
 
             $table->foreign('allergyId')
                 ->references('allergyId')
@@ -33,4 +28,3 @@ return new class extends Migration
         Schema::dropIfExists('ingredient_allergies');
     }
 };
-

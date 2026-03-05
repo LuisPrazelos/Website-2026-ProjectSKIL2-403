@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\SurplusController;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
@@ -40,6 +41,14 @@ Route::middleware(['auth'])->group(function () {
     // Owner management view for surpluses
     Route::get('/owner/surpluses', [SurplusController::class, 'ownerIndex'])->name('owner.surpluses.index');
     Route::post('/owner/surpluses', [SurplusController::class, 'store'])->name('owner.surpluses.store');
+
+    // Owner management view for recipes
+    Route::get('/owner/recipes', [RecipeController::class, 'ownerIndex'])->name('owner.recipes.index');
+    Route::post('/owner/recipes', [RecipeController::class, 'store'])->name('owner.recipes.store');
+    Route::get('/owner/recipes/{recipe}', [RecipeController::class, 'show'])->name('owner.recipes.show');
+    Route::get('/owner/recipes/{recipe}/edit', [RecipeController::class, 'edit'])->name('owner.recipes.edit');
+    Route::put('/owner/recipes/{recipe}', [RecipeController::class, 'update'])->name('owner.recipes.update');
+    Route::delete('/owner/recipes/{recipe}', [RecipeController::class, 'destroy'])->name('owner.recipes.destroy');
 });
 
 require __DIR__.'/auth.php';

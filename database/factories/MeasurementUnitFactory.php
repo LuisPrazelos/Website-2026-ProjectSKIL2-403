@@ -12,7 +12,7 @@ class MeasurementUnitFactory extends Factory
     public function definition(): array
     {
         return [
-            'unitName' => fake()->word(),
+            'name' => fake()->word(),
         ];
     }
 }
