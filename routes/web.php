@@ -1,8 +1,6 @@
 <?php
 
-use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\SurplusController;
-use App\Http\Middleware\AdminMiddleware;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
@@ -11,9 +9,7 @@ use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use App\Models\Ingredient;
 use App\Models\PriceEvolution;
-use App\Models\Dessert;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 Route::get('/', function () {
     return view('welcome');
@@ -34,7 +30,7 @@ Route::middleware(['auth'])->group(function () {
         ->middleware(
             when(
                 Features::canManageTwoFactorAuthentication()
-                && Features::optionEnabled(Features::twoFactorAuthentication(), 'confirmPassword'),
+                    && Features::optionEnabled(Features::twoFactorAuthentication(), 'confirmPassword'),
                 ['password.confirm'],
                 [],
             ),
@@ -44,23 +40,33 @@ Route::middleware(['auth'])->group(function () {
     // Route for the surplus shop (for buying)
     Route::get('/surplus-shop', [SurplusController::class, 'shopIndex'])->name('userSurplusShop.index');
 
-    // User overview for deserts
-    Route::get('/deserts', function () {
-        $deserts = Dessert::with('picture')->get(); // Eager load the picture relationship
-        return view('deserts.index', compact('deserts'));
-    })->name('deserts.index');
+    // Owner management view for surpluses
+    Route::get('/owner/surpluses', [SurplusController::class, 'ownerIndex'])->name('owner.surpluses.index');
+    Route::post('/owner/surpluses', [SurplusController::class, 'store'])->name('owner.surpluses.store');
 
-    Route::middleware([AdminMiddleware::class])->group(function () {
-        // Owner management view for surpluses
-        Route::get('/owner/surpluses', [SurplusController::class, 'ownerIndex'])->name('owner.surpluses.index');
-        Route::post('/owner/surpluses', [SurplusController::class, 'store'])->name('owner.surpluses.store');
+    Route::get('/price-evolution', function (Request $request) {
+        $ingredientId = $request->input('ingredient');
+        $priceEvolutions = null;
+        $ingredientName = null;
+        $ingredients = Ingredient::orderBy('ingredientName')->get();
 
-        // Owner management view for deserts
-        Route::get('/owner/deserts', function () {
-            $deserts = Dessert::with('picture')->paginate(10); // Paginate for better performance
-            return view('deserts.owner-index', compact('deserts'));
-        })->name('owner.deserts.index');
-    });
+        if ($ingredientId) {
+            $ingredient = Ingredient::find($ingredientId);
+            if ($ingredient) {
+                $ingredientName = $ingredient->ingredientName;
+                $priceEvolutions = PriceEvolution::where('ingredientId', $ingredient->ingredientId)
+                    ->orderBy('date', 'asc')
+                    ->get();
+            }
+        }
+
+        return view('price-evolution', [
+            'ingredients' => $ingredients,
+            'priceEvolutions' => $priceEvolutions,
+            'ingredientName' => $ingredientName,
+            'selectedIngredient' => $ingredientId,
+        ]);
+    })->middleware('admin')->name('price-evolution'); // Voeg de 'admin' middleware toe
 });
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';
