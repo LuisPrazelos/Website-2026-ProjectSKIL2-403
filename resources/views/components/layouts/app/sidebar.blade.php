@@ -20,7 +20,7 @@
             <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')"
                                wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
             <flux:navlist.item icon="calendar" href="#" wire:navigate>{{ __('Happenings') }}</flux:navlist.item>
-            <flux:navlist.item icon="cake" :href="route('deserts.index')" :current="request()->routeIs('deserts.index')" wire:navigate>{{ __('Desserts') }}</flux:navlist.item>
+            <flux:navlist.item icon="cake" href="#" wire:navigate>{{ __('Desserts') }}</flux:navlist.item>
             <flux:navlist.item icon="plus" :href="route('userSurplusShop.index')" :current="request()->routeIs('userSurplusShop.index')" wire:navigate>{{ __('Surpluses') }}</flux:navlist.item>
             <flux:navlist.item icon="shopping-cart" href="#" wire:navigate>{{ __('Orders') }}</flux:navlist.item>
             <flux:navlist.item icon="users" href="#" wire:navigate>{{ __('Workshops') }}</flux:navlist.item>
@@ -31,13 +31,17 @@
                 <flux:navlist.item icon="cog" :href="route('owner.surpluses.index')"
                                    :current="request()->routeIs('owner.surpluses.index')"
                                    wire:navigate>{{ __('Owner') }}</flux:navlist.item>
+                <flux:navlist.item icon="cog" :href="route('owner.ingredients.index')"
+                                   :current="request()->routeIs('owner.ingredients.index')"
+                                   wire:navigate>{{ __('Ingredients') }}</flux:navlist.item>
             @endif
         </flux:navlist.group>
 
         @if(auth()->user()->isAdmin())
             <flux:navlist.group :heading="__('Beheer')" class="grid mt-4">
-                <flux:navlist.item icon="cake" :href="route('owner.deserts.index')" :current="request()->routeIs('owner.deserts.index')" wire:navigate>{{ __('Desserts Beheren') }}</flux:navlist.item>
+                <flux:navlist.item icon="cake" href="#" wire:navigate>{{ __('Desserts Beheren') }}</flux:navlist.item>
                 <flux:navlist.item icon="plus" :href="route('owner.surpluses.index')" :current="request()->routeIs('owner.surpluses.index')" wire:navigate>{{ __('Overschotten Beheren') }}</flux:navlist.item>
+                <flux:navlist.item icon="chart-bar" :href="route('price-evolution')" :current="request()->routeIs('price-evolution')" wire:navigate>{{ __('Prijsevolutie') }}</flux:navlist.item>
             </flux:navlist.group>
         @endif
     </flux:navlist>
@@ -74,7 +78,7 @@
                 <flux:menu.separator/>
 
                 <flux:menu.radio.group>
-                    <flux:menu.item :href="route('settings.profile')" icon="cog" wire:navigate>{{ __('Settings') }}</flux:menu.menu.item>
+                    <flux:menu.item :href="route('settings.profile')" icon="cog" wire:navigate>{{ __('Settings') }}</flux:menu.item>
                 </flux:menu.radio.group>
 
                 <flux:menu.separator/>
@@ -120,23 +124,25 @@
                         </div>
                     </div>
                 </div>
-                </flux:menu.radio.group>
-                <flux:menu.separator />
+            </flux:menu.radio.group>
 
-                <flux:menu.radio.group>
-                    <flux:menu.item :href="route('settings.profile')" icon="cog" wire:navigate>{{ __('Settings') }}</flux:menu.item>
-                </flux:menu.radio.group>
+            <flux:menu.separator />
 
-                <flux:menu.separator />
+            <flux:menu.radio.group>
+                <flux:menu.item :href="route('settings.profile')" icon="cog" wire:navigate>{{ __('Settings') }}</flux:menu.item>
+            </flux:menu.radio.group>
 
-                <form method="POST" action="{{ route('logout') }}" class="w-full">
-                    @csrf
-                    <flux:menu.item as="button" type="submit" icon="arrow-right-start-on-rectangle" class="w-full">
-                        {{ __('Log Out') }}
-                    </flux:menu.item>
-                </form>
-            </flux:menu>
-        </flux:dropdown>
+            <flux:menu.separator />
+
+            <form method="POST" action="{{ route('logout') }}" class="w-full">
+                @csrf
+                <flux:menu.item as="button" type="submit" icon="arrow-right-start-on-rectangle" class="w-full">
+                    {{ __('Log Out') }}
+                </flux:menu.item>
+            </form>
+        </flux:menu>
+    </flux:dropdown>
+
 
 </flux:header>
 

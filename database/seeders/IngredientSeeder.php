@@ -23,6 +23,6 @@ class IngredientSeeder extends Seeder
         ]);
 
         // Create 10 random ingredients using the factory
-        Ingredient::factory(10)->create();
+        // Ingredient::factory(10)->create(); // Commented out for now
     }
 }
