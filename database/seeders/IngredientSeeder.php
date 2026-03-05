@@ -11,14 +11,14 @@ class IngredientSeeder extends Seeder
     {
         // Create some specific ingredients
         Ingredient::create([
-            'ingredientName' => 'Bloem',
-            'standardUnitId' => 1, // Assuming 1 is a valid MeasurementUnit ID
+            'name' => 'Bloem',
+            'measurement_unit_id' => 1, // Assuming 1 is a valid MeasurementUnit ID
             'minimumAmount' => 100,
         ]);
 
         Ingredient::create([
-            'ingredientName' => 'Suiker',
-            'standardUnitId' => 1, // Assuming 1 is a valid MeasurementUnit ID
+            'name' => 'Suiker',
+            'measurement_unit_id' => 1, // Assuming 1 is a valid MeasurementUnit ID
             'minimumAmount' => 50,
         ]);
 
