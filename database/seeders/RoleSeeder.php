@@ -16,8 +16,9 @@ class RoleSeeder extends Seeder
         Role::factory()
             ->count(2)
             ->sequence(
-                ['name' => 'Admin'],
-                ['name' => 'Customer']
+                ['name' => 'Customer'],
+                ['name' => 'Admin']
+
             )
             ->create();
     }

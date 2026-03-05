@@ -13,8 +13,8 @@ class IngredientFactory extends Factory
     public function definition(): array
     {
         return [
-            'ingredientName' => fake()->word(),
-            'standardUnitId' => MeasurementUnit::factory(),
+            'name' => fake()->word(),
+            'measurement_unit_id' => MeasurementUnit::factory(),
             'minimumAmount' => fake()->randomFloat(2, 0, 100),
         ];
     }

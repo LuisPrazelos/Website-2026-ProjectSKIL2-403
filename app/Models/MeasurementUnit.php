@@ -9,14 +9,12 @@ class MeasurementUnit extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'measurementUnitId';
-
     protected $fillable = [
-        'unitName',
+        'name',
     ];
 
     public function ingredients()
     {
-        return $this->hasMany(Ingredient::class, 'standardUnitId');
+        return $this->hasMany(Ingredient::class, 'measurement_unit_id');
     }
 }

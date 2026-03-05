@@ -67,7 +67,12 @@ class User extends Authenticatable
             ->explode(' ')
             ->filter()
             ->take(2)
-            ->map(fn ($word) => Str::substr($word, 0, 1))
+            ->map(fn($word) => Str::substr($word, 0, 1))
             ->implode('');
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->role_id === 2; // Admin role_id is 2
     }
 }
