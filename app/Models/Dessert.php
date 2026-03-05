@@ -39,4 +39,8 @@ class Dessert extends Model
         return $this->belongsTo(Picture::class, 'picture_id');
     }
 
+    public function measurementUnit()
+    {
+        return $this->belongsTo(MeasurementUnit::class);
+    }
 }

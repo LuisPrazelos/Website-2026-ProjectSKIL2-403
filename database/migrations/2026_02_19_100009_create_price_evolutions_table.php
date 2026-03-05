@@ -18,7 +18,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('ingredientId')
-                ->references('ingredientId')
+                ->references('id')
                 ->on('ingredients')
                 ->onDelete('cascade');
 

@@ -19,15 +19,8 @@ return new class extends Migration {
                 ->constrained('pictures')
                 ->nullOnDelete();
             $table->decimal('portion_size', 8, 2)->default(0);
-            $table->unsignedBigInteger('measurement_unit_id')->nullable();
+            $table->foreignId('measurement_unit_id')->nullable()->constrained()->nullOnDelete();
             $table->timestamps();
-
-            $table->foreign('measurement_unit_id')
-                ->references('measurementUnitId')
-                ->on('measurement_units')
-                ->onDelete('set null');
-
-            $table->index('measurement_unit_id');
         });
     }
 
@@ -36,4 +29,3 @@ return new class extends Migration {
         Schema::dropIfExists('desserts');
     }
 };
-
