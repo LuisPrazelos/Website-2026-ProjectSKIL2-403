@@ -31,6 +31,9 @@
                 <flux:navlist.item icon="cog" :href="route('owner.surpluses.index')"
                                    :current="request()->routeIs('owner.surpluses.index')"
                                    wire:navigate>{{ __('Owner') }}</flux:navlist.item>
+                <flux:navlist.item icon="cog" :href="route('owner.ingredients.index')"
+                                   :current="request()->routeIs('owner.ingredients.index')"
+                                   wire:navigate>{{ __('Ingredients') }}</flux:navlist.item>
             @endif
         </flux:navlist.group>
 
@@ -137,6 +140,7 @@
                 </form>
             </flux:menu>
         </flux:dropdown>
+
 
 </flux:header>
 
