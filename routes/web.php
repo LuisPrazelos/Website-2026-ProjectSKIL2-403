@@ -7,6 +7,11 @@ use App\Livewire\Settings\Profile;
 use App\Livewire\Settings\TwoFactor;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
+use App\Models\Ingredient;
+use App\Models\PriceEvolution;
+use App\Models\Dessert;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 Route::get('/', function () {
     return view('welcome');
@@ -40,6 +45,51 @@ Route::middleware(['auth'])->group(function () {
     // Owner management view for surpluses
     Route::get('/owner/surpluses', [SurplusController::class, 'ownerIndex'])->name('owner.surpluses.index');
     Route::post('/owner/surpluses', [SurplusController::class, 'store'])->name('owner.surpluses.store');
+
+    Route::get('/price-evolution', function (Request $request) {
+        $type = $request->input('type', 'ingredient');
+        $id = $request->input('id');
+        $priceEvolutions = null;
+        $itemName = null;
+
+        $ingredients = Ingredient::orderBy('ingredientName')->get();
+        $desserts = Dessert::orderBy('name')->get();
+
+        if ($id) {
+            if ($type === 'ingredient') {
+                $ingredient = Ingredient::find($id);
+                if ($ingredient) {
+                    $itemName = $ingredient->ingredientName;
+                    $priceEvolutions = PriceEvolution::where('ingredientId', $id)
+                        ->orderBy('date', 'asc')
+                        ->get();
+                }
+            } elseif ($type === 'recept') {
+                $dessert = Dessert::with('ingredients')->find($id);
+                if ($dessert) {
+                    $itemName = $dessert->name;
+                    $ingredientIds = $dessert->ingredients->pluck('ingredientId');
+
+                    if ($ingredientIds->isNotEmpty()) {
+                        $priceEvolutions = PriceEvolution::whereIn('ingredientId', $ingredientIds)
+                            ->select(DB::raw('date, SUM(price) as price'))
+                            ->groupBy('date')
+                            ->orderBy('date', 'asc')
+                            ->get();
+                    }
+                }
+            }
+        }
+
+        return view('price-evolution', [
+            'ingredients' => $ingredients,
+            'desserts' => $desserts,
+            'priceEvolutions' => $priceEvolutions,
+            'itemName' => $itemName,
+            'selectedType' => $type,
+            'selectedId' => $id,
+        ]);
+    })->name('price-evolution');
 });
 
 require __DIR__.'/auth.php';
