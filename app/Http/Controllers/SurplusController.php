@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Dessert;
 use App\Models\Surplus;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class SurplusController extends Controller
 {
@@ -71,5 +73,42 @@ class SurplusController extends Controller
         ]);
 
         return redirect()->route('owner.surpluses.index')->with('success', 'Overschot succesvol toegevoegd.');
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Surplus $surplus): View
+    {
+        $desserts = Dessert::orderBy('name')->get();
+        return view('surpluses.edit', compact('surplus', 'desserts'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Surplus $surplus): RedirectResponse
+    {
+        $validated = $request->validate([
+            'dessert_id' => 'required|exists:desserts,id',
+            'date' => 'required|date|after_or_equal:today',
+            'total_amount' => 'required|integer|min:1',
+            'sale' => 'required|numeric|min:0|max:100',
+            'status' => 'required|string',
+            'comment' => 'nullable|string',
+        ]);
+
+        $surplus->update($validated);
+
+        return redirect()->route('owner.surpluses.index')->with('success', 'Overschot succesvol bijgewerkt.');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Surplus $surplus): RedirectResponse
+    {
+        $surplus->delete();
+        return redirect()->route('owner.surpluses.index')->with('success', 'Overschot succesvol verwijderd.');
     }
 }

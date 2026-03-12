@@ -29,8 +29,8 @@
                     <tbody>
                         @forelse($ingredients as $ingredient)
                             <tr class="border-t">
-                                <td class="px-4 py-3">{{ $ingredient->ingredientName }}</td>
-                                <td class="px-4 py-3">{{ $ingredient->standardUnit->unitName ?? '-' }}</td>
+                                <td class="px-4 py-3">{{ $ingredient->name }}</td>
+                                <td class="px-4 py-3">{{ $ingredient->measurementUnit->name ?? '-' }}</td>
                                 <td class="px-4 py-3">
                                     @forelse($ingredient->ingredientAllergies as $ingredientAllergy)
                                         <span class="inline-block bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">{{ $ingredientAllergy->allergy->name ?? 'Onbekend' }}</span>
@@ -39,8 +39,8 @@
                                     @endforelse
                                 </td>
                                 <td class="px-4 py-3 flex items-center">
-                                    <a href="{{ route('owner.ingredients.edit', $ingredient->ingredientId) }}" title="{{ __('Bewerken') }}" class="mr-2">✏️</a>
-                                    <form action="{{ route('owner.ingredients.destroy', $ingredient->ingredientId) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this ingredient?');">
+                                    <a href="{{ route('owner.ingredients.edit', ['ingredient' => $ingredient->id]) }}" title="{{ __('Bewerken') }}" class="mr-2">✏️</a>
+                                    <form action="{{ route('owner.ingredients.destroy', ['ingredient' => $ingredient->id]) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this ingredient?');">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" title="{{ __('Verwijderen') }}" class="text-red-600">🗑️</button>
@@ -88,7 +88,7 @@
                         <label for="unit" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('Eenheid') }}</label>
                         <select id="unit" name="unit_id" class="mt-1 block w-full px-3 py-2 bg-white dark:bg-zinc-700 border border-gray-300 dark:border-zinc-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                             @foreach($units as $unit)
-                                <option value="{{ $unit->measurementUnitId }}">{{ $unit->unitName }}</option>
+                                <option value="{{ $unit->id }}">{{ $unit->name }}</option>
                             @endforeach
                         </select>
                     </div>

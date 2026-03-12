@@ -29,8 +29,8 @@
                         <x-layouts.app.dropdown
                             name="id"
                             :options="$ingredients"
-                            valueField="ingredientId"
-                            labelField="ingredientName"
+                            valueField="id"
+                            labelField="name"
                             placeholder="Selecteer een ingrediënt"
                             :value="$selectedId"
                         />
