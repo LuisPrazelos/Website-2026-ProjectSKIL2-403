@@ -39,8 +39,9 @@ class Dessert extends Model
         return $this->belongsTo(Picture::class, 'picture_id');
     }
 
-    public function measurementUnit()
+    public function ingredients()
     {
-        return $this->belongsTo(MeasurementUnit::class);
+        return $this->belongsToMany(Ingredient::class, 'ingredient_desserts', 'dessert_id', 'ingredient_id')
+                    ->withPivot('amount');
     }
 }
