@@ -58,9 +58,9 @@
                     <span class="text-lg font-medium text-gray-900 dark:text-white">Total</span>
                     <span class="text-lg font-bold text-gray-900 dark:text-white">€{{ number_format($this->totalPrice, 2) }}</span>
                 </div>
-                <button class="w-full bg-black text-white py-3 px-4 rounded-md hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200 transition duration-150 ease-in-out">
+                <a href="{{ route('checkout') }}" class="w-full bg-black text-white py-3 px-4 rounded-md hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200 transition duration-150 ease-in-out text-center">
                     Proceed to Checkout
-                </button>
+                </a>
             </div>
         </div>
     @else

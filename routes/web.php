@@ -45,15 +45,13 @@ Route::middleware(['auth'])->group(function () {
         return view('deserts.index', compact('deserts'));
     })->name('deserts.index');
 
-    // Shopping Cart Page - Use full namespace for Livewire component
+    // Shopping Cart Page
     Route::get('/shopping-cart', \App\Livewire\ShoppingCartPage::class)->name('shopping-cart');
-    // Owner management view for recipes
-    Route::get('/owner/recipes', [RecipeController::class, 'ownerIndex'])->name('owner.recipes.index');
-    Route::post('/owner/recipes', [RecipeController::class, 'store'])->name('owner.recipes.store');
-    Route::get('/owner/recipes/{recipe}', [RecipeController::class, 'show'])->name('owner.recipes.show');
-    Route::get('/owner/recipes/{recipe}/edit', [RecipeController::class, 'edit'])->name('owner.recipes.edit');
-    Route::put('/owner/recipes/{recipe}', [RecipeController::class, 'update'])->name('owner.recipes.update');
-    Route::delete('/owner/recipes/{recipe}', [RecipeController::class, 'destroy'])->name('owner.recipes.destroy');
+
+    // QR Code Checkout Route
+    Route::get('/checkout', function () {
+        return view('checkout.qr-code');
+    })->name('checkout');
 
     Route::middleware([AdminMiddleware::class])->group(function () {
         // Owner management view for surpluses
