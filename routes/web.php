@@ -73,6 +73,14 @@ Route::middleware(['auth'])->group(function () {
         return view('deserts.index', compact('deserts'));
     })->name('deserts.index');
 
+    // Shopping Cart Page
+    Route::get('/shopping-cart', \App\Livewire\ShoppingCartPage::class)->name('shopping-cart');
+
+    // QR Code Checkout Route
+    Route::get('/checkout', function () {
+        return view('checkout.qr-code');
+    })->name('checkout');
+
     Route::middleware([AdminMiddleware::class])->group(function () {
         // Livewire routes for recipe management
         Route::get('/owner/recipes', RecipeManager::class)->name('owner.recipes.index');

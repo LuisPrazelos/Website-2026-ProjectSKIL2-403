@@ -20,7 +20,7 @@
             <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')"
                                wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
             <flux:navlist.item icon="calendar" href="#" wire:navigate>{{ __('Happenings') }}</flux:navlist.item>
-            <flux:navlist.item icon="cake" href="#" wire:navigate>{{ __('Desserts') }}</flux:navlist.item>
+            <flux:navlist.item icon="cake" :href="route('deserts.index')" :current="request()->routeIs('deserts.index')" wire:navigate>{{ __('Desserts') }}</flux:navlist.item>
             <flux:navlist.item icon="plus" :href="route('userSurplusShop.index')" :current="request()->routeIs('userSurplusShop.index')" wire:navigate>{{ __('Surpluses') }}</flux:navlist.item>
             <flux:navlist.item icon="shopping-cart" href="#" wire:navigate>{{ __('Orders') }}</flux:navlist.item>
             <flux:navlist.item icon="users" href="#" wire:navigate>{{ __('Workshops') }}</flux:navlist.item>
@@ -31,6 +31,7 @@
 
         @if(auth()->check() && auth()->user()->isAdmin())
             <flux:navlist.group :heading="__('Beheer')" class="grid mt-4">
+                <flux:navlist.item icon="cake" :href="route('owner.deserts.index')" :current="request()->routeIs('owner.deserts.index')" wire:navigate>{{ __('Desserts Beheren') }}</flux:navlist.item>
                 <flux:navlist.item icon="book-open" :href="route('owner.recipes.index')" :current="request()->routeIs('owner.recipes.index')" wire:navigate>{{ __('Recepten Beheren') }}</flux:navlist.item>
                 <flux:navlist.item icon="cake" href="#" wire:navigate>{{ __('Desserts Beheren') }}</flux:navlist.item>
                 <flux:navlist.item icon="plus" :href="route('owner.surpluses.index')" :current="request()->routeIs('owner.surpluses.index')" wire:navigate>{{ __('Overschotten Beheren') }}</flux:navlist.item>
