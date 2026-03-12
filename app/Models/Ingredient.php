@@ -9,9 +9,6 @@ class Ingredient extends Model
 {
     use HasFactory;
 
-    // Reverted primary key to default 'id'
-    // protected $primaryKey = 'ingredientId';
-
     protected $fillable = [
         'name',
         'measurement_unit_id',
@@ -30,11 +27,11 @@ class Ingredient extends Model
 
     /**
      * Define the relationship with PriceEvolution.
-     * The foreign key on the price_evolutions table is 'ingredient_id'.
+     * The foreign key on the price_evolutions table is 'ingredientId'.
      * The local key on the ingredients table is 'id'.
      */
     public function priceEvolutions()
     {
-        return $this->hasMany(PriceEvolution::class, 'ingredient_id', 'id');
+        return $this->hasMany(PriceEvolution::class, 'ingredientId', 'id');
     }
 }

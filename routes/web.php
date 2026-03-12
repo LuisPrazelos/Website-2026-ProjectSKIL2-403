@@ -1,10 +1,11 @@
 <?php
 
 use App\Http\Controllers\CartController;
-use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\SurplusController;
-use App\Http\Controllers\IngredientController; // Import the new controller
+use App\Http\Controllers\IngredientController;
 use App\Http\Middleware\AdminMiddleware;
+use App\Livewire\RecipeManager;
+use App\Livewire\ShowRecipe;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
@@ -69,6 +70,10 @@ Route::middleware(['auth'])->group(function () {
     })->name('deserts.index');
 
     Route::middleware([AdminMiddleware::class])->group(function () {
+        // Livewire routes for recipe management
+        Route::get('/owner/recipes', RecipeManager::class)->name('owner.recipes.index');
+        Route::get('/owner/recipes/{recipe}', ShowRecipe::class)->name('owner.recipes.show');
+
         Route::get('/price-evolution', function (Request $request) {
             $ingredientId = $request->input('ingredient');
             $priceEvolutions = null;
