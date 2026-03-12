@@ -3,7 +3,7 @@
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\SurplusController;
-use App\Http\Controllers\IngredientController; // Import the new controller
+use App\Http\Controllers\IngredientController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
@@ -11,10 +11,11 @@ use App\Livewire\Settings\Profile;
 use App\Livewire\Settings\TwoFactor;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
-use App\Models\Ingredient;
-use App\Models\PriceEvolution;
 use App\Models\Dessert;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 
 Route::get('/', function () {
     return view('welcome');
@@ -64,7 +65,7 @@ Route::middleware(['auth'])->group(function () {
 
     // User overview for deserts
     Route::get('/deserts', function () {
-        $deserts = Dessert::with('picture')->get(); // Eager load the picture relationship
+        $deserts = Dessert::with('picture')->get();
         return view('deserts.index', compact('deserts'));
     })->name('deserts.index');
 
@@ -78,26 +79,96 @@ Route::middleware(['auth'])->group(function () {
 
     Route::middleware([AdminMiddleware::class])->group(function () {
         Route::get('/price-evolution', function (Request $request) {
-            $ingredientId = $request->input('ingredient');
-            $priceEvolutions = null;
-            $ingredientName = null;
-            $ingredients = Ingredient::orderBy('ingredientName')->get();
+            $type = $request->input('type', 'ingredient');
+            $id = $request->input('id');
+            $priceEvolutions = collect();
+            $itemName = null;
 
-            if ($ingredientId) {
-                $ingredient = Ingredient::find($ingredientId);
-                if ($ingredient) {
-                    $ingredientName = $ingredient->ingredientName;
-                    $priceEvolutions = PriceEvolution::where('ingredientId', $ingredient->ingredientId)
-                        ->orderBy('date', 'asc')
-                        ->get();
+            $ingredients = Ingredient::orderBy('name')->get();
+            $desserts = Dessert::orderBy('name')->get();
+
+            if ($id) {
+                if ($type === 'ingredient') {
+                    $ingredient = Ingredient::find($id);
+                    if ($ingredient) {
+                        $itemName = $ingredient->name;
+                        $priceEvolutions = PriceEvolution::where('ingredientId', $ingredient->id)
+                            ->orderBy('date', 'asc')
+                            ->get();
+                    }
+                } elseif ($type === 'recept') {
+                    $dessert = Dessert::with('ingredients')->find($id);
+                    if ($dessert && $dessert->ingredients->isNotEmpty()) {
+                        $itemName = $dessert->name;
+
+                        $ingredientIds = $dessert->ingredients->pluck('id');
+
+                        // Haal alle relevante prijsdata op
+                        $allPrices = PriceEvolution::whereIn('ingredientId', $ingredientIds)
+                            ->orderBy('date', 'asc')
+                            ->get();
+
+                        if ($allPrices->isNotEmpty()) {
+                            // Bepaal de periode
+                            $startDate = Carbon::parse($allPrices->min('date'));
+                            $endDate = Carbon::now(); // Of max date uit DB: Carbon::parse($allPrices->max('date'));
+                            $period = CarbonPeriod::create($startDate, $endDate);
+
+                            $calculatedPrices = [];
+                            $lastKnownPrices = []; // Houdt de laatst bekende prijs per ingrediënt bij
+
+                            // Initialiseer lastKnownPrices (optioneel, kan ook in de loop)
+                            foreach ($dessert->ingredients as $ing) {
+                                $lastKnownPrices[$ing->id] = 0;
+                            }
+
+                            foreach ($period as $date) {
+                                $dateStr = $date->format('Y-m-d');
+                                $pricesOnThisDate = $allPrices->where('date', '>=', $date->copy()->startOfDay())
+                                                              ->where('date', '<=', $date->copy()->endOfDay());
+
+                                // Update laatst bekende prijzen
+                                foreach ($pricesOnThisDate as $priceRecord) {
+                                    $lastKnownPrices[$priceRecord->ingredientId] = $priceRecord->price;
+                                }
+
+                                // Bereken totaalprijs voor deze dag
+                                $totalPrice = 0;
+                                $hasAnyPrice = false;
+
+                                foreach ($dessert->ingredients as $ing) {
+                                    $price = $lastKnownPrices[$ing->id] ?? 0;
+                                    if ($price > 0) {
+                                        $totalPrice += $price * $ing->pivot->amount;
+                                        $hasAnyPrice = true;
+                                    }
+                                }
+
+                                // Voeg alleen toe als we tenminste iets van prijsdata hebben
+                                // Je kunt hier ook checken of *alle* ingrediënten > 0 zijn als je dat liever hebt
+                                if ($hasAnyPrice) {
+                                    $calculatedPrices[] = (object)[
+                                        'date' => $date->copy(),
+                                        'price' => $totalPrice
+                                    ];
+                                }
+                            }
+
+                            // Filter om niet elke dag te tonen als de prijs niet verandert (optioneel, voor schonere grafiek)
+                            // Voor nu tonen we alles, Chart.js handelt dit wel af.
+                            $priceEvolutions = collect($calculatedPrices);
+                        }
+                    }
                 }
             }
 
             return view('price-evolution', [
                 'ingredients' => $ingredients,
+                'desserts' => $desserts,
                 'priceEvolutions' => $priceEvolutions,
-                'ingredientName' => $ingredientName,
-                'selectedIngredient' => $ingredientId,
+                'itemName' => $itemName,
+                'selectedType' => $type,
+                'selectedId' => $id,
             ]);
         })->name('price-evolution');
 
@@ -107,9 +178,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/owner/ingredients/{ingredient}/edit', [IngredientController::class, 'edit'])->name('owner.ingredients.edit');
         Route::put('/owner/ingredients/{ingredient}', [IngredientController::class, 'update'])->name('owner.ingredients.update');
         Route::delete('/owner/ingredients/{ingredient}', [IngredientController::class, 'destroy'])->name('owner.ingredients.destroy');
+
         // Owner management view for deserts
         Route::get('/owner/deserts', function () {
-            $deserts = Dessert::with('picture')->paginate(10); // Paginate for better performance
+            $deserts = Dessert::with('picture')->paginate(10);
             return view('deserts.owner-index', compact('deserts'));
         })->name('owner.deserts.index');
 
