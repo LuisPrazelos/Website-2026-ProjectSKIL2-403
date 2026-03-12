@@ -57,6 +57,7 @@ class DatabaseSeeder extends Seeder
             AllergySeeder::class,
             DessertSeeder::class,
             WorkshopSeeder::class,
+            HappeningSeeder::class, // Added HappeningSeeder
 
             // Then seed items that depend on the above
             ReviewSeeder::class,
