@@ -75,26 +75,40 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/owner/recipes/{recipe}', ShowRecipe::class)->name('owner.recipes.show');
 
         Route::get('/price-evolution', function (Request $request) {
-            $ingredientId = $request->input('ingredient');
+            $selectedType = $request->input('type', 'ingredient');
+            $selectedId = $request->input('id');
             $priceEvolutions = null;
-            $ingredientName = null;
-            $ingredients = Ingredient::orderBy('ingredientName')->get();
+            $itemName = null;
 
-            if ($ingredientId) {
-                $ingredient = Ingredient::find($ingredientId);
-                if ($ingredient) {
-                    $ingredientName = $ingredient->ingredientName;
-                    $priceEvolutions = PriceEvolution::where('ingredientId', $ingredient->ingredientId)
-                        ->orderBy('date', 'asc')
-                        ->get();
+            $ingredients = Ingredient::orderBy('ingredientName')->get();
+            $desserts = Dessert::orderBy('name')->get();
+
+            if ($selectedId) {
+                if ($selectedType === 'ingredient') {
+                    $ingredient = Ingredient::find($selectedId);
+                    if ($ingredient) {
+                        $itemName = $ingredient->ingredientName;
+                        $priceEvolutions = PriceEvolution::where('ingredientId', $ingredient->ingredientId)
+                            ->orderBy('date', 'asc')
+                            ->get();
+                    }
+                } elseif ($selectedType === 'recept') {
+                    $dessert = Dessert::find($selectedId);
+                    if ($dessert) {
+                        $itemName = $dessert->name;
+                        // You may need to implement price evolution logic for desserts
+                        $priceEvolutions = collect();
+                    }
                 }
             }
 
             return view('price-evolution', [
                 'ingredients' => $ingredients,
+                'desserts' => $desserts,
                 'priceEvolutions' => $priceEvolutions,
-                'ingredientName' => $ingredientName,
-                'selectedIngredient' => $ingredientId,
+                'itemName' => $itemName,
+                'selectedType' => $selectedType,
+                'selectedId' => $selectedId,
             ]);
         })->name('price-evolution');
 
