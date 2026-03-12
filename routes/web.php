@@ -16,6 +16,10 @@ use App\Models\Ingredient;
 use App\Models\PriceEvolution;
 use App\Models\Dessert;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
+use App\Livewire\ShowHappenings;
 
 Route::get('/', function () {
     return view('welcome');
@@ -116,6 +120,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/owner/surpluses/{surplus}/edit', [SurplusController::class, 'edit'])->name('owner.surpluses.edit');
         Route::put('/owner/surpluses/{surplus}', [SurplusController::class, 'update'])->name('owner.surpluses.update');
         Route::delete('/owner/surpluses/{surplus}', [SurplusController::class, 'destroy'])->name('owner.surpluses.destroy');
+
+        // Owner management view for happenings
+        Route::get('/owner/happenings', ShowHappenings::class)->name('owner.happenings.index');
     });
 });
 

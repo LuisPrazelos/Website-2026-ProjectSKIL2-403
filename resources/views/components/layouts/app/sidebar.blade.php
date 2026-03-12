@@ -34,6 +34,7 @@
                 <flux:navlist.item icon="cake" href="#" wire:navigate>{{ __('Desserts Beheren') }}</flux:navlist.item>
                 <flux:navlist.item icon="plus" :href="route('owner.surpluses.index')" :current="request()->routeIs('owner.surpluses.index')" wire:navigate>{{ __('Overschotten Beheren') }}</flux:navlist.item>
                 <flux:navlist.item icon="chart-bar" :href="route('price-evolution')" :current="request()->routeIs('price-evolution')" wire:navigate>{{ __('Prijsevolutie') }}</flux:navlist.item>
+                <flux:navlist.item icon="calendar" :href="route('owner.happenings.index')" :current="request()->routeIs('owner.happenings.index')" wire:navigate>{{ __('Evenementen Beheren') }}</flux:navlist.item>
             </flux:navlist.group>
         @endif
     </flux:navlist>
