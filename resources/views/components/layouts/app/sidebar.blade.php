@@ -27,17 +27,9 @@
             <flux:navlist.item icon="clipboard-document-list" href="#"
                                wire:navigate>{{ __('Shopping List') }}</flux:navlist.item>
             <flux:navlist.item icon="star" href="#" wire:navigate>{{ __('Reviews') }}</flux:navlist.item>
-            @if(auth()->check() && auth()->user()->isAdmin())
-                <flux:navlist.item icon="cog" :href="route('owner.surpluses.index')"
-                                   :current="request()->routeIs('owner.surpluses.index')"
-                                   wire:navigate>{{ __('Owner') }}</flux:navlist.item>
-                <flux:navlist.item icon="cog" :href="route('owner.ingredients.index')"
-                                   :current="request()->routeIs('owner.ingredients.index')"
-                                   wire:navigate>{{ __('Ingredients') }}</flux:navlist.item>
-            @endif
         </flux:navlist.group>
 
-        @if(auth()->user()->isAdmin())
+        @if(auth()->check() && auth()->user()->isAdmin())
             <flux:navlist.group :heading="__('Beheer')" class="grid mt-4">
                 <flux:navlist.item icon="cake" href="#" wire:navigate>{{ __('Desserts Beheren') }}</flux:navlist.item>
                 <flux:navlist.item icon="plus" :href="route('owner.surpluses.index')" :current="request()->routeIs('owner.surpluses.index')" wire:navigate>{{ __('Overschotten Beheren') }}</flux:navlist.item>
@@ -47,8 +39,11 @@
         @endif
     </flux:navlist>
 
-    <!-- Desktop User Menu (pinned to bottom) -->
+    <!-- Desktop User Menu & Cart (pinned to bottom) -->
     <div class="mt-auto hidden lg:block">
+        <div class="p-2">
+            <livewire:shopping-cart />
+        </div>
         <flux:dropdown position="bottom" align="start">
             <flux:profile
                 :name="auth()->user()->name"
@@ -60,14 +55,11 @@
                 <flux:menu.radio.group>
                     <div class="p-0 text-sm font-normal">
                         <div class="flex items-center gap-2 px-1 py-1.5 text-start text-sm">
-                                    <span class="relative flex h-8 w-8 shrink-0 overflow-hidden rounded-lg">
-                                        <span
-                                            class="flex h-full w-full items-center justify-center rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white"
-                                        >
-                                            {{ auth()->user()->initials() }}
-                                        </span>
-                                    </span>
-
+                            <span class="relative flex h-8 w-8 shrink-0 overflow-hidden rounded-lg">
+                                <span class="flex h-full w-full items-center justify-center rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
+                                    {{ auth()->user()->initials() }}
+                                </span>
+                            </span>
                             <div class="grid flex-1 text-start text-sm leading-tight">
                                 <span class="truncate font-semibold">{{ auth()->user()->name }}</span>
                                 <span class="truncate text-xs">{{ auth()->user()->email }}</span>
@@ -75,15 +67,11 @@
                         </div>
                     </div>
                 </flux:menu.radio.group>
-
                 <flux:menu.separator/>
-
                 <flux:menu.radio.group>
                     <flux:menu.item :href="route('settings.profile')" icon="cog" wire:navigate>{{ __('Settings') }}</flux:menu.item>
                 </flux:menu.radio.group>
-
                 <flux:menu.separator/>
-
                 <form method="POST" action="{{ route('logout') }}" class="w-full">
                     @csrf
                     <flux:menu.item as="button" type="submit" icon="arrow-right-start-on-rectangle" class="w-full">
@@ -95,30 +83,25 @@
     </div>
 </flux:sidebar>
 
-<!-- Mobile User Menu -->
+<!-- Mobile Header -->
 <flux:header class="lg:hidden">
     <flux:sidebar.toggle class="lg:hidden" icon="bars-2" inset="left"/>
-
     <flux:spacer/>
-
+    <livewire:shopping-cart :handle-adds="true" />
     <flux:dropdown position="top" align="end">
         <flux:profile
             :initials="auth()->user()->initials()"
             icon-trailing="chevron-down"
         />
-
         <flux:menu>
             <flux:menu.radio.group>
                 <div class="p-0 text-sm font-normal">
                     <div class="flex items-center gap-2 px-1 py-1.5 text-start text-sm">
-                                <span class="relative flex h-8 w-8 shrink-0 overflow-hidden rounded-lg">
-                                    <span
-                                        class="flex h-full w-full items-center justify-center rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white"
-                                    >
-                                        {{ auth()->user()->initials() }}
-                                    </span>
-                                </span>
-
+                        <span class="relative flex h-8 w-8 shrink-0 overflow-hidden rounded-lg">
+                            <span class="flex h-full w-full items-center justify-center rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
+                                {{ auth()->user()->initials() }}
+                            </span>
+                        </span>
                         <div class="grid flex-1 text-start text-sm leading-tight">
                             <span class="truncate font-semibold">{{ auth()->user()->name }}</span>
                             <span class="truncate text-xs">{{ auth()->user()->email }}</span>
@@ -143,8 +126,6 @@
             </form>
         </flux:menu>
     </flux:dropdown>
-
-
 </flux:header>
 
 {{ $slot }}

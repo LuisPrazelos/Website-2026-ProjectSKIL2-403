@@ -1,10 +1,11 @@
 <?php
 
 use App\Http\Controllers\CartController;
-use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\SurplusController;
 use App\Http\Controllers\IngredientController;
 use App\Http\Middleware\AdminMiddleware;
+use App\Livewire\RecipeManager;
+use App\Livewire\ShowRecipe;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
@@ -73,97 +74,31 @@ Route::middleware(['auth'])->group(function () {
     })->name('deserts.index');
 
     Route::middleware([AdminMiddleware::class])->group(function () {
+        // Livewire routes for recipe management
+        Route::get('/owner/recipes', RecipeManager::class)->name('owner.recipes.index');
+        Route::get('/owner/recipes/{recipe}', ShowRecipe::class)->name('owner.recipes.show');
+
         Route::get('/price-evolution', function (Request $request) {
-            $type = $request->input('type', 'ingredient');
-            $id = $request->input('id');
-            $priceEvolutions = collect();
-            $itemName = null;
+            $ingredientId = $request->input('ingredient');
+            $priceEvolutions = null;
+            $ingredientName = null;
+            $ingredients = Ingredient::orderBy('ingredientName')->get();
 
-            $ingredients = Ingredient::orderBy('name')->get();
-            $desserts = Dessert::orderBy('name')->get();
-
-            if ($id) {
-                if ($type === 'ingredient') {
-                    $ingredient = Ingredient::find($id);
-                    if ($ingredient) {
-                        $itemName = $ingredient->name;
-                        $priceEvolutions = PriceEvolution::where('ingredientId', $ingredient->id)
-                            ->orderBy('date', 'asc')
-                            ->get();
-                    }
-                } elseif ($type === 'recept') {
-                    $dessert = Dessert::with('ingredients')->find($id);
-                    if ($dessert && $dessert->ingredients->isNotEmpty()) {
-                        $itemName = $dessert->name;
-
-                        $ingredientIds = $dessert->ingredients->pluck('id');
-
-                        // Haal alle relevante prijsdata op
-                        $allPrices = PriceEvolution::whereIn('ingredientId', $ingredientIds)
-                            ->orderBy('date', 'asc')
-                            ->get();
-
-                        if ($allPrices->isNotEmpty()) {
-                            // Bepaal de periode
-                            $startDate = Carbon::parse($allPrices->min('date'));
-                            $endDate = Carbon::now(); // Of max date uit DB: Carbon::parse($allPrices->max('date'));
-                            $period = CarbonPeriod::create($startDate, $endDate);
-
-                            $calculatedPrices = [];
-                            $lastKnownPrices = []; // Houdt de laatst bekende prijs per ingrediënt bij
-
-                            // Initialiseer lastKnownPrices (optioneel, kan ook in de loop)
-                            foreach ($dessert->ingredients as $ing) {
-                                $lastKnownPrices[$ing->id] = 0;
-                            }
-
-                            foreach ($period as $date) {
-                                $dateStr = $date->format('Y-m-d');
-                                $pricesOnThisDate = $allPrices->where('date', '>=', $date->copy()->startOfDay())
-                                                              ->where('date', '<=', $date->copy()->endOfDay());
-
-                                // Update laatst bekende prijzen
-                                foreach ($pricesOnThisDate as $priceRecord) {
-                                    $lastKnownPrices[$priceRecord->ingredientId] = $priceRecord->price;
-                                }
-
-                                // Bereken totaalprijs voor deze dag
-                                $totalPrice = 0;
-                                $hasAnyPrice = false;
-
-                                foreach ($dessert->ingredients as $ing) {
-                                    $price = $lastKnownPrices[$ing->id] ?? 0;
-                                    if ($price > 0) {
-                                        $totalPrice += $price * $ing->pivot->amount;
-                                        $hasAnyPrice = true;
-                                    }
-                                }
-
-                                // Voeg alleen toe als we tenminste iets van prijsdata hebben
-                                // Je kunt hier ook checken of *alle* ingrediënten > 0 zijn als je dat liever hebt
-                                if ($hasAnyPrice) {
-                                    $calculatedPrices[] = (object)[
-                                        'date' => $date->copy(),
-                                        'price' => $totalPrice
-                                    ];
-                                }
-                            }
-
-                            // Filter om niet elke dag te tonen als de prijs niet verandert (optioneel, voor schonere grafiek)
-                            // Voor nu tonen we alles, Chart.js handelt dit wel af.
-                            $priceEvolutions = collect($calculatedPrices);
-                        }
-                    }
+            if ($ingredientId) {
+                $ingredient = Ingredient::find($ingredientId);
+                if ($ingredient) {
+                    $ingredientName = $ingredient->ingredientName;
+                    $priceEvolutions = PriceEvolution::where('ingredientId', $ingredient->ingredientId)
+                        ->orderBy('date', 'asc')
+                        ->get();
                 }
             }
 
             return view('price-evolution', [
                 'ingredients' => $ingredients,
-                'desserts' => $desserts,
                 'priceEvolutions' => $priceEvolutions,
-                'itemName' => $itemName,
-                'selectedType' => $type,
-                'selectedId' => $id,
+                'ingredientName' => $ingredientName,
+                'selectedIngredient' => $ingredientId,
             ]);
         })->name('price-evolution');
 
@@ -173,7 +108,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/owner/ingredients/{ingredient}/edit', [IngredientController::class, 'edit'])->name('owner.ingredients.edit');
         Route::put('/owner/ingredients/{ingredient}', [IngredientController::class, 'update'])->name('owner.ingredients.update');
         Route::delete('/owner/ingredients/{ingredient}', [IngredientController::class, 'destroy'])->name('owner.ingredients.destroy');
-
         // Owner management view for deserts
         Route::get('/owner/deserts', function () {
             $deserts = Dessert::with('picture')->paginate(10); // Paginate for better performance
