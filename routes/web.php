@@ -11,8 +11,6 @@ use App\Livewire\Settings\Profile;
 use App\Livewire\Settings\TwoFactor;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
-use App\Models\Ingredient;
-use App\Models\PriceEvolution;
 use App\Models\Dessert;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -67,9 +65,12 @@ Route::middleware(['auth'])->group(function () {
 
     // User overview for deserts
     Route::get('/deserts', function () {
-        $deserts = Dessert::with('picture')->get(); // Eager load the picture relationship
+        $deserts = Dessert::with('picture')->get();
         return view('deserts.index', compact('deserts'));
     })->name('deserts.index');
+
+    // Shopping Cart Page
+    Route::get('/shopping-cart', ShoppingCartPage::class)->name('shopping-cart');
 
     Route::middleware([AdminMiddleware::class])->group(function () {
         Route::get('/price-evolution', function (Request $request) {
@@ -175,7 +176,7 @@ Route::middleware(['auth'])->group(function () {
 
         // Owner management view for deserts
         Route::get('/owner/deserts', function () {
-            $deserts = Dessert::with('picture')->paginate(10); // Paginate for better performance
+            $deserts = Dessert::with('picture')->paginate(10);
             return view('deserts.owner-index', compact('deserts'));
         })->name('owner.deserts.index');
 
