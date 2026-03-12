@@ -31,6 +31,7 @@
 
         @if(auth()->check() && auth()->user()->isAdmin())
             <flux:navlist.group :heading="__('Beheer')" class="grid mt-4">
+                <flux:navlist.item icon="book-open" :href="route('owner.recipes.index')" :current="request()->routeIs('owner.recipes.index')" wire:navigate>{{ __('Recepten Beheren') }}</flux:navlist.item>
                 <flux:navlist.item icon="cake" href="#" wire:navigate>{{ __('Desserts Beheren') }}</flux:navlist.item>
                 <flux:navlist.item icon="plus" :href="route('owner.surpluses.index')" :current="request()->routeIs('owner.surpluses.index')" wire:navigate>{{ __('Overschotten Beheren') }}</flux:navlist.item>
                 <flux:navlist.item icon="chart-bar" :href="route('price-evolution')" :current="request()->routeIs('price-evolution')" wire:navigate>{{ __('Prijsevolutie') }}</flux:navlist.item>
