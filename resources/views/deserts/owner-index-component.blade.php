@@ -8,7 +8,7 @@
                     <p class="text-sm text-gray-600 mt-1">{{ __('Beheer je desserts hier: zoek, voeg toe, bewerk of verwijder items.') }}</p>
                 </div>
                 <div>
-                    <button wire:click="$set('showAddModal', true)" class="inline-flex items-center px-4 py-2 border rounded-md text-sm bg-black text-white">+ {{ __('Dessert toevoegen') }}</button>
+                    <button wire:click="$set('showAddModal', true)" class="inline-flex items-center px-4 py-2 border rounded-md text-sm bg-accent text-white hover:bg-amber-700 dark:bg-accent dark:text-white dark:hover:bg-amber-500">+ {{ __('Dessert toevoegen') }}</button>
                 </div>
             </div>
 
@@ -131,8 +131,8 @@
                             </div>
                         </div>
                         <div class="mt-6 flex justify-end space-x-4">
-                            <button type="button" wire:click="$set('showAddModal', false)" class="px-4 py-2 border rounded-md text-sm">Annuleren</button>
-                            <button type="submit" class="px-4 py-2 border rounded-md text-sm bg-black text-white">Opslaan</button>
+                            <button type="button" wire:click="$set('showAddModal', false)" class="px-4 py-2 border rounded-md text-sm bg-zinc-200 text-zinc-800 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-600">Annuleren</button>
+                            <button type="submit" class="px-4 py-2 border rounded-md text-sm bg-accent text-white hover:bg-amber-700 dark:bg-accent dark:text-white dark:hover:bg-amber-500">Opslaan</button>
                         </div>
                     </form>
                 </div>
@@ -204,8 +204,8 @@
                             </div>
                         </div>
                         <div class="mt-6 flex justify-end space-x-4">
-                            <button type="button" wire:click="$set('showEditModal', false)" class="px-4 py-2 border rounded-md text-sm">Annuleren</button>
-                            <button type="submit" class="px-4 py-2 border rounded-md text-sm bg-black text-white">Opslaan</button>
+                            <button type="button" wire:click="$set('showEditModal', false)" class="px-4 py-2 border rounded-md text-sm bg-zinc-200 text-zinc-800 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-600">Annuleren</button>
+                            <button type="submit" class="px-4 py-2 border rounded-md text-sm bg-accent text-white hover:bg-amber-700 dark:bg-accent dark:text-white dark:hover:bg-amber-500">Opslaan</button>
                         </div>
                     </form>
                 </div>
