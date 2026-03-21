@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     public function up(): void
     {
         Schema::create('shoppinglist_items', function (Blueprint $table) {
@@ -23,7 +22,7 @@ return new class extends Migration
                 ->onDelete('cascade');
 
             $table->foreign('ingredientId')
-                ->references('ingredientId')
+                ->references('id')
                 ->on('ingredients')
                 ->onDelete('cascade');
 
