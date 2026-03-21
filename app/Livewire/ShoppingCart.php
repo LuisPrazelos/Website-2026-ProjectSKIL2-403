@@ -37,6 +37,7 @@ class ShoppingCart extends Component
             $cart[$desertId] = [
                 'id' => $desert->id,
                 'name' => $desert->name,
+                'dessert_name' => $desert->name, // Add compatibility field
                 'price' => $desert->price,
                 'picture_hash' => $desert->picture->hash ?? null,
                 'quantity' => $quantity,

@@ -33,7 +33,7 @@
                                 <div class="flex items-center justify-between border-b pb-2">
                                     <div class="flex items-center gap-2">
                                         <span class="font-semibold">€{{ number_format($subtotal, 2) }}</span>
-                                        <span class="text-gray-700">- {{ $item['quantity'] }} x {{ $item['dessert_name'] }}</span>
+                                        <span class="text-gray-700">- {{ $item['quantity'] }} x {{ $item['dessert_name'] ?? $item['name'] ?? 'Unknown Item' }}</span>
                                     </div>
                                     <form action="{{ route('cart.update', $surplus_id) }}" method="POST" class="flex items-center gap-1">
                                         @csrf
