@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Surplus;
+use App\Models\Ingredient;
 
 class Dessert extends Model
 {
@@ -42,5 +43,12 @@ class Dessert extends Model
     public function measurementUnit()
     {
         return $this->belongsTo(MeasurementUnit::class);
+    }
+
+    public function ingredients()
+    {
+        return $this->belongsToMany(Ingredient::class, 'ingredient_desserts')
+                    ->withPivot('amount')
+                    ->withTimestamps();
     }
 }

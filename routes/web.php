@@ -3,12 +3,13 @@
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\SurplusController;
-use App\Http\Controllers\IngredientController; // Import the new controller
+use App\Http\Controllers\IngredientController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
 use App\Livewire\Settings\TwoFactor;
+use App\Livewire\Deserts\OwnerIndex as DesertOwnerIndex; // Import the Livewire component
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use App\Models\Ingredient;
@@ -64,8 +65,8 @@ Route::middleware(['auth'])->group(function () {
 
     // User overview for deserts
     Route::get('/deserts', function () {
-        $deserts = Dessert::with('picture')->get(); // Eager load the picture relationship
-        return view('deserts.index', compact('deserts'));
+        $deserts = Dessert::with('picture', 'ingredients')->get(); // Eager load the picture and ingredients relationship
+        return view('livewire.deserts.index', compact('deserts'));
     })->name('deserts.index');
 
     Route::middleware([AdminMiddleware::class])->group(function () {
@@ -99,11 +100,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/owner/ingredients/{ingredient}/edit', [IngredientController::class, 'edit'])->name('owner.ingredients.edit');
         Route::put('/owner/ingredients/{ingredient}', [IngredientController::class, 'update'])->name('owner.ingredients.update');
         Route::delete('/owner/ingredients/{ingredient}', [IngredientController::class, 'destroy'])->name('owner.ingredients.destroy');
-        // Owner management view for deserts
-        Route::get('/owner/deserts', function () {
-            $deserts = Dessert::with('picture')->paginate(10); // Paginate for better performance
-            return view('deserts.owner-index', compact('deserts'));
-        })->name('owner.deserts.index');
+
+        // Owner management view for deserts - Using Livewire Component
+        Route::get('/owner/deserts', DesertOwnerIndex::class)->name('owner.deserts.index');
 
         // Owner management view for surpluses
         Route::get('/owner/surpluses', [SurplusController::class, 'ownerIndex'])->name('owner.surpluses.index');
