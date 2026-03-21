@@ -10,16 +10,10 @@ use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
 use App\Livewire\Settings\TwoFactor;
-use App\Livewire\Deserts\OwnerIndex as DesertOwnerIndex; // Import the Livewire component
+use App\Livewire\PriceEvolution; // Importeer het nieuwe component
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
-use App\Models\Ingredient;
-use App\Models\PriceEvolution;
 use App\Models\Dessert;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
-use Carbon\CarbonPeriod;
 use App\Livewire\ShowHappenings;
 
 Route::get('/', function () {
@@ -71,60 +65,17 @@ Route::middleware(['auth'])->group(function () {
 
     // User overview for deserts
     Route::get('/deserts', function () {
-        $deserts = Dessert::with('picture', 'ingredients')->get(); // Eager load the picture and ingredients relationship
+        $deserts = Dessert::with('picture')->get(); // Eager load the picture relationship
         return view('deserts.index', compact('deserts'));
     })->name('deserts.index');
-
-    // Shopping Cart Page
-    Route::get('/shopping-cart', \App\Livewire\ShoppingCartPage::class)->name('shopping-cart');
-
-    // QR Code Checkout Route
-    Route::get('/checkout', function () {
-        return view('checkout.qr-code');
-    })->name('checkout');
 
     Route::middleware([AdminMiddleware::class])->group(function () {
         // Livewire routes for recipe management
         Route::get('/owner/recipes', RecipeManager::class)->name('owner.recipes.index');
         Route::get('/owner/recipes/{recipe}', ShowRecipe::class)->name('owner.recipes.show');
 
-        Route::get('/price-evolution', function (Request $request) {
-            $selectedType = $request->input('type', 'ingredient');
-            $selectedId = $request->input('id');
-            $priceEvolutions = null;
-            $itemName = null;
-
-            $ingredients = Ingredient::orderBy('ingredientName')->get();
-            $desserts = Dessert::orderBy('name')->get();
-
-            if ($selectedId) {
-                if ($selectedType === 'ingredient') {
-                    $ingredient = Ingredient::find($selectedId);
-                    if ($ingredient) {
-                        $itemName = $ingredient->ingredientName;
-                        $priceEvolutions = PriceEvolution::where('ingredientId', $ingredient->ingredientId)
-                            ->orderBy('date', 'asc')
-                            ->get();
-                    }
-                } elseif ($selectedType === 'recept') {
-                    $dessert = Dessert::find($selectedId);
-                    if ($dessert) {
-                        $itemName = $dessert->name;
-                        // You may need to implement price evolution logic for desserts
-                        $priceEvolutions = collect();
-                    }
-                }
-            }
-
-            return view('price-evolution', [
-                'ingredients' => $ingredients,
-                'desserts' => $desserts,
-                'priceEvolutions' => $priceEvolutions,
-                'itemName' => $itemName,
-                'selectedType' => $selectedType,
-                'selectedId' => $selectedId,
-            ]);
-        })->name('price-evolution');
+        // Route voor prijsontwikkeling (nu via Livewire component)
+        Route::get('/price-evolution', PriceEvolution::class)->name('price-evolution');
 
         // Owner management view for ingredients
         Route::get('/owner/ingredients', [IngredientController::class, 'ownerIndex'])->name('owner.ingredients.index');
@@ -132,9 +83,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/owner/ingredients/{ingredient}/edit', [IngredientController::class, 'edit'])->name('owner.ingredients.edit');
         Route::put('/owner/ingredients/{ingredient}', [IngredientController::class, 'update'])->name('owner.ingredients.update');
         Route::delete('/owner/ingredients/{ingredient}', [IngredientController::class, 'destroy'])->name('owner.ingredients.destroy');
-
-        // Owner management view for deserts - Using Livewire Component
-        Route::get('/owner/deserts', DesertOwnerIndex::class)->name('owner.deserts.index');
+        // Owner management view for deserts
+        Route::get('/owner/deserts', function () {
+            $deserts = Dessert::with('picture')->paginate(10); // Paginate for better performance
+            return view('deserts.owner-index', compact('deserts'));
+        })->name('owner.deserts.index');
 
         // Owner management view for surpluses
         Route::get('/owner/surpluses', [SurplusController::class, 'ownerIndex'])->name('owner.surpluses.index');
