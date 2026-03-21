@@ -6,7 +6,7 @@
             <img src="{{ asset('pictures/QrCode.png') }}" alt="QR Code for Payment" class="w-64 h-64">
         </div>
         <div class="mt-8">
-            <a href="{{ route('dashboard') }}" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-black hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200">
+            <a href="{{ route('dashboard') }}" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-accent hover:bg-amber-700 dark:bg-accent dark:text-white dark:hover:bg-amber-500">
                 Back to Dashboard
             </a>
         </div>

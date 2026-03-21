@@ -51,10 +51,10 @@
                             <input type="date" id="pickup_date" name="pickup_date" class="mt-1 block w-full px-1.5 py-2 text-base border border-black focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" value="{{ date('Y-m-d') }}" min="{{ date('Y-m-d') }}">
                         </div>
                         <form action="{{ route('checkout') }}" method="GET" class="flex justify-center mb-2">
-                            <button type="submit" class="bg-brown-700 text-white px-8 py-3 rounded-lg text-lg font-bold hover:bg-brown-800 transition">Betalen</button>
+                            <button type="submit" class="bg-accent text-white px-8 py-3 rounded-lg text-lg font-bold hover:bg-amber-700 transition">Betalen</button>
                         </form>
                         <form action="{{ route('payment.page') }}" method="GET" class="flex justify-center">
-                            <button type="submit" class="bg-blue-600 text-white px-8 py-3 rounded-lg text-lg font-bold hover:bg-blue-700 transition">Ga naar betalingspagina</button>
+                            <button type="submit" class="bg-accent text-white px-8 py-3 rounded-lg text-lg font-bold hover:bg-amber-700 transition">Ga naar betalingspagina</button>
                         </form>
                     </div>
                 </div>
@@ -67,7 +67,7 @@
                     </svg>
                     <h2 class="text-2xl font-bold text-gray-600 mb-2">Je winkelwagen is leeg</h2>
                     <p class="text-gray-500 mb-6">Voeg wat overschotten toe om te beginnen met winkelen!</p>
-                    <a href="{{ route('userSurplusShop.index') }}" class="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition font-medium">
+                    <a href="{{ route('userSurplusShop.index') }}" class="px-6 py-3 bg-accent text-white rounded-lg hover:bg-amber-700 transition font-medium">
                         Terug naar shop
                     </a>
                 </div>

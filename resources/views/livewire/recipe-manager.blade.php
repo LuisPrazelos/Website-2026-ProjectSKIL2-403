@@ -15,7 +15,7 @@
                     <p class="text-sm text-gray-600 mt-1">{{ __('Beheer je recepten hier: zoek, voeg toe, bewerk of verwijder items.') }}</p>
                 </div>
                 <div>
-                    <button wire:click="create" class="inline-flex items-center px-4 py-2 border rounded-md text-sm bg-black text-white">+ {{ __('Recept toevoegen') }}</button>
+                    <button wire:click="create" class="inline-flex items-center px-4 py-2 border rounded-md text-sm bg-accent text-white hover:bg-amber-700 dark:bg-accent dark:text-white dark:hover:bg-amber-500">+ {{ __('Recept toevoegen') }}</button>
                 </div>
             </div>
 
@@ -183,8 +183,8 @@
                         </div>
 
                         <div class="flex justify-end mt-6">
-                            <button type="button" wire:click="closeModal" class="mr-2 inline-flex items-center px-4 py-2 border rounded-md text-sm">{{ __('Annuleren') }}</button>
-                            <button type="submit" class="inline-flex items-center px-4 py-2 border rounded-md text-sm bg-black text-white">{{ $isEditing ? __('Wijzigingen opslaan') : __('Recept opslaan') }}</button>
+                            <button type="button" wire:click="closeModal" class="mr-2 inline-flex items-center px-4 py-2 border rounded-md text-sm bg-zinc-200 text-zinc-800 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-600">{{ __('Annuleren') }}</button>
+                            <button type="submit" class="inline-flex items-center px-4 py-2 border rounded-md text-sm bg-accent text-white hover:bg-amber-700 dark:bg-accent dark:text-white dark:hover:bg-amber-500">{{ $isEditing ? __('Wijzigingen opslaan') : __('Recept opslaan') }}</button>
                         </div>
                     </form>
                 </div>

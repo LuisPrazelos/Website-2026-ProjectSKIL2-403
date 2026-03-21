@@ -9,7 +9,7 @@
                 </div>
 
                 <div>
-                    <button @click="showModal = true" class="inline-flex items-center px-4 py-2 border rounded-md text-sm bg-black text-white">+ {{ __('Recept toevoegen') }}</button>
+                    <button @click="showModal = true" class="inline-flex items-center px-4 py-2 border rounded-md text-sm bg-accent text-white hover:bg-amber-700 dark:bg-accent dark:text-white dark:hover:bg-amber-500">+ {{ __('Recept toevoegen') }}</button>
                 </div>
             </div>
 
@@ -28,7 +28,7 @@
                         @endforeach
                     </select>
                 </div>
-                <button type="submit" class="px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800">{{ __('Zoeken') }}</button>
+                <button type="submit" class="px-4 py-2 bg-accent text-white rounded-md hover:bg-amber-700 dark:bg-accent dark:text-white dark:hover:bg-amber-500">{{ __('Zoeken') }}</button>
                 @if($search || (isset($category) && $category))
                     <a href="{{ route('owner.recipes.index') }}" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 flex items-center justify-center" title="{{ __('Filters wissen') }}">X</a>
                 @endif
@@ -185,8 +185,8 @@
                     </div>
 
                     <div class="flex justify-end mt-6">
-                        <button type="button" @click="showModal = false" class="mr-2 inline-flex items-center px-4 py-2 border rounded-md text-sm">{{ __('Annuleren') }}</button>
-                        <button type="submit" class="inline-flex items-center px-4 py-2 border rounded-md text-sm bg-black text-white">{{ __('Opslaan recept') }}</button>
+                        <button type="button" @click="showModal = false" class="mr-2 inline-flex items-center px-4 py-2 border rounded-md text-sm bg-zinc-200 text-zinc-800 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-600">{{ __('Annuleren') }}</button>
+                        <button type="submit" class="inline-flex items-center px-4 py-2 border rounded-md text-sm bg-accent text-white hover:bg-amber-700 dark:bg-accent dark:text-white dark:hover:bg-amber-500">{{ __('Opslaan recept') }}</button>
                     </div>
                 </form>
             </div>
