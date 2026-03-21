@@ -5,11 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\Ingredient;
 use App\Models\MeasurementUnit;
 use App\Models\Allergy;
-use App\Models\IngredientAllergy; // Import IngredientAllergy model
+use App\Models\IngredientAllergy;
+
+// Import IngredientAllergy model
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\DB; // Import DB facade for transactions
+use Illuminate\Support\Facades\DB;
+
+// Import DB facade for transactions
 
 class IngredientController extends Controller
 {
@@ -37,7 +41,7 @@ class IngredientController extends Controller
             'name' => 'required|string|max:255',
             'unit_id' => 'required|exists:measurement_units,id', // Use id
             'allergens' => 'nullable|array',
-            'allergens.*' => 'exists:allergies,id', // Use id
+            'allergens.*' => 'exists:allergies,allergyId',
         ]);
 
         DB::transaction(function () use ($validatedData) {
@@ -50,7 +54,7 @@ class IngredientController extends Controller
             if (isset($validatedData['allergens'])) {
                 foreach ($validatedData['allergens'] as $allergyId) {
                     IngredientAllergy::create([
-                        'ingredientId' => $ingredient->id,
+                        'ingredient_id' => $ingredient->id,
                         'allergyId' => $allergyId,
                     ]);
                 }
@@ -81,7 +85,7 @@ class IngredientController extends Controller
             'name' => 'required|string|max:255',
             'unit_id' => 'required|exists:measurement_units,id',
             'allergens' => 'nullable|array',
-            'allergens.*' => 'exists:allergies,id',
+            'allergens.*' => 'exists:allergies,allergyId',
         ]);
 
         DB::transaction(function () use ($ingredient, $validatedData) {
@@ -95,7 +99,7 @@ class IngredientController extends Controller
             if (isset($validatedData['allergens'])) {
                 foreach ($validatedData['allergens'] as $allergyId) {
                     IngredientAllergy::create([
-                        'ingredientId' => $ingredient->id,
+                        'ingredient_id' => $ingredient->id,
                         'allergyId' => $allergyId,
                     ]);
                 }
