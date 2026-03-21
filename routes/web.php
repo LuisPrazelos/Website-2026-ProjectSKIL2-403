@@ -6,6 +6,7 @@ use App\Http\Controllers\IngredientController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Livewire\RecipeManager;
 use App\Livewire\ShowRecipe;
+use App\Livewire\EventRequest;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
@@ -68,6 +69,9 @@ Route::middleware(['auth'])->group(function () {
         $deserts = Dessert::with('picture')->get(); // Eager load the picture relationship
         return view('deserts.index', compact('deserts'));
     })->name('deserts.index');
+
+    // User event request route
+    Route::get('/evenement-aanvragen', EventRequest::class)->name('event.request');
 
     Route::middleware([AdminMiddleware::class])->group(function () {
         // Livewire routes for recipe management

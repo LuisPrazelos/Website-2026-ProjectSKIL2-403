@@ -19,7 +19,7 @@
         <flux:navlist.group :heading="__('Platform')" class="grid">
             <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')"
                                wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
-            <flux:navlist.item icon="calendar" href="#" wire:navigate>{{ __('Happenings') }}</flux:navlist.item>
+            <flux:navlist.item icon="calendar" :href="route('event.request')" :current="request()->routeIs('event.request')" wire:navigate>{{ __('Evenementen') }}</flux:navlist.item>
             <flux:navlist.item icon="cake" :href="route('deserts.index')" :current="request()->routeIs('deserts.index')" wire:navigate>{{ __('Desserts') }}</flux:navlist.item>
             <flux:navlist.item icon="plus" :href="route('userSurplusShop.index')" :current="request()->routeIs('userSurplusShop.index')" wire:navigate>{{ __('Surpluses') }}</flux:navlist.item>
             <flux:navlist.item icon="shopping-cart" href="#" wire:navigate>{{ __('Orders') }}</flux:navlist.item>
