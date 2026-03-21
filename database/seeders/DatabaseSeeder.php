@@ -47,16 +47,17 @@ class DatabaseSeeder extends Seeder
             TablePictureSeeder::class,
             StateSeeder::class,
             ThemeSeeder::class,
-            AllergySeeder::class,
+            AllergySeeder::class, // AllergySeeder moet voor IngredientAllergySeeder komen
             DecorationSeeder::class,
 
             // Core domain data
             CategorySeeder::class,
-            IngredientSeeder::class,
+            IngredientSeeder::class, // IngredientSeeder moet voor IngredientAllergySeeder komen
             PriceEvolutionSeeder::class,
-            AllergySeeder::class,
             DessertSeeder::class,
             WorkshopSeeder::class,
+            HappeningSeeder::class, // Added HappeningSeeder
+            IngredientAllergySeeder::class, // Nu wordt deze aangeroepen
 
             // Then seed items that depend on the above
             ReviewSeeder::class,

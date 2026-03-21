@@ -13,7 +13,26 @@
                 </div>
             </div>
 
-            <x-layouts.search :action="route('owner.recipes.index')" :value="$search ?? ''" placeholder="{{ __('Zoek recept...') }}" />
+            <!-- Filter & Search Form -->
+            <form method="GET" action="{{ route('owner.recipes.index') }}" class="mb-4 flex flex-col md:flex-row gap-2">
+                <div class="flex-1">
+                    <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="{{ __('Zoek recept...') }}" class="w-full px-4 py-2 border border-gray-300 rounded-md dark:bg-zinc-900 dark:border-zinc-700 dark:text-gray-300 focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+                <div class="w-full md:w-1/4">
+                    <select name="category" onchange="this.form.submit()" class="w-full px-4 py-2 border border-gray-300 rounded-md dark:bg-zinc-900 dark:border-zinc-700 dark:text-gray-300 focus:ring-indigo-500 focus:border-indigo-500">
+                        <option value="">{{ __('Alle categorieën') }}</option>
+                        @foreach($categories as $id => $name)
+                            <option value="{{ $id }}" {{ (isset($category) && $category == $id) ? 'selected' : '' }}>
+                                {{ $name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <button type="submit" class="px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800">{{ __('Zoeken') }}</button>
+                @if($search || (isset($category) && $category))
+                    <a href="{{ route('owner.recipes.index') }}" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 flex items-center justify-center" title="{{ __('Filters wissen') }}">X</a>
+                @endif
+            </form>
 
             <div class="overflow-x-auto bg-white dark:bg-zinc-900 rounded-md shadow-sm p-4">
                 <table class="min-w-full text-left">
@@ -41,7 +60,6 @@
                                 <td class="px-4 py-3">{{ $recipe->updated_at ? $recipe->updated_at->format('d-m-Y H:i') : '-' }}</td>
                                 <td class="px-4 py-3">
                                     <a href="{{ route('owner.recipes.show', $recipe->id) }}" title="{{ __('Bekijken') }}" class="mr-2">👁️</a>
-                                    <a href="{{ route('owner.recipes.edit', $recipe->id) }}" title="{{ __('Bewerken') }}" class="mr-2">✏️</a>
                                     <form action="{{ route('owner.recipes.destroy', $recipe->id) }}" method="POST" class="inline-block">
                                         @csrf
                                         @method('DELETE')

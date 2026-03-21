@@ -28,8 +28,15 @@ return new class extends Migration
     {
         Schema::table('recipes', function (Blueprint $table) {
             $table->dropForeign(['category_id']);
-            $table->dropForeign(['portion_size_unit_id']); // Drop foreign key
-            $table->dropColumn(['category_id', 'portion_size', 'selling_price', 'instructions', 'portion_size_unit_id', 'photo']); // Drop the new column too
+            $table->dropForeign(['portion_size_unit_id']);
+            $table->dropColumn([
+                'category_id',
+                'portion_size',
+                'selling_price',
+                'instructions',
+                'portion_size_unit_id',
+                'photo'
+            ]);
         });
     }
 };

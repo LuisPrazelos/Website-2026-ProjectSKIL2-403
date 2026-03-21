@@ -1,10 +1,11 @@
 <?php
 
 use App\Http\Controllers\CartController;
-use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\SurplusController;
 use App\Http\Controllers\IngredientController;
 use App\Http\Middleware\AdminMiddleware;
+use App\Livewire\RecipeManager;
+use App\Livewire\ShowRecipe;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
@@ -16,6 +17,10 @@ use App\Models\Ingredient;
 use App\Models\PriceEvolution;
 use App\Models\Dessert;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
+use App\Livewire\ShowHappenings;
 
 Route::get('/', function () {
     return view('welcome');
@@ -69,28 +74,54 @@ Route::middleware(['auth'])->group(function () {
         return view('livewire.deserts.index', compact('deserts'));
     })->name('deserts.index');
 
-    Route::middleware([AdminMiddleware::class])->group(function () {
-        Route::get('/price-evolution', function (Request $request) {
-            $ingredientId = $request->input('ingredient');
-            $priceEvolutions = null;
-            $ingredientName = null;
-            $ingredients = Ingredient::orderBy('ingredientName')->get();
+    // Shopping Cart Page
+    Route::get('/shopping-cart', \App\Livewire\ShoppingCartPage::class)->name('shopping-cart');
 
-            if ($ingredientId) {
-                $ingredient = Ingredient::find($ingredientId);
-                if ($ingredient) {
-                    $ingredientName = $ingredient->ingredientName;
-                    $priceEvolutions = PriceEvolution::where('ingredientId', $ingredient->ingredientId)
-                        ->orderBy('date', 'asc')
-                        ->get();
+    // QR Code Checkout Route
+    Route::get('/checkout', function () {
+        return view('checkout.qr-code');
+    })->name('checkout');
+
+    Route::middleware([AdminMiddleware::class])->group(function () {
+        // Livewire routes for recipe management
+        Route::get('/owner/recipes', RecipeManager::class)->name('owner.recipes.index');
+        Route::get('/owner/recipes/{recipe}', ShowRecipe::class)->name('owner.recipes.show');
+
+        Route::get('/price-evolution', function (Request $request) {
+            $selectedType = $request->input('type', 'ingredient');
+            $selectedId = $request->input('id');
+            $priceEvolutions = null;
+            $itemName = null;
+
+            $ingredients = Ingredient::orderBy('ingredientName')->get();
+            $desserts = Dessert::orderBy('name')->get();
+
+            if ($selectedId) {
+                if ($selectedType === 'ingredient') {
+                    $ingredient = Ingredient::find($selectedId);
+                    if ($ingredient) {
+                        $itemName = $ingredient->ingredientName;
+                        $priceEvolutions = PriceEvolution::where('ingredientId', $ingredient->ingredientId)
+                            ->orderBy('date', 'asc')
+                            ->get();
+                    }
+                } elseif ($selectedType === 'recept') {
+                    $dessert = Dessert::find($selectedId);
+                    if ($dessert) {
+                        $itemName = $dessert->name;
+                        // You may need to implement price evolution logic for desserts
+                        $priceEvolutions = collect();
+                    }
                 }
             }
 
             return view('price-evolution', [
                 'ingredients' => $ingredients,
+                'desserts' => $desserts,
                 'priceEvolutions' => $priceEvolutions,
-                'ingredientName' => $ingredientName,
-                'selectedIngredient' => $ingredientId,
+                'itemName' => $itemName,
+                'selectedType' => $selectedType,
+                'selectedId' => $selectedId,
             ]);
         })->name('price-evolution');
 
@@ -110,6 +141,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/owner/surpluses/{surplus}/edit', [SurplusController::class, 'edit'])->name('owner.surpluses.edit');
         Route::put('/owner/surpluses/{surplus}', [SurplusController::class, 'update'])->name('owner.surpluses.update');
         Route::delete('/owner/surpluses/{surplus}', [SurplusController::class, 'destroy'])->name('owner.surpluses.destroy');
+
+        // Owner management view for happenings
+        Route::get('/owner/happenings', ShowHappenings::class)->name('owner.happenings.index');
     });
 });
 
