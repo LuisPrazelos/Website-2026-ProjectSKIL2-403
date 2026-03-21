@@ -71,7 +71,7 @@ Route::middleware(['auth'])->group(function () {
     // User overview for deserts
     Route::get('/deserts', function () {
         $deserts = Dessert::with('picture', 'ingredients')->get(); // Eager load the picture and ingredients relationship
-        return view('livewire.deserts.index', compact('deserts'));
+        return view('deserts.index', compact('deserts'));
     })->name('deserts.index');
 
     // Shopping Cart Page
