@@ -104,6 +104,31 @@
                         <strong>Thema:</strong><br>
                         {{ $selectedHappening->theme->name ?? 'Geen thema' }}
                     </div>
+
+                    <div class="mt-6">
+                        <label class="block font-semibold text-lg mb-2">Opmerkingen</label>
+                        <textarea
+                            wire:model="remarks"
+                            placeholder="Voeg hier je opmerkingen in..."
+                            class="w-full px-4 py-2 border border-gray-300 dark:border-zinc-600 rounded-md bg-white dark:bg-zinc-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            rows="5"
+                        ></textarea>
+                    </div>
+
+                    <div class="flex justify-end gap-2 mt-6">
+                        <button
+                            wire:click="closeDetails()"
+                            class="px-4 py-2 bg-gray-300 dark:bg-zinc-700 text-gray-900 dark:text-white rounded-md hover:bg-gray-400 dark:hover:bg-zinc-600 transition"
+                        >
+                            Annuleren
+                        </button>
+                        <button
+                            wire:click="saveRemarks()"
+                            class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
+                        >
+                            Opmerkingen Opslaan
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

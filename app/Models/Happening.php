@@ -18,6 +18,7 @@ class Happening extends Model
      */
     protected $fillable = [
         'message',
+        'remarks',
         'event_date',
         'person_count',
         'price_per_person',
