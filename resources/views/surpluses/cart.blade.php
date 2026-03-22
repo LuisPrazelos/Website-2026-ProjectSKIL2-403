@@ -50,12 +50,9 @@
                             <label for="pickup_date" class="block text-sm font-medium text-gray-700 mb-1">Kies een ophaaldatum:</label>
                             <input type="date" id="pickup_date" name="pickup_date" class="mt-1 block w-full px-1.5 py-2 text-base border border-black focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" value="{{ date('Y-m-d') }}" min="{{ date('Y-m-d') }}">
                         </div>
-                        <form action="{{ route('checkout') }}" method="GET" class="flex justify-center mb-2">
-                            <button type="submit" class="bg-accent text-white px-8 py-3 rounded-lg text-lg font-bold hover:bg-amber-700 transition">Betalen</button>
-                        </form>
-                        <form action="{{ route('payment.page') }}" method="GET" class="flex justify-center">
-                            <button type="submit" class="bg-accent text-white px-8 py-3 rounded-lg text-lg font-bold hover:bg-amber-700 transition">Ga naar betalingspagina</button>
-                        </form>
+                        <a href="{{ route('checkout') }}" class="flex justify-center mb-2">
+                            <button class="bg-blue-600 text-white px-8 py-3 rounded-lg text-lg font-bold hover:bg-blue-700 transition">Betalen</button>
+                        </a>
                     </div>
                 </div>
 

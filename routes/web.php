@@ -11,6 +11,7 @@ use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
 use App\Livewire\Settings\TwoFactor;
+use App\Livewire\ShoppingList; // Importeer ShoppingList
 use App\Livewire\PriceEvolution; // Importeer het nieuwe component
 use App\Livewire\Orders\ManageOrders;
 use App\Livewire\Orders\OrderDetail;
@@ -20,6 +21,7 @@ use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use App\Models\Dessert;
 use App\Livewire\ShowHappenings;
+use App\Livewire\Checkout;
 
 Route::get('/', function () {
     return view('welcome');
@@ -58,10 +60,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
 
     // Checkout route
-    Route::get('checkout', function () {
-        // Placeholder for checkout logic
-        return 'Checkout page';
-    })->name('checkout');
+    Route::get('checkout', Checkout::class)->name('checkout');
 
     // Payment route
     Route::get('payment', function () {
@@ -82,9 +81,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/owner/recipes', RecipeManager::class)->name('owner.recipes.index');
         Route::get('/owner/recipes/{recipe}', ShowRecipe::class)->name('owner.recipes.show');
 
-        // Route voor prijsontwikkeling (nu via Livewire component)
+        // Route voor prijsontwikkeling
         Route::get('/price-evolution', PriceEvolution::class)->name('price-evolution');
 
+        // Route voor boodschappenlijst
+        Route::get('/shopping-list', ShoppingList::class)->name('shopping-list');
         // Route voor bestellingen beheren
         Route::get('/owner/bestellingen', ManageOrders::class)->name('owner.orders.index');
         Route::get('/owner/bestellingen/nieuw', CreateOrder::class)->name('owner.orders.create');
