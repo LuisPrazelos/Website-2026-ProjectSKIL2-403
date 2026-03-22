@@ -19,7 +19,7 @@
         <flux:navlist.group :heading="__('Platform')" class="grid">
             <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')"
                                wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
-            <flux:navlist.item icon="calendar" href="#" wire:navigate>{{ __('Happenings') }}</flux:navlist.item>
+            <flux:navlist.item icon="calendar" :href="route('event.request')" :current="request()->routeIs('event.request')" wire:navigate>{{ __('Evenementen') }}</flux:navlist.item>
             <flux:navlist.item icon="cake" :href="route('deserts.index')" :current="request()->routeIs('deserts.index')" wire:navigate>{{ __('Desserts') }}</flux:navlist.item>
             <flux:navlist.item icon="plus" :href="route('userSurplusShop.index')" :current="request()->routeIs('userSurplusShop.index')" wire:navigate>{{ __('Surpluses') }}</flux:navlist.item>
             <flux:navlist.item icon="shopping-cart" href="#" wire:navigate>{{ __('Orders') }}</flux:navlist.item>
@@ -33,6 +33,9 @@
             <flux:navlist.group :heading="__('Beheer')" class="grid mt-4">
                 <flux:navlist.item icon="cake" :href="route('owner.deserts.index')" :current="request()->routeIs('owner.deserts.index')" wire:navigate>{{ __('Desserts Beheren') }}</flux:navlist.item>
                 <flux:navlist.item icon="book-open" :href="route('owner.recipes.index')" :current="request()->routeIs('owner.recipes.index')" wire:navigate>{{ __('Recepten Beheren') }}</flux:navlist.item>
+                <flux:navlist.item icon="cake" href="#" wire:navigate>{{ __('Desserts Beheren') }}</flux:navlist.item>
+
+                <flux:navlist.item icon="shopping-cart" :href="route('owner.orders.index')" :current="request()->routeIs('owner.orders.index')" wire:navigate>{{ __('Bestellingen Beheren') }}</flux:navlist.item>
                 <flux:navlist.item icon="plus" :href="route('owner.surpluses.index')" :current="request()->routeIs('owner.surpluses.index')" wire:navigate>{{ __('Overschotten Beheren') }}</flux:navlist.item>
                 <flux:navlist.item icon="chart-bar" :href="route('price-evolution')" :current="request()->routeIs('price-evolution')" wire:navigate>{{ __('Prijsevolutie') }}</flux:navlist.item>
                 <flux:navlist.item icon="calendar" :href="route('owner.happenings.index')" :current="request()->routeIs('owner.happenings.index')" wire:navigate>{{ __('Evenementen Beheren') }}</flux:navlist.item>

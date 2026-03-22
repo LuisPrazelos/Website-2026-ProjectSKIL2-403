@@ -64,7 +64,7 @@
                     </svg>
                     <h2 class="text-2xl font-bold text-gray-600 mb-2">Je winkelwagen is leeg</h2>
                     <p class="text-gray-500 mb-6">Voeg wat overschotten toe om te beginnen met winkelen!</p>
-                    <a href="{{ route('userSurplusShop.index') }}" class="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition font-medium">
+                    <a href="{{ route('userSurplusShop.index') }}" class="px-6 py-3 bg-accent text-white rounded-lg hover:bg-amber-700 transition font-medium">
                         Terug naar shop
                     </a>
                 </div>

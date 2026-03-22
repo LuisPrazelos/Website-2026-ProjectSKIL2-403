@@ -6,12 +6,17 @@ use App\Http\Controllers\IngredientController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Livewire\RecipeManager;
 use App\Livewire\ShowRecipe;
+use App\Livewire\EventRequest;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
 use App\Livewire\Settings\TwoFactor;
-use App\Livewire\PriceEvolution;
 use App\Livewire\ShoppingList; // Importeer ShoppingList
+use App\Livewire\PriceEvolution; // Importeer het nieuwe component
+use App\Livewire\Orders\ManageOrders;
+use App\Livewire\Orders\OrderDetail;
+use App\Livewire\Orders\CreateOrder;
+use App\Models\Order;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use App\Models\Dessert;
@@ -68,6 +73,9 @@ Route::middleware(['auth'])->group(function () {
         return view('deserts.index', compact('deserts'));
     })->name('deserts.index');
 
+    // User event request route
+    Route::get('/evenement-aanvragen', EventRequest::class)->name('event.request');
+
     Route::middleware([AdminMiddleware::class])->group(function () {
         // Livewire routes for recipe management
         Route::get('/owner/recipes', RecipeManager::class)->name('owner.recipes.index');
@@ -78,6 +86,10 @@ Route::middleware(['auth'])->group(function () {
 
         // Route voor boodschappenlijst
         Route::get('/shopping-list', ShoppingList::class)->name('shopping-list');
+        // Route voor bestellingen beheren
+        Route::get('/owner/bestellingen', ManageOrders::class)->name('owner.orders.index');
+        Route::get('/owner/bestellingen/nieuw', CreateOrder::class)->name('owner.orders.create');
+        Route::get('/owner/bestellingen/{order}', OrderDetail::class)->name('owner.orders.show');
 
         // Owner management view for ingredients
         Route::get('/owner/ingredients', [IngredientController::class, 'ownerIndex'])->name('owner.ingredients.index');
