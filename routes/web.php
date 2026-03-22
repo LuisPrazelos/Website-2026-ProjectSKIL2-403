@@ -12,6 +12,10 @@ use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
 use App\Livewire\Settings\TwoFactor;
 use App\Livewire\PriceEvolution; // Importeer het nieuwe component
+use App\Livewire\Orders\ManageOrders;
+use App\Livewire\Orders\OrderDetail;
+use App\Livewire\Orders\CreateOrder;
+use App\Models\Order;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use App\Models\Dessert;
@@ -80,6 +84,11 @@ Route::middleware(['auth'])->group(function () {
 
         // Route voor prijsontwikkeling (nu via Livewire component)
         Route::get('/price-evolution', PriceEvolution::class)->name('price-evolution');
+
+        // Route voor bestellingen beheren
+        Route::get('/owner/bestellingen', ManageOrders::class)->name('owner.orders.index');
+        Route::get('/owner/bestellingen/nieuw', CreateOrder::class)->name('owner.orders.create');
+        Route::get('/owner/bestellingen/{order}', OrderDetail::class)->name('owner.orders.show');
 
         // Owner management view for ingredients
         Route::get('/owner/ingredients', [IngredientController::class, 'ownerIndex'])->name('owner.ingredients.index');
