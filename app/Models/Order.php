@@ -40,9 +40,10 @@ class Order extends Model
 
     /**
      * An order has many items.
+     * We specify 'orderId' as the foreign key because the shopping_carts table uses camelCase.
      */
     public function items()
     {
-        return $this->hasMany(OrderItem::class);
+        return $this->hasMany(OrderItem::class, 'orderId');
     }
 }
