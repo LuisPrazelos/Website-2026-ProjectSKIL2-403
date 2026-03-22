@@ -46,4 +46,11 @@ class Dessert extends Model
                     ->withPivot('amount')
                     ->withTimestamps();
     }
+
+    public function proposals()
+    {
+        return $this->belongsToMany(Proposal::class, 'proposal_desserts')
+            ->withPivot(['quantity', 'allergies'])
+            ->withTimestamps();
+    }
 }

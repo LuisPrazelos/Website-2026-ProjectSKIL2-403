@@ -16,6 +16,9 @@ use App\Livewire\PriceEvolution; // Importeer het nieuwe component
 use App\Livewire\Orders\ManageOrders;
 use App\Livewire\Orders\OrderDetail;
 use App\Livewire\Orders\CreateOrder;
+use App\Livewire\Orders\RespondOrderRequests;
+use App\Livewire\Orders\ViewOrderRequest;
+use App\Livewire\Orders\RespondToOrderRequest;
 use App\Models\Order;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
@@ -90,6 +93,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/owner/bestellingen', ManageOrders::class)->name('owner.orders.index');
         Route::get('/owner/bestellingen/nieuw', CreateOrder::class)->name('owner.orders.create');
         Route::get('/owner/bestellingen/{order}', OrderDetail::class)->name('owner.orders.show');
+        Route::get('/owner/aanvragen', RespondOrderRequests::class)->name('owner.respond-order-requests');
+        Route::get('/owner/aanvragen/{id}', ViewOrderRequest::class)->name('owner.respond-order-requests.view');
+        Route::get('/owner/aanvragen/{id}/beantwoorden', RespondToOrderRequest::class)->name('owner.respond-order-requests.respond');
 
         // Owner management view for ingredients
         Route::get('/owner/ingredients', [IngredientController::class, 'ownerIndex'])->name('owner.ingredients.index');

@@ -36,6 +36,7 @@
                 <flux:navlist.item icon="cake" href="#" wire:navigate>{{ __('Desserts Beheren') }}</flux:navlist.item>
 
                 <flux:navlist.item icon="shopping-cart" :href="route('owner.orders.index')" :current="request()->routeIs('owner.orders.index')" wire:navigate>{{ __('Bestellingen Beheren') }}</flux:navlist.item>
+                <flux:navlist.item icon="envelope" :href="route('owner.respond-order-requests')" :current="request()->routeIs('owner.respond-order-requests')" wire:navigate>{{ __('Reageren op aanvragen') }}</flux:navlist.item>
                 <flux:navlist.item icon="plus" :href="route('owner.surpluses.index')" :current="request()->routeIs('owner.surpluses.index')" wire:navigate>{{ __('Overschotten Beheren') }}</flux:navlist.item>
                 <flux:navlist.item icon="chart-bar" :href="route('price-evolution')" :current="request()->routeIs('price-evolution')" wire:navigate>{{ __('Prijsevolutie') }}</flux:navlist.item>
                 <flux:navlist.item icon="calendar" :href="route('owner.happenings.index')" :current="request()->routeIs('owner.happenings.index')" wire:navigate>{{ __('Evenementen Beheren') }}</flux:navlist.item>

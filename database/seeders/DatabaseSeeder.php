@@ -57,6 +57,7 @@ class DatabaseSeeder extends Seeder
             DessertSeeder::class,
             WorkshopSeeder::class,
             HappeningSeeder::class, // Added HappeningSeeder
+            ProposalSeeder::class, // Added ProposalSeeder
             IngredientAllergySeeder::class, // Nu wordt deze aangeroepen
 
             // Then seed items that depend on the above
