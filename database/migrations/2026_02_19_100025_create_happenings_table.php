@@ -11,6 +11,7 @@ return new class extends Migration
         Schema::create('happenings', function (Blueprint $table) {
             $table->id();
             $table->text('message');
+            $table->text('remarks')->nullable();
             $table->dateTime('event_date');
             $table->integer('person_count')->unsigned();
             $table->decimal('price_per_person', 8, 2)->default(0);
@@ -44,4 +45,3 @@ return new class extends Migration
         Schema::dropIfExists('happenings');
     }
 };
-

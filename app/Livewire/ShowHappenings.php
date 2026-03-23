@@ -22,7 +22,7 @@ class ShowHappenings extends Component
     public function showDetails($id)
     {
         $this->selectedHappening = Happening::with(['status', 'theme'])->find($id);
-        $this->remarks = $this->selectedHappening->remarks ?? '';
+        $this->remarks = $this->selectedHappening?->remarks ?? '';
     }
 
     public function closeDetails()
