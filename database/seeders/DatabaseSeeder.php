@@ -59,6 +59,9 @@ class DatabaseSeeder extends Seeder
             HappeningSeeder::class, // Added HappeningSeeder
             IngredientAllergySeeder::class, // Nu wordt deze aangeroepen
 
+            // Pivot table seeder for desserts and ingredients
+            IngredientDessertSeeder::class,
+
             // Then seed items that depend on the above
             ReviewSeeder::class,
             SurplusSeeder::class,
