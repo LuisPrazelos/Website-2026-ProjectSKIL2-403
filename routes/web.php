@@ -18,6 +18,7 @@ use App\Livewire\Orders\CreateOrder;
 use App\Livewire\Orders\RespondOrderRequests;
 use App\Livewire\Orders\ViewOrderRequest;
 use App\Livewire\Orders\RespondToOrderRequest;
+use App\Livewire\Ingredient as LivewireIngredient;
 use App\Models\Order;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
@@ -97,12 +98,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/owner/aanvragen/{id}', ViewOrderRequest::class)->name('owner.respond-order-requests.view');
         Route::get('/owner/aanvragen/{id}/beantwoorden', RespondToOrderRequest::class)->name('owner.respond-order-requests.respond');
 
-        // Owner management view for ingredients
-        Route::get('/owner/ingredients', [IngredientController::class, 'ownerIndex'])->name('owner.ingredients.index');
-        Route::post('/owner/ingredients', [IngredientController::class, 'store'])->name('owner.ingredients.store');
-        Route::get('/owner/ingredients/{ingredient}/edit', [IngredientController::class, 'edit'])->name('owner.ingredients.edit');
-        Route::put('/owner/ingredients/{ingredient}', [IngredientController::class, 'update'])->name('owner.ingredients.update');
-        Route::delete('/owner/ingredients/{ingredient}', [IngredientController::class, 'destroy'])->name('owner.ingredients.destroy');
+        // Owner management view for ingredients (Livewire)
+        Route::get('/owner/ingredients', LivewireIngredient::class)->name('owner.ingredients.index');
+
         // Owner management view for deserts
         Route::get('/owner/deserts', function () {
             $deserts = Dessert::with('picture')->paginate(10); // Paginate for better performance
