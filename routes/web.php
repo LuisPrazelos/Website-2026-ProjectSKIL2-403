@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\CartController;
-use App\Http\Controllers\SurplusController;
+use App\Http\Controllers\IngredientController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Livewire\RecipeManager;
 use App\Livewire\ShowRecipe;
@@ -10,8 +10,8 @@ use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
 use App\Livewire\Settings\TwoFactor;
-use App\Livewire\ShoppingList; // Importeer ShoppingList
-use App\Livewire\PriceEvolution; // Importeer het nieuwe component
+use App\Livewire\ShoppingList;
+use App\Livewire\PriceEvolution;
 use App\Livewire\Orders\ManageOrders;
 use App\Livewire\Orders\OrderDetail;
 use App\Livewire\Orders\CreateOrder;
@@ -25,6 +25,7 @@ use Laravel\Fortify\Features;
 use App\Models\Dessert;
 use App\Livewire\ShowHappenings;
 use App\Livewire\Checkout;
+use App\Livewire\SurplusManager;
 
 Route::get('/', function () {
     return view('welcome');
@@ -53,7 +54,7 @@ Route::middleware(['auth'])->group(function () {
         ->name('two-factor.show');
 
     // Route for the surplus shop (for buying)
-    Route::get('/surplus-shop', [SurplusController::class, 'shopIndex'])->name('userSurplusShop.index');
+    Route::get('/surplus-shop', SurplusManager::class)->name('userSurplusShop.index');
 
     // Cart routes
     Route::get('cart', [CartController::class, 'index'])->name('cart.index');
@@ -107,11 +108,7 @@ Route::middleware(['auth'])->group(function () {
         })->name('owner.deserts.index');
 
         // Owner management view for surpluses
-        Route::get('/owner/surpluses', [SurplusController::class, 'ownerIndex'])->name('owner.surpluses.index');
-        Route::post('/owner/surpluses', [SurplusController::class, 'store'])->name('owner.surpluses.store');
-        Route::get('/owner/surpluses/{surplus}/edit', [SurplusController::class, 'edit'])->name('owner.surpluses.edit');
-        Route::put('/owner/surpluses/{surplus}', [SurplusController::class, 'update'])->name('owner.surpluses.update');
-        Route::delete('/owner/surpluses/{surplus}', [SurplusController::class, 'destroy'])->name('owner.surpluses.destroy');
+        Route::get('/owner/surpluses', SurplusManager::class)->name('owner.surpluses.index');
 
         // Owner management view for happenings
         Route::get('/owner/happenings', ShowHappenings::class)->name('owner.happenings.index');
