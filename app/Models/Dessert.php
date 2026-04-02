@@ -67,6 +67,14 @@ class Dessert extends Model
     }
 
     /**
+     * Get the measurement unit for the dessert.
+     */
+    public function measurementUnit()
+    {
+        return $this->belongsTo(MeasurementUnit::class);
+    }
+
+    /**
      * One dessert can have many surpluses (leftovers).
      */
     public function surpluses()
