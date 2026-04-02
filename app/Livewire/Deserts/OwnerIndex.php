@@ -6,6 +6,7 @@ use App\Models\Dessert;
 use App\Models\Ingredient;
 use App\Models\MeasurementUnit;
 use App\Models\Picture;
+use App\Models\Recipe;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
@@ -26,38 +27,42 @@ class OwnerIndex extends Component
     public $price;
     public $originalPrice; // Nieuwe eigenschap om de originele prijs te onthouden
     public $portion_size;
+    public $measurement_unit_id; // Added measurement_unit_id
     public $description;
     public $picture_id;
-    public $ingredients = [];
+    public $recipe_id; // Added property for the linked recipe
+    public $is_available = true; // Added property for availability
     public $photo;
 
     protected $rules = [
         'name' => 'required|string|max:255',
         'price' => 'required|numeric|min:0',
-        'portion_size' => 'required|integer|min:0', // Integer validatie
+        'portion_size' => 'required|numeric|min:0', // Changed to numeric
+        'measurement_unit_id' => 'required|exists:measurement_units,id', // Added validation rule
         'description' => 'required|string',
         'picture_id' => 'nullable|exists:pictures,id',
-        'ingredients' => 'required|array',
-        'ingredients.*' => 'exists:ingredients,id',
+        'recipe_id' => 'required|exists:recipes,id',
+        'is_available' => 'boolean',
         'photo' => 'nullable|image|max:1024',
     ];
 
     public function render()
     {
-        $deserts = Dessert::with('picture', 'ingredients')
+        $deserts = Dessert::with('picture', 'recipe', 'measurementUnit')
             ->when($this->search, function ($query) {
                 $query->where('name', 'like', "%{$this->search}%");
             })
             ->paginate(10);
 
         $pictures = Picture::all();
-        $measurementUnits = MeasurementUnit::all();
-        $allIngredients = Ingredient::orderBy('name')->get();
+        $recipes = Recipe::orderBy('name')->get(); // Fetch all recipes
+        $measurementUnits = MeasurementUnit::orderBy('name')->get(); // Fetch all measurement units
 
         return view('deserts.owner-index-component', [
             'deserts' => $deserts,
             'pictures' => $pictures,
-            'allIngredients' => $allIngredients,
+            'recipes' => $recipes,
+            'measurementUnits' => $measurementUnits,
         ]);
     }
 
@@ -80,14 +85,13 @@ class OwnerIndex extends Component
         $dessert = Dessert::create([
             'name' => $this->name,
             'price' => $this->price,
-            'portion_size' => (int) $this->portion_size, // Forceer cast naar int
+            'portion_size' => $this->portion_size,
+            'measurement_unit_id' => $this->measurement_unit_id,
             'description' => $this->description,
             'picture_id' => $this->picture_id,
+            'recipe_id' => $this->recipe_id, // Save the recipe_id
+            'is_available' => $this->is_available,
         ]);
-
-        if (!empty($this->ingredients)) {
-            $dessert->ingredients()->sync($this->ingredients);
-        }
 
         $this->resetForm();
         $this->showAddModal = false;
@@ -101,9 +105,11 @@ class OwnerIndex extends Component
         $this->price = $desert->price;
         $this->originalPrice = $desert->price; // Sla originele prijs op
         $this->portion_size = $desert->portion_size;
+        $this->measurement_unit_id = $desert->measurement_unit_id;
         $this->description = $desert->description;
         $this->picture_id = $desert->picture_id;
-        $this->ingredients = $desert->ingredients->pluck('id')->toArray();
+        $this->recipe_id = $desert->recipe_id; // Populate the recipe_id
+        $this->is_available = $desert->is_available;
         $this->photo = null;
 
         $this->showEditModal = true;
@@ -127,31 +133,35 @@ class OwnerIndex extends Component
         $this->editingDesert->update([
             'name' => $this->name,
             'price' => $this->price,
-            'portion_size' => (int) $this->portion_size, // Forceer cast naar int
+            'portion_size' => $this->portion_size,
+            'measurement_unit_id' => $this->measurement_unit_id,
             'description' => $this->description,
             'picture_id' => $this->picture_id,
+            'recipe_id' => $this->recipe_id, // Update the recipe_id
+            'is_available' => $this->is_available,
         ]);
-
-        if (!empty($this->ingredients)) {
-            $this->editingDesert->ingredients()->sync($this->ingredients);
-        } else {
-            $this->editingDesert->ingredients()->detach();
-        }
 
         $this->resetForm();
         $this->showEditModal = false;
         session()->flash('success', 'Dessert succesvol bijgewerkt.');
     }
 
+    public function toggleAvailability(Dessert $desert)
+    {
+        $desert->is_available = !$desert->is_available;
+        $desert->save();
+        session()->flash('success', 'Beschikbaarheid van dessert bijgewerkt.');
+    }
+
     public function destroy(Dessert $desert)
     {
-        $desert->ingredients()->detach();
         $desert->delete();
         session()->flash('success', 'Dessert succesvol verwijderd.');
     }
 
     public function resetForm()
     {
-        $this->reset(['name', 'price', 'originalPrice', 'portion_size', 'description', 'picture_id', 'ingredients', 'editingDesert', 'photo']);
+        $this->reset(['name', 'price', 'originalPrice', 'portion_size', 'measurement_unit_id', 'description', 'picture_id', 'recipe_id', 'is_available', 'editingDesert', 'photo']);
+        $this->is_available = true; // Default back to true
     }
 }

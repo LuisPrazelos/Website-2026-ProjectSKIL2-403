@@ -126,7 +126,8 @@ Route::middleware(['auth'])->group(function () {
 
     // User overview for deserts
     Route::get('/deserts', function () {
-        $deserts = Dessert::with('picture')->get();
+        $deserts = Dessert::with('picture')->where('is_available', true)->get(); // Only show available desserts
+
         return view('deserts.index', compact('deserts'));
     })->name('deserts.index');
 
