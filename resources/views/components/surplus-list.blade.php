@@ -1,6 +1,5 @@
 @props(['surplus'])
 
-
 <div class="bg-white/70 backdrop-blur-md rounded-xl p-4 flex flex-col gap-4 shadow-lg dark:bg-zinc-800/70">
 
     {{-- Header: Afbeelding, Naam en Details --}}
@@ -19,8 +18,15 @@
 
             {{-- Beschikbaar en Prijs --}}
             <p class="text-zinc-600 dark:text-zinc-400">
-                Aantal beschikbaar: {{ $surplus->total_amount }} | Prijs: €{{ number_format($surplus->dessert->price, 2) }}/liter
+                Beschikbaar: {{ $surplus->total_amount }} porties | Prijs: €{{ number_format($surplus->dessert->price, 2) }}/portie
             </p>
+
+            {{-- Portie informatie --}}
+            @if($surplus->dessert->portion_size > 0)
+                <p class="text-xs text-zinc-500 dark:text-zinc-400 italic">
+                    Per portie: {{ $surplus->dessert->portion_size }} {{ $surplus->dessert->measurementUnit?->name ?? 'stuks' }}
+                </p>
+            @endif
 
             {{-- Houdbaar tot op nieuwe regel --}}
             <p class="text-zinc-600 dark:text-zinc-400">
@@ -37,7 +43,7 @@
 
             {{-- Hoeveelheid input --}}
             <div class="flex items-center gap-2">
-                <label for="quantity_{{ $surplus->id }}" class="text-sm text-zinc-600 dark:text-zinc-400">Hoeveelheid:</label>
+                <label for="quantity_{{ $surplus->id }}" class="text-sm text-zinc-600 dark:text-zinc-400">Porties:</label>
                 <input
                     type="number"
                     id="quantity_{{ $surplus->id }}"
