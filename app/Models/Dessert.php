@@ -20,12 +20,49 @@ class Dessert extends Model
         'picture_id',
         'portion_size',
         'measurement_unit_id',
+        'recipe_id',
     ];
 
     protected $casts = [
         'price' => 'float',
         'portion_size' => 'float',
     ];
+
+    /**
+     * Get the calculated cost price.
+     * Prioritizes the linked recipe, otherwise calculates from directly attached ingredients.
+     */
+    public function getCostPriceAttribute()
+    {
+        if ($this->recipe) {
+            return $this->recipe->cost;
+        }
+
+        $totalCost = 0;
+
+        foreach ($this->ingredients as $ingredient) {
+            // Get the latest price for this ingredient from price_evolutions
+            $latestPrice = $ingredient->priceEvolutions()
+                ->orderBy('date', 'desc')
+                ->first();
+
+            if ($latestPrice && $latestPrice->amount > 0) {
+                // Calculation: (pivot amount / price_evolution amount) * price_evolution price
+                $ingredientCost = ($ingredient->pivot->amount / $latestPrice->amount) * $latestPrice->price;
+                $totalCost += $ingredientCost;
+            }
+        }
+
+        return $totalCost;
+    }
+
+    /**
+     * A dessert can belong to a recipe.
+     */
+    public function recipe()
+    {
+        return $this->belongsTo(Recipe::class);
+    }
 
     /**
      * One dessert can have many surpluses (leftovers).

@@ -25,13 +25,16 @@ class Ingredient extends Model
         return $this->hasMany(IngredientAllergy::class, 'ingredient_id');
     }
 
-    /**
-     * Define the relationship with PriceEvolution.
-     * The foreign key on the price_evolutions table is 'ingredientId'.
-     * The local key on the ingredients table is 'id'.
-     */
     public function priceEvolutions()
     {
         return $this->hasMany(PriceEvolution::class, 'ingredientId', 'id');
+    }
+
+    /**
+     * Haal de meest recente prijsontwikkeling op voor dit ingrediënt.
+     */
+    public function latestPriceEvolution()
+    {
+        return $this->hasOne(PriceEvolution::class, 'ingredientId', 'id')->latestOfMany('date');
     }
 }
