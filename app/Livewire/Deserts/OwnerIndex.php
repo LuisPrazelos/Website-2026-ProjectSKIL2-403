@@ -30,6 +30,7 @@ class OwnerIndex extends Component
     public $description;
     public $picture_id;
     public $recipe_id; // Added property for the linked recipe
+    public $is_available = true; // Added property for availability
     public $photo;
 
     protected $rules = [
@@ -39,6 +40,7 @@ class OwnerIndex extends Component
         'description' => 'required|string',
         'picture_id' => 'nullable|exists:pictures,id',
         'recipe_id' => 'required|exists:recipes,id', // Changed to required as ingredients are removed
+        'is_available' => 'boolean',
         'photo' => 'nullable|image|max:1024',
     ];
 
@@ -83,6 +85,7 @@ class OwnerIndex extends Component
             'description' => $this->description,
             'picture_id' => $this->picture_id,
             'recipe_id' => $this->recipe_id, // Save the recipe_id
+            'is_available' => $this->is_available,
         ]);
 
         $this->resetForm();
@@ -100,6 +103,7 @@ class OwnerIndex extends Component
         $this->description = $desert->description;
         $this->picture_id = $desert->picture_id;
         $this->recipe_id = $desert->recipe_id; // Populate the recipe_id
+        $this->is_available = $desert->is_available;
         $this->photo = null;
 
         $this->showEditModal = true;
@@ -127,11 +131,19 @@ class OwnerIndex extends Component
             'description' => $this->description,
             'picture_id' => $this->picture_id,
             'recipe_id' => $this->recipe_id, // Update the recipe_id
+            'is_available' => $this->is_available,
         ]);
 
         $this->resetForm();
         $this->showEditModal = false;
         session()->flash('success', 'Dessert succesvol bijgewerkt.');
+    }
+
+    public function toggleAvailability(Dessert $desert)
+    {
+        $desert->is_available = !$desert->is_available;
+        $desert->save();
+        session()->flash('success', 'Beschikbaarheid van dessert bijgewerkt.');
     }
 
     public function destroy(Dessert $desert)
@@ -142,6 +154,7 @@ class OwnerIndex extends Component
 
     public function resetForm()
     {
-        $this->reset(['name', 'price', 'originalPrice', 'portion_size', 'description', 'picture_id', 'recipe_id', 'editingDesert', 'photo']);
+        $this->reset(['name', 'price', 'originalPrice', 'portion_size', 'description', 'picture_id', 'recipe_id', 'is_available', 'editingDesert', 'photo']);
+        $this->is_available = true; // Default back to true
     }
 }

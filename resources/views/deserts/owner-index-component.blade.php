@@ -31,8 +31,7 @@
                             <th class="px-4 py-3">{{ __('Prijs') }}</th>
                             <th class="px-4 py-3">{{ __('Kostprijs') }}</th>
                             <th class="px-4 py-3">{{ __('Aantal') }}</th>
-                            <th class="px-4 py-3">{{ __('Beschrijving') }}</th>
-                            <th class="px-4 py-3">{{ __('Gekoppeld Recept') }}</th>
+                            <th class="px-4 py-3">{{ __('Beschikbaar') }}</th>
                             <th class="px-4 py-3">{{ __('Acties') }}</th>
                         </tr>
                     </thead>
@@ -50,13 +49,12 @@
                                 <td class="px-4 py-3">€{{ number_format($desert->price, 2) }}</td>
                                 <td class="px-4 py-3 text-sm font-semibold">€{{ number_format($desert->cost_price, 2) }}</td>
                                 <td class="px-4 py-3">{{ (int) $desert->portion_size }}</td>
-                                <td class="px-4 py-3 text-sm text-gray-500 truncate max-w-xs">{{ $desert->description }}</td>
-                                <td class="px-4 py-3 text-sm text-gray-500">
-                                    @if($desert->recipe)
-                                        <span>{{ $desert->recipe->name }}</span>
-                                    @else
-                                        <span class="text-red-500 italic">{{ __('Geen recept gekoppeld') }}</span>
-                                    @endif
+                                <td class="px-4 py-3">
+                                    <button wire:click="toggleAvailability({{ $desert->id }})"
+                                            class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2 {{ $desert->is_available ? 'bg-green-500' : 'bg-gray-200' }}"
+                                            role="switch" aria-checked="{{ $desert->is_available ? 'true' : 'false' }}">
+                                        <span class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out {{ $desert->is_available ? 'translate-x-5' : 'translate-x-0' }}"></span>
+                                    </button>
                                 </td>
                                 <td class="px-4 py-3 flex items-center space-x-2">
                                     <button wire:click="edit({{ $desert->id }})" title="{{ __('Bewerken') }}" class="text-blue-600 hover:text-blue-900">✏️</button>
@@ -65,7 +63,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td class="px-4 py-8 text-center" colspan="8">
+                                <td class="px-4 py-8 text-center" colspan="7">
                                     <h2 class="text-gray-500">{{ __('Geen desserts gevonden.') }}</h2>
                                     <p class="text-gray-400 mt-2">{{ __('Voeg een dessert toe via de knop rechtsboven.') }}</p>
                                 </td>
@@ -117,6 +115,13 @@
                                     @endforeach
                                 </select>
                                 @error('recipe_id') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                            </div>
+                            <div>
+                                <label class="flex items-center space-x-3 cursor-pointer">
+                                    <input type="checkbox" wire:model.defer="is_available" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Beschikbaar</span>
+                                </label>
+                                @error('is_available') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                             </div>
                             <div>
                                 <label for="photo" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nieuwe afbeelding uploaden</label>
@@ -191,6 +196,13 @@
                                     @endforeach
                                 </select>
                                 @error('recipe_id') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                            </div>
+                            <div>
+                                <label class="flex items-center space-x-3 cursor-pointer">
+                                    <input type="checkbox" wire:model.defer="is_available" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Beschikbaar</span>
+                                </label>
+                                @error('is_available') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                             </div>
                             <div>
                                 <label for="edit_photo" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nieuwe afbeelding uploaden</label>

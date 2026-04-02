@@ -21,11 +21,13 @@ class Dessert extends Model
         'portion_size',
         'measurement_unit_id',
         'recipe_id',
+        'is_available',
     ];
 
     protected $casts = [
         'price' => 'float',
         'portion_size' => 'float',
+        'is_available' => 'boolean',
     ];
 
     /**
