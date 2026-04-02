@@ -10,10 +10,10 @@ return new class extends Migration
     {
         Schema::create('notification_preferences', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('notification_category_id');
-            $table->unsignedBigInteger('notification_channel_id');
-            $table->boolean('received')->default(true);
+            $table->unsignedBigInteger('user_id')->nullable(false);
+            $table->unsignedBigInteger('notification_category_id')->nullable(false);
+            $table->unsignedBigInteger('notification_channel_id')->nullable(false);
+            $table->boolean('received')->nullable(false)->default(true);
             $table->timestamps();
 
             $table->foreign('user_id')

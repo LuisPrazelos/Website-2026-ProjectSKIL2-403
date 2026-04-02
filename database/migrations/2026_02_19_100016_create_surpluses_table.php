@@ -10,12 +10,12 @@ return new class extends Migration
     {
         Schema::create('surpluses', function (Blueprint $table) {
             $table->id();
-            $table->date('date');
-            $table->integer('total_amount')->default(0);
-            $table->decimal('sale', 10, 2)->default(0);
-            $table->string('status')->default('available');
-            $table->date('expiration_date')->nullable();
-            $table->unsignedBigInteger('dessert_id');
+            $table->date('date')->nullable(false);
+            $table->integer('total_amount')->nullable(false)->default(0);
+            $table->decimal('sale', 10, 2)->nullable(false)->default(0);
+            $table->string('status')->nullable(false)->default('available');
+            $table->date('expiration_date')->nullable(false);
+            $table->unsignedBigInteger('dessert_id')->nullable(false);
             $table->text('comment')->nullable();
             $table->timestamps();
 

@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('recipe_ingredients', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('recipe_id')->constrained()->onDelete('cascade');
-            $table->foreignId('ingredient_id')->constrained()->onDelete('cascade');
-            $table->decimal('quantity');
-            $table->foreignId('measurement_unit_id')->constrained()->onDelete('cascade');
+            $table->foreignId('recipe_id')->nullable(false)->constrained()->onDelete('cascade');
+            $table->foreignId('ingredient_id')->nullable(false)->constrained()->onDelete('cascade');
+            $table->decimal('quantity')->nullable(false);
+            $table->foreignId('measurement_unit_id')->nullable(false)->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

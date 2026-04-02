@@ -10,11 +10,11 @@ return new class extends Migration
     {
         Schema::create('price_evolutions', function (Blueprint $table) {
             $table->id('priceEvolutionId');
-            $table->unsignedBigInteger('ingredientId');
-            $table->decimal('price', 10, 4)->default(0);
-            $table->decimal('amount', 10, 4)->default(0);
-            $table->date('date');
-            $table->string('source')->nullable();
+            $table->unsignedBigInteger('ingredientId')->nullable(false);
+            $table->decimal('price', 10, 4)->nullable(false)->default(0);
+            $table->decimal('amount', 10, 4)->nullable(false)->default(0);
+            $table->date('date')->nullable(false);
+            $table->string('source')->nullable(false);
             $table->timestamps();
 
             $table->foreign('ingredientId')
