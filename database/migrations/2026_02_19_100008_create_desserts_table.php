@@ -14,10 +14,7 @@ return new class extends Migration {
             $table->text('description')->nullable();
             $table->text('preparation_method')->nullable();
             $table->text('notes')->nullable();
-            $table->foreignId('picture_id')
-                ->nullable()
-                ->constrained('pictures')
-                ->nullOnDelete();
+            $table->unsignedBigInteger('picture_id')->nullable();
             $table->decimal('portion_size', 8, 2)->default(0);
             $table->foreignId('measurement_unit_id')->nullable()->constrained()->nullOnDelete();
             $table->timestamps();
@@ -29,4 +26,3 @@ return new class extends Migration {
         Schema::dropIfExists('desserts');
     }
 };
-
