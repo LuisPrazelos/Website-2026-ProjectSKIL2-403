@@ -10,9 +10,9 @@ return new class extends Migration
     {
         Schema::create('ingredient_desserts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('dessert_id')->constrained()->onDelete('cascade');
-            $table->foreignId('ingredient_id')->constrained()->onDelete('cascade');
-            $table->decimal('amount', 10, 4)->default(0);
+            $table->foreignId('dessert_id')->nullable(false)->constrained()->onDelete('cascade');
+            $table->foreignId('ingredient_id')->nullable(false)->constrained()->onDelete('cascade');
+            $table->decimal('amount', 10, 4)->nullable(false)->default(0);
             $table->timestamps();
         });
     }

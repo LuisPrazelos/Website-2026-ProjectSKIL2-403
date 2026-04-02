@@ -10,9 +10,9 @@ return new class extends Migration
     {
         Schema::create('ingredients', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->foreignId('measurement_unit_id')->constrained()->onDelete('cascade');
-            $table->decimal('minimumAmount', 10, 2)->default(0);
+            $table->string('name')->nullable(false);
+            $table->foreignId('measurement_unit_id')->nullable(false)->constrained()->onDelete('cascade');
+            $table->decimal('minimumAmount', 10, 2)->nullable()->default(0);
             $table->timestamps();
         });
     }

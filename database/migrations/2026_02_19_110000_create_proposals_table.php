@@ -10,16 +10,16 @@ return new class extends Migration
     {
         Schema::create('proposals', function (Blueprint $table) {
             $table->id();
-            $table->text('message'); // Boodschap
-            $table->integer('person_count'); // Aantal personen
-            $table->dateTime('delivery_date'); // Afhaaldatum/leveldatum
-            $table->boolean('on_location')->default(false); // Boolean op locatie
+            $table->text('message')->nullable(false); // Boodschap
+            $table->integer('person_count')->nullable(false); // Aantal personen
+            $table->dateTime('delivery_date')->nullable(false); // Afhaaldatum/leveldatum
+            $table->boolean('on_location')->nullable(false)->default(false); // Boolean op locatie
 
             // Added fields for response
             $table->decimal('price_per_person', 8, 2)->nullable();
             $table->text('remarks')->nullable();
 
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->nullable(false);
             $table->unsignedBigInteger('theme_id')->nullable();
 
             $table->timestamps();
@@ -38,9 +38,9 @@ return new class extends Migration
         // Create a pivot table for proposals and desserts
         Schema::create('proposal_desserts', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('proposal_id');
-            $table->unsignedBigInteger('dessert_id');
-            $table->integer('quantity');
+            $table->unsignedBigInteger('proposal_id')->nullable(false);
+            $table->unsignedBigInteger('dessert_id')->nullable(false);
+            $table->integer('quantity')->nullable(false);
             $table->string('allergies')->nullable();
             $table->timestamps();
 

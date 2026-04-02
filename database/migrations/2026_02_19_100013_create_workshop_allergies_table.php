@@ -10,8 +10,8 @@ return new class extends Migration
     {
         Schema::create('workshop_allergies', function (Blueprint $table) {
             $table->id('workshopAllergyId');
-            $table->unsignedBigInteger('allergyId');
-            $table->unsignedBigInteger('workshopId');
+            $table->unsignedBigInteger('allergyId')->nullable(false);
+            $table->unsignedBigInteger('workshopId')->nullable(false);
             $table->timestamps();
 
             $table->foreign('allergyId')

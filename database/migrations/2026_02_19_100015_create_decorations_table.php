@@ -10,8 +10,8 @@ return new class extends Migration
     {
         Schema::create('decorations', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->decimal('price', 10, 2)->default(0);
+            $table->string('name')->nullable(false);
+            $table->decimal('price', 10, 2)->nullable(false)->default(0);
             $table->text('content')->nullable();
             $table->unsignedBigInteger('themeId')->nullable();
             $table->timestamps();
