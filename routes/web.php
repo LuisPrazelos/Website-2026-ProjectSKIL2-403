@@ -1,8 +1,6 @@
 <?php
 
-use App\Http\Controllers\CartController;
 use App\Http\Controllers\SurplusController;
-use App\Http\Controllers\IngredientController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Livewire\RecipeManager;
 use App\Livewire\ShowRecipe;
@@ -11,20 +9,23 @@ use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
 use App\Livewire\Settings\TwoFactor;
-use App\Livewire\ShoppingList; // Importeer ShoppingList
-use App\Livewire\PriceEvolution; // Importeer het nieuwe component
+use App\Livewire\ShoppingList;
+use App\Livewire\PriceEvolution;
 use App\Livewire\Orders\ManageOrders;
 use App\Livewire\Orders\OrderDetail;
 use App\Livewire\Orders\CreateOrder;
 use App\Livewire\Orders\RespondOrderRequests;
 use App\Livewire\Orders\ViewOrderRequest;
 use App\Livewire\Orders\RespondToOrderRequest;
+use App\Livewire\Ingredient as LivewireIngredient;
 use App\Models\Order;
+use App\Models\Surplus;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use App\Models\Dessert;
 use App\Livewire\ShowHappenings;
 use App\Livewire\Checkout;
+use Illuminate\Http\Request;
 
 Route::get('/', function () {
     return view('welcome');
@@ -55,12 +56,65 @@ Route::middleware(['auth'])->group(function () {
     // Route for the surplus shop (for buying)
     Route::get('/surplus-shop', [SurplusController::class, 'shopIndex'])->name('userSurplusShop.index');
 
-    // Cart routes
-    Route::get('cart', [CartController::class, 'index'])->name('cart.index');
-    Route::get('shopping-cart', [CartController::class, 'index'])->name('shopping-cart');
-    Route::post('cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
-    Route::patch('cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
-    Route::delete('cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
+    // Cart routes implemented with closures
+    Route::get('cart', function () {
+        return view('surpluses.cart');
+    })->name('cart.index');
+
+    Route::get('shopping-cart', function () {
+        return view('surpluses.cart');
+    })->name('shopping-cart');
+
+    Route::post('cart/add/{id}', function (Request $request, $id) {
+        $surplus = Surplus::with('dessert')->findOrFail($id);
+        $quantity = (int) $request->input('quantity', 1);
+        $quantity = max(1, min($quantity, $surplus->total_amount));
+
+        $cart = session()->get('cart', []);
+
+        if(isset($cart[$id])) {
+            $cart[$id]['quantity'] += $quantity;
+            $cart[$id]['quantity'] = min($cart[$id]['quantity'], $surplus->total_amount);
+        } else {
+            $cart[$id] = [
+                "dessert_name" => $surplus->dessert->name,
+                "surplus_id" => $surplus->id,
+                "quantity" => $quantity,
+                "price" => $surplus->dessert->price,
+                "discount" => $surplus->sale,
+            ];
+        }
+
+        session()->put('cart', $cart);
+        return redirect()->back()->with('success', 'Product toegevoegd aan winkelwagen!');
+    })->name('cart.add');
+
+    Route::patch('cart/update/{id}', function (Request $request, $id) {
+        $quantity = (int) $request->input('quantity', 1);
+        $cart = session()->get('cart', []);
+
+        if(isset($cart[$id])) {
+            if($quantity <= 0) {
+                unset($cart[$id]);
+                session()->put('cart', $cart);
+                return redirect()->back()->with('success', 'Product verwijderd uit winkelwagen!');
+            } else {
+                $cart[$id]['quantity'] = $quantity;
+                session()->put('cart', $cart);
+                return redirect()->back()->with('success', 'Hoeveelheid bijgewerkt!');
+            }
+        }
+        return redirect()->back()->with('error', 'Product niet gevonden in winkelwagen!');
+    })->name('cart.update');
+
+    Route::delete('cart/remove/{id}', function ($id) {
+        $cart = session()->get('cart', []);
+        if(isset($cart[$id])) {
+            unset($cart[$id]);
+            session()->put('cart', $cart);
+        }
+        return redirect()->back()->with('success', 'Product verwijderd uit winkelwagen!');
+    })->name('cart.remove');
 
     // Checkout route
     Route::get('checkout', Checkout::class)->name('checkout');
@@ -73,6 +127,7 @@ Route::middleware(['auth'])->group(function () {
     // User overview for deserts
     Route::get('/deserts', function () {
         $deserts = Dessert::with('picture')->where('is_available', true)->get(); // Only show available desserts
+
         return view('deserts.index', compact('deserts'));
     })->name('deserts.index');
 
@@ -80,43 +135,26 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/evenement-aanvragen', EventRequest::class)->name('event.request');
 
     Route::middleware([AdminMiddleware::class])->group(function () {
-        // Livewire routes for recipe management
         Route::get('/owner/recipes', RecipeManager::class)->name('owner.recipes.index');
         Route::get('/owner/recipes/{recipe}', ShowRecipe::class)->name('owner.recipes.show');
-
-        // Route voor prijsontwikkeling
         Route::get('/price-evolution', PriceEvolution::class)->name('price-evolution');
-
-        // Route voor boodschappenlijst
         Route::get('/shopping-list', ShoppingList::class)->name('shopping-list');
-        // Route voor bestellingen beheren
         Route::get('/owner/bestellingen', ManageOrders::class)->name('owner.orders.index');
         Route::get('/owner/bestellingen/nieuw', CreateOrder::class)->name('owner.orders.create');
         Route::get('/owner/bestellingen/{order}', OrderDetail::class)->name('owner.orders.show');
         Route::get('/owner/aanvragen', RespondOrderRequests::class)->name('owner.respond-order-requests');
         Route::get('/owner/aanvragen/{id}', ViewOrderRequest::class)->name('owner.respond-order-requests.view');
         Route::get('/owner/aanvragen/{id}/beantwoorden', RespondToOrderRequest::class)->name('owner.respond-order-requests.respond');
-
-        // Owner management view for ingredients
-        Route::get('/owner/ingredients', [IngredientController::class, 'ownerIndex'])->name('owner.ingredients.index');
-        Route::post('/owner/ingredients', [IngredientController::class, 'store'])->name('owner.ingredients.store');
-        Route::get('/owner/ingredients/{ingredient}/edit', [IngredientController::class, 'edit'])->name('owner.ingredients.edit');
-        Route::put('/owner/ingredients/{ingredient}', [IngredientController::class, 'update'])->name('owner.ingredients.update');
-        Route::delete('/owner/ingredients/{ingredient}', [IngredientController::class, 'destroy'])->name('owner.ingredients.destroy');
-        // Owner management view for deserts
+        Route::get('/owner/ingredients', LivewireIngredient::class)->name('owner.ingredients.index');
         Route::get('/owner/deserts', function () {
-            $deserts = Dessert::with('picture')->paginate(10); // Paginate for better performance
+            $deserts = Dessert::with('picture')->paginate(10);
             return view('deserts.owner-index', compact('deserts'));
         })->name('owner.deserts.index');
-
-        // Owner management view for surpluses
         Route::get('/owner/surpluses', [SurplusController::class, 'ownerIndex'])->name('owner.surpluses.index');
         Route::post('/owner/surpluses', [SurplusController::class, 'store'])->name('owner.surpluses.store');
         Route::get('/owner/surpluses/{surplus}/edit', [SurplusController::class, 'edit'])->name('owner.surpluses.edit');
         Route::put('/owner/surpluses/{surplus}', [SurplusController::class, 'update'])->name('owner.surpluses.update');
         Route::delete('/owner/surpluses/{surplus}', [SurplusController::class, 'destroy'])->name('owner.surpluses.destroy');
-
-        // Owner management view for happenings
         Route::get('/owner/happenings', ShowHappenings::class)->name('owner.happenings.index');
     });
 });
