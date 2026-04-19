@@ -11,8 +11,8 @@ return new class extends Migration
         Schema::create('shopping_lists', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('personId')->nullable();
-            $table->string('name');
-            $table->boolean('isCompleted')->default(false);
+            $table->string('name')->nullable(false);
+            $table->boolean('isCompleted')->nullable(false)->default(false);
             $table->text('internalComment')->nullable();
             $table->timestamps();
 

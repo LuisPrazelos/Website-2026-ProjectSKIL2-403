@@ -12,8 +12,8 @@ return new class extends Migration {
     {
         Schema::create('pictures', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->string('hash')->unique();
+            $table->string('title')->nullable(false);
+            $table->string('hash')->unique()->nullable(false);
             $table->timestamps();
         });
     }

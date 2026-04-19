@@ -10,14 +10,14 @@ return new class extends Migration
     {
         Schema::create('workshops', function (Blueprint $table) {
             $table->id('workshopId');
-            $table->string('name');
-            $table->dateTime('date');
-            $table->decimal('price_adults', 10, 2)->default(0);
-            $table->decimal('price_children', 10, 2)->default(0);
+            $table->string('name')->nullable(false);
+            $table->dateTime('date')->nullable(false);
+            $table->decimal('price_adults', 10, 2)->nullable(false)->default(0);
+            $table->decimal('price_children', 10, 2)->nullable(false)->default(0);
             $table->text('description')->nullable();
             $table->string('location')->nullable();
-            $table->integer('duration_minutes')->nullable();
-            $table->integer('max_participants')->nullable();
+            $table->integer('duration_minutes')->nullable(false);
+            $table->integer('max_participants')->nullable(false);
             $table->timestamps();
         });
     }

@@ -9,8 +9,8 @@ return new class extends Migration {
     {
         Schema::create('desserts', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->decimal('price', 10, 2)->default(0);
+            $table->string('name')->nullable(false);
+            $table->decimal('price', 10, 2)->nullable(false)->default(0);
             $table->text('description')->nullable();
             $table->text('preparation_method')->nullable();
             $table->text('notes')->nullable();
@@ -18,8 +18,8 @@ return new class extends Migration {
                 ->nullable()
                 ->constrained('pictures')
                 ->nullOnDelete();
-            $table->decimal('portion_size', 8, 2)->default(0);
-            $table->foreignId('measurement_unit_id')->nullable()->constrained()->nullOnDelete();
+            $table->decimal('portion_size', 8, 2)->nullable(false)->default(0);
+            $table->foreignId('measurement_unit_id')->nullable(false)->constrained()->nullOnDelete();
             $table->timestamps();
         });
     }
