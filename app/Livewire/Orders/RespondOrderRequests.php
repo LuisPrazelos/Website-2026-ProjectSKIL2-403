@@ -4,7 +4,7 @@ namespace App\Livewire\Orders;
 
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\Proposal;
+use App\Models\Happening;
 
 class RespondOrderRequests extends Component
 {
@@ -21,8 +21,8 @@ class RespondOrderRequests extends Component
 
     public function render()
     {
-        $query = Proposal::with(['user', 'theme'])
-            ->latest('delivery_date');
+        $query = Happening::with(['user', 'theme'])
+            ->latest('event_date');
 
         if ($this->searchQuery) {
             $query->where(function ($q) {
@@ -36,10 +36,10 @@ class RespondOrderRequests extends Component
             });
         }
 
-        $proposals = $query->paginate(10);
+        $happenings = $query->paginate(10);
 
         return view('livewire.orders.respond-order-requests', [
-            'proposals' => $proposals
+            'happenings' => $happenings
         ])
         ->layout('components.layouts.app', ['title' => 'Reageren op aanvragen']);
     }

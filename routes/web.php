@@ -23,7 +23,6 @@ use App\Models\Order;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use App\Models\Dessert;
-use App\Livewire\ShowHappenings;
 use App\Livewire\Checkout;
 use App\Livewire\SurplusManager;
 
@@ -109,9 +108,6 @@ Route::middleware(['auth'])->group(function () {
 
         // Owner management view for surpluses
         Route::get('/owner/surpluses', SurplusManager::class)->name('owner.surpluses.index');
-
-        // Owner management view for happenings
-        Route::get('/owner/happenings', ShowHappenings::class)->name('owner.happenings.index');
     });
 });
 

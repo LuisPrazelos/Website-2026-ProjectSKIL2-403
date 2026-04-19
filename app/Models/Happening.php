@@ -25,11 +25,13 @@ class Happening extends Model
         'user_id',
         'theme_id',
         'status_id',
+        'on_location',
     ];
 
     protected $casts = [
         'event_date' => 'datetime',
         'price_per_person' => 'float',
+        'on_location' => 'boolean',
     ];
 
     /*
@@ -51,5 +53,12 @@ class Happening extends Model
     public function status()
     {
         return $this->belongsTo(State::class, 'status_id');
+    }
+
+    public function desserts()
+    {
+        return $this->belongsToMany(Dessert::class, 'happening_desserts')
+            ->withPivot('quantity', 'allergies')
+            ->withTimestamps();
     }
 }

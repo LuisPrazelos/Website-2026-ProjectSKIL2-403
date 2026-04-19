@@ -28,6 +28,7 @@ class HappeningFactory extends Factory
             'user_id' => User::query()->inRandomOrder()->value('id') ?? User::factory(),
             'theme_id' => Theme::query()->inRandomOrder()->value('id'),
             'status_id' => State::query()->inRandomOrder()->value('id'),
+            'on_location' => fake()->boolean(),
         ];
     }
 }
