@@ -10,10 +10,10 @@ return new class extends Migration
     {
         Schema::create('shopping_carts', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('orderId');
+            $table->unsignedBigInteger('orderId')->nullable(false);
             $table->unsignedBigInteger('dessertId')->nullable();
             $table->unsignedBigInteger('leftoverId')->nullable();
-            $table->integer('amount')->default(1);
+            $table->integer('amount')->nullable(false)->default(1);
             $table->timestamps();
 
             $table->foreign('orderId')

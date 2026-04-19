@@ -10,13 +10,13 @@ return new class extends Migration
     {
         Schema::create('workshop_users', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('workshop_id');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('workshop_id')->nullable(false);
+            $table->unsignedBigInteger('user_id')->nullable(false);
             $table->date('registration_date')->nullable();
-            $table->integer('total_adults')->default(0);
-            $table->integer('total_children')->default(0);
+            $table->integer('total_adults')->nullable(false)->default(0);
+            $table->integer('total_children')->nullable(false)->default(0);
             $table->text('comment')->nullable();
-            $table->boolean('is_present')->default(false);
+            $table->boolean('is_present')->nullable(false)->default(false);
             $table->timestamps();
 
             $table->foreign('workshop_id')

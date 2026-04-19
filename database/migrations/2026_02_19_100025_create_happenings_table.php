@@ -10,12 +10,12 @@ return new class extends Migration
     {
         Schema::create('happenings', function (Blueprint $table) {
             $table->id();
-            $table->text('message');
+            $table->text('message')->nullable(false);
             $table->text('remarks')->nullable();
-            $table->dateTime('event_date');
-            $table->integer('person_count')->unsigned();
-            $table->decimal('price_per_person', 8, 2)->default(0);
-            $table->unsignedBigInteger('user_id');
+            $table->dateTime('event_date')->nullable(false);
+            $table->integer('person_count')->unsigned()->nullable(false);
+            $table->decimal('price_per_person', 8, 2)->nullable(false)->default(0);
+            $table->unsignedBigInteger('user_id')->nullable(false);
             $table->unsignedBigInteger('theme_id')->nullable();
             $table->unsignedBigInteger('status_id')->nullable();
             $table->boolean('on_location')->default(false);

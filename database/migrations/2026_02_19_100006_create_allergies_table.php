@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('allergies', function (Blueprint $table) {
             $table->id('allergyId');
-            $table->string('name');
+            $table->string('name')->nullable(false);
             $table->timestamps();
         });
     }

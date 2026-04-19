@@ -10,10 +10,10 @@ return new class extends Migration
     {
         Schema::create('availabilities', function (Blueprint $table) {
             $table->id();
-            $table->date('date');
+            $table->date('date')->nullable(false);
             $table->dateTime('exceptionAvailabilityDate')->nullable();
-            $table->dateTime('pickUpTimeStart')->nullable();
-            $table->dateTime('pickUpTimeStop')->nullable();
+            $table->dateTime('pickUpTimeStart')->nullable(false);
+            $table->dateTime('pickUpTimeStop')->nullable(false);
             $table->timestamps();
         });
     }
