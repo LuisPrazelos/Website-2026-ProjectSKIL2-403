@@ -11,11 +11,8 @@ class ThemeManager extends Component
     public $showForm = false;
     public $editingThemeId = null;
     public $themeName = '';
+    public $themeDescription = '';
     public $searchQuery = '';
-
-    protected $rules = [
-        'themeName' => 'required|string|max:255|unique:themes,name',
-    ];
 
     public function mount()
     {
@@ -30,7 +27,15 @@ class ThemeManager extends Component
             $query->where('name', 'like', '%' . $this->searchQuery . '%');
         }
 
-        $this->themes = $query->get()->toArray();
+        $this->themes = $query
+            ->get()
+            ->map(fn (Theme $theme) => [
+                'id' => $theme->id,
+                'name' => $theme->name,
+                'description' => $theme->description,
+                'created_at' => $theme->created_at,
+            ])
+            ->toArray();
     }
 
     public function updatedSearchQuery()
@@ -43,6 +48,7 @@ class ThemeManager extends Component
         $this->showForm = true;
         $this->editingThemeId = null;
         $this->themeName = '';
+        $this->themeDescription = '';
     }
 
     public function editTheme($themeId)
@@ -50,6 +56,7 @@ class ThemeManager extends Component
         $theme = Theme::findOrFail($themeId);
         $this->editingThemeId = $themeId;
         $this->themeName = $theme->name;
+        $this->themeDescription = $theme->description ?? '';
         $this->showForm = true;
     }
 
@@ -58,23 +65,23 @@ class ThemeManager extends Component
         $this->showForm = false;
         $this->editingThemeId = null;
         $this->themeName = '';
+        $this->themeDescription = '';
     }
 
     public function saveTheme()
     {
-        // Adjust rules if editing
-        if ($this->editingThemeId) {
-            $this->rules['themeName'] = 'required|string|max:255|unique:themes,name,' . $this->editingThemeId;
-        }
-
-        $this->validate();
+        $validated = $this->validate($this->rules());
+        $themeData = [
+            'name' => $validated['themeName'],
+            'description' => $validated['themeDescription'] ?: null,
+        ];
 
         if ($this->editingThemeId) {
             $theme = Theme::findOrFail($this->editingThemeId);
-            $theme->update(['name' => $this->themeName]);
+            $theme->update($themeData);
             $this->dispatch('theme-updated', 'Thema succesvol bijgewerkt!');
         } else {
-            Theme::create(['name' => $this->themeName]);
+            Theme::create($themeData);
             $this->dispatch('theme-created', 'Thema succesvol aangemaakt!');
         }
 
@@ -99,5 +106,12 @@ class ThemeManager extends Component
         return view('livewire.theme-manager')
             ->layout('components.layouts.app', ['title' => 'Thema\'s Beheren']);
     }
-}
 
+    protected function rules()
+    {
+        return [
+            'themeName' => 'required|string|max:255|unique:themes,name,' . $this->editingThemeId,
+            'themeDescription' => 'nullable|string',
+        ];
+    }
+}

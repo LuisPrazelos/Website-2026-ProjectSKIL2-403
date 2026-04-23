@@ -155,7 +155,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/owner/surpluses/{surplus}/edit', SurplusManager::class)->name('owner.surpluses.edit');
         Route::put('/owner/surpluses/{surplus}', SurplusManager::class)->name('owner.surpluses.update');
         Route::delete('/owner/surpluses/{surplus}', SurplusManager::class)->name('owner.surpluses.destroy');
-         });
+        Route::get('/owner/themes', ThemeManager::class)->name('owner.themes.index');
+    });
 });
 
 require __DIR__ . '/auth.php';
