@@ -7,142 +7,127 @@ use App\Models\Surplus;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\Url;
-use Illuminate\Support\Facades\Route;
+use Carbon\Carbon;
 
 class SurplusManager extends Component
 {
     use WithPagination;
 
     #[Url]
-    public string $search = '';
+    public $search = '';
 
-    public string $mode = 'shop';
-    public ?Surplus $editingSurplus = null;
-    public array $desserts = [];
+    public $showAddModal = false;
+    public $showEditModal = false;
+    public $editingSurplus = null;
 
-    public string $dessertInput = '';
-    public string $dateInput = '';
-    public string $quantityInput = '';
-    public string $discountInput = '';
-    public string $notesInput = '';
-    public string $statusInput = 'available';
-    public string $commentInput = '';
+    // Form properties
+    public $dessert_id;
+    public $date;
+    public $total_amount;
+    public $sale;
+    public $comment;
+    public $status;
+
+    protected $rules = [
+        'dessert_id' => 'required|exists:desserts,id',
+        'date' => 'required|date|after_or_equal:today',
+        'total_amount' => 'required|integer|min:1',
+        'sale' => 'required|numeric|min:0|max:100',
+        'comment' => 'nullable|string',
+        'status' => 'required|string',
+    ];
 
     public function mount()
     {
-        // Determine mode based on the current route
-        $routeName = Route::currentRouteName();
-        $this->mode = ($routeName === 'owner.surpluses.index') ? 'owner' : 'shop';
-        $this->desserts = Dessert::orderBy('name')->get()->toArray();
+        $this->date = now()->toDateString();
+        $this->status = 'available';
     }
 
     public function render()
     {
-        if ($this->mode === 'shop') {
-            $surpluses = Surplus::with('dessert')
-                ->where('expiration_date', '>=', now())
-                ->where('total_amount', '>', 0)
-                ->orderBy('date', 'asc')
-                ->get();
+        $surpluses = Surplus::with('dessert')
+            ->when($this->search, function ($query) {
+                $query->whereHas('dessert', function ($q) {
+                    $q->where('name', 'like', "%{$this->search}%");
+                });
+            })
+            ->orderBy('date', 'desc')
+            ->paginate(10);
 
-            return view('livewire.surplus-manager', [
-                'surpluses' => $surpluses,
-            ]);
-        } else {
-            $surpluses = Surplus::with('dessert')
-                ->when($this->search, function ($query) {
-                    $query->whereHas('dessert', function ($q) {
-                        $q->where('name', 'like', "%{$this->search}%");
-                    });
-                })
-                ->orderBy('date', 'desc')
-                ->paginate(10);
+        $desserts = Dessert::orderBy('name')->get();
 
-            return view('livewire.surplus-manager', [
-                'surpluses' => $surpluses,
-            ]);
-        }
+        return view('livewire.surplus-manager', [
+            'surpluses' => $surpluses,
+            'desserts' => $desserts,
+        ])->layout('components.layouts.app', ['title' => 'Overschotten Beheren']);
     }
 
     public function store()
     {
-        $validated = $this->validate([
-            'dessertInput' => 'required|exists:desserts,id',
-            'dateInput' => 'required|date|after_or_equal:today',
-            'quantityInput' => 'required|integer|min:1',
-            'discountInput' => 'required|numeric|min:0|max:100',
-            'notesInput' => 'nullable|string',
+        $this->validate([
+            'dessert_id' => 'required|exists:desserts,id',
+            'date' => 'required|date|after_or_equal:today',
+            'total_amount' => 'required|integer|min:1',
+            'sale' => 'required|numeric|min:0|max:100',
+            'comment' => 'nullable|string',
         ]);
 
         Surplus::create([
-            'dessert_id' => $validated['dessertInput'],
-            'date' => $validated['dateInput'],
-            'expiration_date' => $validated['dateInput'],
-            'total_amount' => $validated['quantityInput'],
-            'sale' => $validated['discountInput'],
+            'dessert_id' => $this->dessert_id,
+            'date' => $this->date,
+            'expiration_date' => $this->date,
+            'total_amount' => $this->total_amount,
+            'sale' => $this->sale,
             'status' => 'available',
-            'comment' => $validated['notesInput'],
+            'comment' => $this->comment,
         ]);
 
         $this->resetForm();
-        session()->flash('success', 'Overschot succesvol toegevoegd.');
+        $this->showAddModal = false;
+        session()->flash('success', 'Overschot succesvol toegevoegd!');
     }
 
     public function edit(Surplus $surplus)
     {
         $this->editingSurplus = $surplus;
-        $this->dessertInput = (string) $surplus->dessert_id;
-        $this->dateInput = $surplus->date->format('Y-m-d');
-        $this->quantityInput = (string) $surplus->total_amount;
-        $this->discountInput = (string) $surplus->sale;
-        $this->statusInput = $surplus->status;
-        $this->commentInput = $surplus->comment ?? '';
+        $this->dessert_id = $surplus->dessert_id;
+        $this->date = $surplus->date->toDateString();
+        $this->total_amount = $surplus->total_amount;
+        $this->sale = $surplus->sale;
+        $this->comment = $surplus->comment;
+        $this->status = $surplus->status;
+
+        $this->showEditModal = true;
     }
 
     public function update()
     {
-        if (!$this->editingSurplus) {
-            return;
-        }
-
-        $validated = $this->validate([
-            'dessertInput' => 'required|exists:desserts,id',
-            'dateInput' => 'required|date|after_or_equal:today',
-            'quantityInput' => 'required|integer|min:1',
-            'discountInput' => 'required|numeric|min:0|max:100',
-            'statusInput' => 'required|string',
-            'commentInput' => 'nullable|string',
-        ]);
+        $this->validate();
 
         $this->editingSurplus->update([
-            'dessert_id' => $validated['dessertInput'],
-            'date' => $validated['dateInput'],
-            'total_amount' => $validated['quantityInput'],
-            'sale' => $validated['discountInput'],
-            'status' => $validated['statusInput'],
-            'comment' => $validated['commentInput'],
+            'dessert_id' => $this->dessert_id,
+            'date' => $this->date,
+            'total_amount' => $this->total_amount,
+            'sale' => $this->sale,
+            'status' => $this->status,
+            'comment' => $this->comment,
         ]);
 
         $this->resetForm();
-        session()->flash('success', 'Overschot succesvol bijgewerkt.');
+        $this->showEditModal = false;
+        session()->flash('success', 'Overschot succesvol bijgewerkt!');
     }
 
-    public function delete(Surplus $surplus)
+    public function destroy(Surplus $surplus)
     {
         $surplus->delete();
-        session()->flash('success', 'Overschot succesvol verwijderd.');
+        session()->flash('success', 'Overschot succesvol verwijderd!');
     }
 
     public function resetForm()
     {
-        $this->dessertInput = '';
-        $this->dateInput = '';
-        $this->quantityInput = '';
-        $this->discountInput = '';
-        $this->notesInput = '';
-        $this->statusInput = 'available';
-        $this->commentInput = '';
-        $this->editingSurplus = null;
+        $this->reset(['dessert_id', 'total_amount', 'sale', 'comment', 'status', 'editingSurplus']);
+        $this->date = now()->toDateString();
+        $this->status = 'available';
     }
 }
-
