@@ -23,7 +23,7 @@
             <flux:navlist.item icon="cake" :href="route('deserts.index')" :current="request()->routeIs('deserts.index')" wire:navigate>{{ __('Desserts') }}</flux:navlist.item>
             <flux:navlist.item icon="plus" :href="route('userSurplusShop.index')" :current="request()->routeIs('userSurplusShop.index')" wire:navigate>{{ __('Surpluses') }}</flux:navlist.item>
             <flux:navlist.item icon="shopping-cart" href="#" wire:navigate>{{ __('Orders') }}</flux:navlist.item>
-            <flux:navlist.item icon="users" href="#" wire:navigate>{{ __('Workshops') }}</flux:navlist.item>
+            <flux:navlist.item icon="users" :href="route('workshops.index')" :current="request()->routeIs('workshops.index')" wire:navigate>{{ __('Workshops') }}</flux:navlist.item>
             <flux:navlist.item icon="clipboard-document-list" href="#"
                                wire:navigate>{{ __('Shopping List') }}</flux:navlist.item>
             <flux:navlist.item icon="star" href="#" wire:navigate>{{ __('Reviews') }}</flux:navlist.item>
@@ -36,7 +36,6 @@
                 <flux:navlist.item icon="beaker" :href="route('owner.ingredients.index')" :current="request()->routeIs('owner.ingredients.index')" wire:navigate>{{ __('Ingrediënten Beheren') }}</flux:navlist.item>
                 <flux:navlist.item icon="users" :href="route('owner.workshops.index')" :current="request()->routeIs('owner.workshops.index')" wire:navigate>{{ __('Workshops Beheren') }}</flux:navlist.item>
 
-                <flux:navlist.item icon="paint-brush" :href="route('owner.themes.index')" :current="request()->routeIs('owner.themes.index')" wire:navigate>{{ __('Thema\'s Beheren') }}</flux:navlist.item>
                 <flux:navlist.item icon="shopping-cart" :href="route('owner.orders.index')" :current="request()->routeIs('owner.orders.index')" wire:navigate>{{ __('Bestellingen Beheren') }}</flux:navlist.item>
                 <flux:navlist.item icon="envelope" :href="route('owner.respond-order-requests')" :current="request()->routeIs('owner.respond-order-requests')" wire:navigate>{{ __('Reageren op aanvragen') }}</flux:navlist.item>
                 <flux:navlist.item icon="plus" :href="route('owner.surpluses.index')" :current="request()->routeIs('owner.surpluses.index')" wire:navigate>{{ __('Overschotten Beheren') }}</flux:navlist.item>
