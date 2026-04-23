@@ -12,9 +12,11 @@ class IngredientFactory extends Factory
 
     public function definition(): array
     {
+        $kgUnitId = MeasurementUnit::firstOrCreate(['name' => 'kg'])->id;
+
         return [
             'name' => fake()->word(),
-            'measurement_unit_id' => MeasurementUnit::factory(),
+            'measurement_unit_id' => $kgUnitId,
             'minimumAmount' => fake()->randomFloat(2, 0, 100),
         ];
     }
