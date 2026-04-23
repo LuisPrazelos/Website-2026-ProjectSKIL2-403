@@ -3,15 +3,18 @@
 namespace App\Livewire;
 
 use App\Models\Recipe;
+use App\Models\MeasurementUnit;
 use Livewire\Component;
 
 class ShowRecipe extends Component
 {
     public Recipe $recipe;
+    public array $units = [];
 
     public function mount(Recipe $recipe)
     {
         $this->recipe = $recipe;
+        $this->units = MeasurementUnit::pluck('name', 'id')->toArray();
     }
 
     public function render()
@@ -23,7 +26,8 @@ class ShowRecipe extends Component
         })->unique()->sort()->values()->all();
 
         return view('livewire.show-recipe', [
-            'allAllergies' => $allAllergies
+            'allAllergies' => $allAllergies,
+            'units' => $this->units
         ]);
     }
 }

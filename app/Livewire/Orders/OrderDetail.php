@@ -47,10 +47,10 @@ class OrderDetail extends Component
             ];
         }
 
-        // Load items with dessert relationship
+        // Load items with dessert relationship and measurement unit
         try {
             Log::info('Attempting to load items for order ' . $order->id);
-            $order->load('items.dessert');
+            $order->load('items.dessert.measurementUnit');
 
             Log::info('Items loaded: ' . $order->items->count());
 
@@ -65,6 +65,7 @@ class OrderDetail extends Component
                     'price' => $dessertPrice,
                     'dessertName' => $item->dessert?->name ?? 'Verwijderd item',
                     'dessertId' => $item->dessertId,
+                    'unit' => $item->dessert?->measurementUnit?->name ?? '',
                 ];
             })->toArray();
 
@@ -76,7 +77,7 @@ class OrderDetail extends Component
 
             // Fallback: try direct query
             Log::info('Trying direct query for items of order ' . $order->id);
-            $items = OrderItem::where('orderId', $order->id)->with('dessert')->get();
+            $items = OrderItem::where('orderId', $order->id)->with('dessert.measurementUnit')->get();
             Log::info('Direct query result: ' . $items->count() . ' items found');
 
             if ($items->count() > 0) {
@@ -90,6 +91,7 @@ class OrderDetail extends Component
                         'price' => $dessertPrice,
                         'dessertName' => $item->dessert?->name ?? 'Verwijderd item',
                         'dessertId' => $item->dessertId,
+                        'unit' => $item->dessert?->measurementUnit?->name ?? '',
                     ];
                 })->toArray();
 
@@ -108,4 +110,3 @@ class OrderDetail extends Component
         ])->layout('components.layouts.app', ['title' => 'Bestellingsdetails']);
     }
 }
-

@@ -136,7 +136,7 @@
                                             <span>{{ $item['dessertName'] }}</span>
                                         </span>
                                     </td>
-                                    <td class="px-4 py-3 text-gray-900 dark:text-gray-100">{{ $item['quantity'] }}</td>
+                                    <td class="px-4 py-3 text-gray-900 dark:text-gray-100">{{ $item['quantity'] }} {{ $item['unit'] }}</td>
                                     <td class="px-4 py-3 text-gray-900 dark:text-gray-100">€ {{ number_format($item['price'], 2, ',', '.') }}</td>
                                     <td class="px-4 py-3 text-gray-900 dark:text-gray-100 font-medium">
                                         € {{ number_format($item['quantity'] * $item['price'], 2, ',', '.') }}
@@ -207,4 +207,3 @@
         </div>
     </div>
 </div>
-

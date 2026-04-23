@@ -42,7 +42,6 @@
                                 <tr>
                                     <th class="px-4 py-2">{{ __('Ingrediëntnaam') }}</th>
                                     <th class="px-4 py-2">{{ __('Hoeveelheid') }}</th>
-                                    <th class="px-4 py-2">{{ __('Eenheid') }}</th>
                                     <th class="px-4 py-2">{{ __('Allergenen') }}</th>
                                 </tr>
                             </thead>
@@ -50,8 +49,7 @@
                                 @foreach($recipe->ingredients as $ingredient)
                                     <tr class="border-t">
                                         <td class="px-4 py-2">{{ $ingredient->name }}</td>
-                                        <td class="px-4 py-2">{{ $ingredient->pivot->quantity }}</td>
-                                        <td class="px-4 py-2">{{ $ingredient->measurementUnit->name ?? '-' }}</td>
+                                        <td class="px-4 py-2">{{ $ingredient->pivot->quantity }} {{ $units[$ingredient->pivot->measurement_unit_id] ?? '-' }}</td>
                                         <td class="px-4 py-2">
                                             @if($ingredient->ingredientAllergies->isNotEmpty())
                                                 {{ $ingredient->ingredientAllergies->map(fn($ia) => $ia->allergy->name)->implode(', ') }}
