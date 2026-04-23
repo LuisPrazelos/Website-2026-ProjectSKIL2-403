@@ -55,7 +55,7 @@
                                 <span class="text-xs font-bold text-zinc-500 uppercase tracking-widest">{{ $surplus->date->format('d-m-Y') }}</span>
                             </td>
                             <td class="px-6 py-4">
-                                <span class="text-xs font-bold text-zinc-500 uppercase tracking-widest">{{ $surplus->total_amount }}</span>
+                                <span class="text-xs font-bold text-zinc-500 uppercase tracking-widest">{{ $surplus->total_amount }} {{ $surplus->dessert->measurementUnit->name ?? '' }}</span>
                             </td>
                             <td class="px-6 py-4">
                                 <span class="text-xs font-bold text-red-500 uppercase tracking-widest">-{{ $surplus->sale }}%</span>
@@ -240,7 +240,7 @@
                                     @endphp
                                     {{ $date ? (\Illuminate\Support\Carbon::parse($date))->format('d-m-Y') : __('-') }}
                                 </td>
-                                <td class="px-4 py-3">{{ $surplus->total_amount ?? '-' }}</td>
+                                <td class="px-4 py-3">{{ $surplus->total_amount ?? '-' }} {{ $surplus->dessert->measurementUnit->name ?? '' }}</td>
                                 <td class="px-4 py-3">{{ $surplus->sale ?? '-' }}</td>
                                 <td class="px-4 py-3">
                                     @php $status = $surplus->status ?? 'available'; @endphp
@@ -359,4 +359,3 @@
 
     </div>
 @endif
-

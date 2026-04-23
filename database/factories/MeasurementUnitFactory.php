@@ -12,7 +12,7 @@ class MeasurementUnitFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->word(),
+            'name' => fake()->randomElement(['gram', 'kg', 'ml', 'liter', 'stuks', 'portie']),
         ];
     }
 }
