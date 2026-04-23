@@ -29,7 +29,6 @@ use App\Models\Dessert;
 use App\Livewire\Checkout;
 use App\Livewire\WorkshopManager;
 use App\Livewire\ShoppingCartPage;
-use App\Livewire\ShowHappenings;
 use Illuminate\Http\Request;
 
 Route::get('/', function () {

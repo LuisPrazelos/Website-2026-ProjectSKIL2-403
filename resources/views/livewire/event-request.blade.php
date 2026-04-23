@@ -75,6 +75,42 @@
                 @enderror
             </div>
 
+            <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    {{ __('Op locatie') }}
+                </label>
+                <label class="inline-flex items-center gap-3">
+                    <input
+                        wire:model="onLocation"
+                        type="checkbox"
+                        class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
+                    >
+                    <span class="text-sm text-gray-700 dark:text-gray-300">{{ __('Ja, ik wil een locatie doorgeven') }}</span>
+                </label>
+                @error('onLocation')
+                    <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <div>
+                <label for="location" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    {{ __('Locatie') }}
+                    @if($onLocation)
+                        <span class="text-red-500">*</span>
+                    @endif
+                </label>
+                <input
+                    wire:model="location"
+                    type="text"
+                    id="location"
+                    placeholder="{{ __('Bijv: Grote Markt 1, Antwerpen') }}"
+                    class="w-full px-4 py-2 bg-white dark:bg-zinc-800 border border-gray-300 dark:border-zinc-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 dark:text-gray-100"
+                >
+                @error('location')
+                    <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+                @enderror
+            </div>
+
             <!-- Thema -->
             <div>
                 <label for="theme_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -131,4 +167,3 @@
         </form>
     </div>
 </div>
-

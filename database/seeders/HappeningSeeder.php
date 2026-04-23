@@ -13,7 +13,12 @@ class HappeningSeeder extends Seeder
     public function run(): void
     {
         Happening::factory()
-            ->count(10)
+            ->count(6)
+            ->create();
+
+        Happening::factory()
+            ->answered()
+            ->count(4)
             ->create();
     }
 }

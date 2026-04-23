@@ -26,6 +26,7 @@ class Happening extends Model
         'theme_id',
         'status_id',
         'on_location',
+        'location',
     ];
 
     protected $casts = [
@@ -33,6 +34,13 @@ class Happening extends Model
         'price_per_person' => 'float',
         'on_location' => 'boolean',
     ];
+
+    public function getHasOwnerResponseAttribute(): bool
+    {
+        return $this->price_per_person > 0
+            || filled($this->remarks)
+            || $this->relationLoaded('desserts') && $this->desserts->isNotEmpty();
+    }
 
     /*
     |--------------------------------------------------------------------------

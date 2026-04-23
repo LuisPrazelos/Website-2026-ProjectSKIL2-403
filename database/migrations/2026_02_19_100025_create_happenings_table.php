@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('theme_id')->nullable();
             $table->unsignedBigInteger('status_id')->nullable();
             $table->boolean('on_location')->default(false);
+            $table->string('location')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')
