@@ -20,6 +20,7 @@ class Review extends Model
         'userId',
         'desssertId',
         'workshopId',
+        'is_visible',
     ];
 
     public function user()
@@ -29,11 +30,11 @@ class Review extends Model
 
     public function dessert()
     {
-        return $this->belongsTo(dessert::class, 'desssertId');
+        return $this->belongsTo(Dessert::class, 'desssertId');
     }
 
     public function workshop()
     {
-        return $this->belongsTo(workshop::class, 'workshopId');
+        return $this->belongsTo(Workshop::class, 'workshopId');
     }
 }

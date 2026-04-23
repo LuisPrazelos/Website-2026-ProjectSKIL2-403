@@ -13,7 +13,8 @@ class ThemeFactory extends Factory
     {
         return [
             'name' => fake()->word(),
-
+            'description' => fake()->sentence(),
+            'price' => fake()->randomFloat(2, 15, 150),
         ];
     }
 }
