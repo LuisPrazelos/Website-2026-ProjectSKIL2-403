@@ -18,6 +18,7 @@ use App\Livewire\Orders\RespondOrderRequests;
 use App\Livewire\Orders\ViewOrderRequest;
 use App\Livewire\Orders\RespondToOrderRequest;
 use App\Livewire\Ingredient as LivewireIngredient;
+use App\Livewire\ManageReviews;
 use App\Models\Order;
 use App\Models\Surplus;
 use Illuminate\Support\Facades\Route;
@@ -156,6 +157,7 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/owner/surpluses/{surplus}', [SurplusController::class, 'update'])->name('owner.surpluses.update');
         Route::delete('/owner/surpluses/{surplus}', [SurplusController::class, 'destroy'])->name('owner.surpluses.destroy');
         Route::get('/owner/happenings', ShowHappenings::class)->name('owner.happenings.index');
+        Route::get('/owner/reviews', ManageReviews::class)->name('owner.reviews.index');
     });
 });
 
