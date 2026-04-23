@@ -3,8 +3,8 @@
     <div class="relative w-full overflow-hidden rounded-xl bg-cover bg-center h-40" style="background-image: url('/Pictures/Gebakjes.jpg');">
         <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
             <div class="text-center">
-                <h1 class="text-4xl font-bold text-white drop-shadow-lg">{{ __('Beantwoord Voorstel #' . $proposal->id) }}</h1>
-                <p class="text-white text-lg mt-2">{{ __('Reageer op de aanvraag van') }} {{ $proposal->user->first_name }} {{ $proposal->user->last_name }}</p>
+                <h1 class="text-4xl font-bold text-white drop-shadow-lg">{{ __('Beantwoord Evenement #' . $happening->id) }}</h1>
+                <p class="text-white text-lg mt-2">{{ __('Reageer op de aanvraag van') }} {{ $happening->user->first_name }} {{ $happening->user->last_name }}</p>
             </div>
         </div>
     </div>
@@ -15,40 +15,40 @@
             {{ __('Reageren op aanvragen') }}
         </a>
         <span>></span>
-        <span>{{ __('Voorstel #' . $proposal->id) }}</span>
+        <span>{{ __('Evenement #' . $happening->id) }}</span>
     </div>
 
     <!-- Main Content -->
     <div class="relative flex flex-1 flex-col rounded-xl border border-neutral-200 bg-white p-6 shadow-sm dark:border-neutral-700 dark:bg-neutral-800 overflow-auto">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <!-- Left: Voorstel Details -->
+            <!-- Left: Evenement Details -->
             <div>
-                <h2 class="text-xl font-semibold mb-6 text-gray-900 dark:text-white">{{ __('Voorstel details') }}</h2>
+                <h2 class="text-xl font-semibold mb-6 text-gray-900 dark:text-white">{{ __('Evenement details') }}</h2>
 
                 <div class="space-y-4">
                     <div>
                         <label class="text-sm font-medium text-gray-600 dark:text-gray-400">{{ __('Klantnaam') }}</label>
-                        <p class="text-gray-900 dark:text-white font-semibold mt-1">{{ $proposal->user->first_name }} {{ $proposal->user->last_name }}</p>
+                        <p class="text-gray-900 dark:text-white font-semibold mt-1">{{ $happening->user->first_name }} {{ $happening->user->last_name }}</p>
                     </div>
                     <div>
                         <label class="text-sm font-medium text-gray-600 dark:text-gray-400">{{ __('Gewenste datum') }}</label>
-                        <p class="text-gray-900 dark:text-white font-semibold mt-1">{{ $proposal->delivery_date->format('d/m/Y') }}</p>
+                        <p class="text-gray-900 dark:text-white font-semibold mt-1">{{ $happening->event_date->format('d/m/Y') }}</p>
                     </div>
                     <div>
                         <label class="text-sm font-medium text-gray-600 dark:text-gray-400">{{ __('Boodschap') }}</label>
-                        <p class="text-gray-900 dark:text-white mt-1">{{ $proposal->message }}</p>
+                        <p class="text-gray-900 dark:text-white mt-1">{{ $happening->message }}</p>
                     </div>
                     <div>
                         <label class="text-sm font-medium text-gray-600 dark:text-gray-400">{{ __('Aantal personen') }}</label>
-                        <p class="text-gray-900 dark:text-white font-semibold mt-1">{{ $proposal->person_count }} {{ __('personen') }}</p>
+                        <p class="text-gray-900 dark:text-white font-semibold mt-1">{{ $happening->person_count }} {{ __('personen') }}</p>
                     </div>
                      <div>
                         <label class="text-sm font-medium text-gray-600 dark:text-gray-400">{{ __('Op locatie') }}</label>
-                        <p class="text-gray-900 dark:text-white font-semibold mt-1">{{ $proposal->on_location ? 'Ja' : 'Nee' }}</p>
+                        <p class="text-gray-900 dark:text-white font-semibold mt-1">{{ $happening->on_location ? 'Ja' : 'Nee' }}</p>
                     </div>
                     <div>
                         <label class="text-sm font-medium text-gray-600 dark:text-gray-400">{{ __('Thema') }}</label>
-                        <p class="text-gray-900 dark:text-white font-semibold mt-1">{{ $proposal->theme->name ?? '-' }}</p>
+                        <p class="text-gray-900 dark:text-white font-semibold mt-1">{{ $happening->theme->name ?? '-' }}</p>
                     </div>
                 </div>
             </div>
@@ -78,7 +78,7 @@
                         </label>
                         <textarea
                             wire:model="remarks"
-                            placeholder="{{ __('Beste ' . ($proposal->user->first_name ?? 'klant') . ', geef hier je reactie op de aanvraag...') }}"
+                            placeholder="{{ __('Beste ' . ($happening->user->first_name ?? 'klant') . ', geef hier je reactie op de aanvraag...') }}"
                             rows="8"
                             class="w-full px-4 py-2 border border-gray-300 dark:border-zinc-600 rounded-md bg-white dark:bg-zinc-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"
                         ></textarea>
@@ -105,7 +105,7 @@
                                 </thead>
                                 <tbody class="divide-y divide-gray-200 dark:divide-zinc-700">
                                     @forelse($selectedDesserts as $index => $dessert)
-                                        <tr class="hover:bg-gray-50 dark:hover:bg-zinc-800">
+                                        <tr class="hover:bg-gray-50 dark:hover:bg-zinc-800" wire:key="selected-dessert-{{ $index }}">
                                             <td class="px-4 py-3 text-gray-900 dark:text-white">{{ $dessert['name'] }}</td>
                                             <td class="px-4 py-3 text-gray-600 dark:text-gray-400">€ {{ number_format($dessert['price'], 2) }}</td>
                                             <td class="px-4 py-3">
