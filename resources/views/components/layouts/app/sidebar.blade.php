@@ -59,8 +59,8 @@
                 <flux:navlist.item icon="chart-bar" :href="route('price-evolution')"
                                    :current="request()->routeIs('price-evolution')"
                                    wire:navigate>{{ __('Prijsevolutie') }}</flux:navlist.item>
-                <flux:navlist.item icon="calendar" :href="route('owner.happenings.index')"
-                                   :current="request()->routeIs('owner.happenings.index')"
+                <flux:navlist.item icon="calendar" :href="route('owner.respond-order-requests')"
+                                   :current="request()->routeIs('owner.respond-order-requests*')"
                                    wire:navigate>{{ __('Evenementen Beheren') }}</flux:navlist.item>
                 <flux:navlist.item icon="star" :href="route('owner.reviews.index')"
                                    :current="request()->routeIs('owner.reviews.index')"
