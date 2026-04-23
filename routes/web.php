@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use App\Models\Dessert;
 use App\Livewire\Checkout;
+use App\Livewire\WorkshopManager;
 use App\Livewire\ShoppingCartPage;
 use App\Livewire\ShowHappenings;
 use Illuminate\Http\Request;
@@ -72,7 +73,7 @@ Route::middleware(['auth'])->group(function () {
 
     // User overview for desserts
     Route::get('/deserts', function () {
-        $deserts = Dessert::with('picture', 'measurementUnit')->where('is_available', true)->get();
+        $deserts = Dessert::with('picture')->get();
         return view('deserts.index', compact('deserts'));
     })->name('deserts.index');
 
