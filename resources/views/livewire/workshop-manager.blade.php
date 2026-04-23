@@ -32,7 +32,7 @@
                             <th class="px-4 py-3">{{ __('Prijs Volw.') }}</th>
                             <th class="px-4 py-3">{{ __('Prijs Kind') }}</th>
                             <th class="px-4 py-3">{{ __('Max Deeln.') }}</th>
-                            <th class="px-4 py-3">{{ __('Acties') }}</th>
+                            <th class="px-4 py-3">{{ __('Bewerken') }}</th>
                         </tr>
                     </thead>
                     <tbody>
