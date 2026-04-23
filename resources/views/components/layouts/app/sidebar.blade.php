@@ -28,7 +28,7 @@
                                :current="request()->routeIs('userSurplusShop.index')"
                                wire:navigate>{{ __('Surpluses') }}</flux:navlist.item>
             <flux:navlist.item icon="shopping-cart" href="#" wire:navigate>{{ __('Orders') }}</flux:navlist.item>
-            <flux:navlist.item icon="users" href="#" wire:navigate>{{ __('Workshops') }}</flux:navlist.item>
+            <flux:navlist.item icon="users" :href="route('workshops.index')" :current="request()->routeIs('workshops.index')" wire:navigate>{{ __('Workshops') }}</flux:navlist.item>
             <flux:navlist.item icon="clipboard-document-list" href="#"
                                wire:navigate>{{ __('Shopping List') }}</flux:navlist.item>
         </flux:navlist.group>
@@ -45,27 +45,11 @@
                                    :current="request()->routeIs('owner.ingredients.index')"
                                    wire:navigate>{{ __('Ingrediënten Beheren') }}</flux:navlist.item>
 
-                <flux:navlist.item icon="shopping-cart" :href="route('owner.orders.index')"
-                                   :current="request()->routeIs('owner.orders.index')"
-                                   wire:navigate>{{ __('Bestellingen Beheren') }}</flux:navlist.item>
-                <flux:navlist.item icon="envelope" :href="route('owner.respond-order-requests')"
-                                   :current="request()->routeIs('owner.respond-order-requests')"
-                                   wire:navigate>{{ __('Reageren op aanvragen') }}</flux:navlist.item>
-                <flux:navlist.item icon="plus" :href="route('owner.surpluses.index')"
-                                   :current="request()->routeIs('owner.surpluses.index')"
-                                   wire:navigate>{{ __('Overschotten Beheren') }}</flux:navlist.item>
-                <flux:navlist.item icon="chart-bar" :href="route('price-evolution')"
-                                   :current="request()->routeIs('price-evolution')"
-                                   wire:navigate>{{ __('Prijsevolutie') }}</flux:navlist.item>
-                <flux:navlist.item icon="calendar" :href="route('owner.respond-order-requests')"
-                                   :current="request()->routeIs('owner.respond-order-requests*')"
-                                   wire:navigate>{{ __('Evenementen Beheren') }}</flux:navlist.item>
-                <flux:navlist.item icon="star" :href="route('owner.reviews.index')"
-                                   :current="request()->routeIs('owner.reviews.index')"
-                                   wire:navigate>{{ __('Reviews Beheren') }}</flux:navlist.item>
-                <flux:navlist.item icon="clipboard-document-list" :href="route('shopping-list')"
-                                   :current="request()->routeIs('shopping-list')"
-                                   wire:navigate>{{ __('Boodschappenlijst') }}</flux:navlist.item>
+                <flux:navlist.item icon="shopping-cart" :href="route('owner.orders.index')" :current="request()->routeIs('owner.orders.index')" wire:navigate>{{ __('Bestellingen Beheren') }}</flux:navlist.item>
+                <flux:navlist.item icon="envelope" :href="route('owner.respond-order-requests')" :current="request()->routeIs('owner.respond-order-requests')" wire:navigate>{{ __('Reageren op aanvragen') }}</flux:navlist.item>
+                <flux:navlist.item icon="plus" :href="route('owner.surpluses.index')" :current="request()->routeIs('owner.surpluses.index')" wire:navigate>{{ __('Overschotten Beheren') }}</flux:navlist.item>
+                <flux:navlist.item icon="chart-bar" :href="route('price-evolution')" :current="request()->routeIs('price-evolution')" wire:navigate>{{ __('Prijsevolutie') }}</flux:navlist.item>
+                <flux:navlist.item icon="clipboard-document-list" :href="route('shopping-list')" :current="request()->routeIs('shopping-list')" wire:navigate>{{ __('Boodschappenlijst') }}</flux:navlist.item>
             </flux:navlist.group>
         @endif
     </flux:navlist>

@@ -9,10 +9,8 @@ class Workshop extends Model
 {
     use HasFactory;
 
-    // Omdat de primary key 'workshopId' heet in plaats van 'id'
     protected $primaryKey = 'workshopId';
 
-    // English field names (translated from Dutch)
     protected $fillable = [
         'name',
         'date',
@@ -23,4 +21,14 @@ class Workshop extends Model
         'duration_minutes',
         'max_participants',
     ];
+
+    public function registrations()
+    {
+        return $this->hasMany(WorkshopUser::class, 'workshop_id', 'workshopId');
+    }
+
+    public function getParticipantCountAttribute()
+    {
+        return $this->registrations()->sum('total_adults') + $this->registrations()->sum('total_children');
+    }
 }

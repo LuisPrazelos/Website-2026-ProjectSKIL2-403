@@ -1,10 +1,10 @@
 <?php
 
+use App\Http\Controllers\SurplusController;
+use App\Http\Middleware\AdminMiddleware;
 use App\Livewire\RecipeManager;
-use App\Livewire\SurplusManager;
 use App\Livewire\ShowRecipe;
 use App\Livewire\EventRequest;
-use App\Livewire\ThemeManager;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
@@ -17,11 +17,15 @@ use App\Livewire\Orders\CreateOrder;
 use App\Livewire\Orders\RespondOrderRequests;
 use App\Livewire\Orders\ViewOrderRequest;
 use App\Livewire\Orders\RespondToOrderRequest;
+use App\Livewire\Ingredient as LivewireIngredient;
+use App\Models\Order;
+use App\Models\Surplus;
 use App\Livewire\ManageReviews;
 use App\Livewire\IngredientsManager;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use App\Models\Dessert;
+use App\Livewire\ShowHappenings;
 use App\Livewire\Checkout;
 use App\Livewire\WorkshopManager;
 use App\Livewire\ShoppingCartPage;
