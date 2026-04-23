@@ -34,6 +34,7 @@
                 <flux:navlist.item icon="cake" :href="route('owner.deserts.index')" :current="request()->routeIs('owner.deserts.index')" wire:navigate>{{ __('Desserts Beheren') }}</flux:navlist.item>
                 <flux:navlist.item icon="book-open" :href="route('owner.recipes.index')" :current="request()->routeIs('owner.recipes.index')" wire:navigate>{{ __('Recepten Beheren') }}</flux:navlist.item>
                 <flux:navlist.item icon="beaker" :href="route('owner.ingredients.index')" :current="request()->routeIs('owner.ingredients.index')" wire:navigate>{{ __('Ingrediënten Beheren') }}</flux:navlist.item>
+                <flux:navlist.item icon="users" :href="route('owner.workshops.index')" :current="request()->routeIs('owner.workshops.index')" wire:navigate>{{ __('Workshops Beheren') }}</flux:navlist.item>
 
                 <flux:navlist.item icon="shopping-cart" :href="route('owner.orders.index')" :current="request()->routeIs('owner.orders.index')" wire:navigate>{{ __('Bestellingen Beheren') }}</flux:navlist.item>
                 <flux:navlist.item icon="envelope" :href="route('owner.respond-order-requests')" :current="request()->routeIs('owner.respond-order-requests')" wire:navigate>{{ __('Reageren op aanvragen') }}</flux:navlist.item>

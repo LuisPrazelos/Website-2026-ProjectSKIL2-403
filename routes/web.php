@@ -25,6 +25,7 @@ use Laravel\Fortify\Features;
 use App\Models\Dessert;
 use App\Livewire\ShowHappenings;
 use App\Livewire\Checkout;
+use App\Livewire\WorkshopManager;
 use Illuminate\Http\Request;
 
 Route::get('/', function () {
@@ -126,8 +127,7 @@ Route::middleware(['auth'])->group(function () {
 
     // User overview for deserts
     Route::get('/deserts', function () {
-        $deserts = Dessert::with('picture')->where('is_available', true)->get(); // Only show available desserts
-
+        $deserts = Dessert::with('picture')->get();
         return view('deserts.index', compact('deserts'));
     })->name('deserts.index');
 
@@ -156,6 +156,9 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/owner/surpluses/{surplus}', [SurplusController::class, 'update'])->name('owner.surpluses.update');
         Route::delete('/owner/surpluses/{surplus}', [SurplusController::class, 'destroy'])->name('owner.surpluses.destroy');
         Route::get('/owner/happenings', ShowHappenings::class)->name('owner.happenings.index');
+
+        // Owner management view for workshops
+        Route::get('/owner/workshops', WorkshopManager::class)->name('owner.workshops.index');
     });
 });
 
