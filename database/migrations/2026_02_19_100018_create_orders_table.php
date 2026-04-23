@@ -10,8 +10,8 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->decimal('total_price', 10, 2)->default(0);
+            $table->unsignedBigInteger('user_id')->nullable(false);
+            $table->decimal('total_price', 10, 2)->nullable(false)->default(0);
             $table->string('status')->nullable();
             $table->unsignedBigInteger('availability_id')->nullable();
             $table->dateTime('placed_at')->nullable();
