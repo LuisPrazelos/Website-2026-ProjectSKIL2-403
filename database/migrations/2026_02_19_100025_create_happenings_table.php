@@ -10,14 +10,15 @@ return new class extends Migration
     {
         Schema::create('happenings', function (Blueprint $table) {
             $table->id();
-            $table->text('message');
+            $table->text('message')->nullable(false);
             $table->text('remarks')->nullable();
-            $table->dateTime('event_date');
-            $table->integer('person_count')->unsigned();
-            $table->decimal('price_per_person', 8, 2)->default(0);
-            $table->unsignedBigInteger('user_id');
+            $table->dateTime('event_date')->nullable(false);
+            $table->integer('person_count')->unsigned()->nullable(false);
+            $table->decimal('price_per_person', 8, 2)->nullable(false)->default(0);
+            $table->unsignedBigInteger('user_id')->nullable(false);
             $table->unsignedBigInteger('theme_id')->nullable();
             $table->unsignedBigInteger('status_id')->nullable();
+            $table->boolean('on_location')->default(false);
             $table->timestamps();
 
             $table->foreign('user_id')
@@ -35,13 +36,26 @@ return new class extends Migration
                 ->on('states')
                 ->onDelete('set null');
 
-            $table->index(['theme_id', 'status_id']);
             $table->index('user_id');
+        });
+
+        // Create happening_desserts pivot table
+        Schema::create('happening_desserts', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('happening_id');
+            $table->unsignedBigInteger('dessert_id');
+            $table->integer('quantity');
+            $table->string('allergies')->nullable();
+            $table->timestamps();
+
+            $table->foreign('happening_id')->references('id')->on('happenings')->onDelete('cascade');
+            $table->foreign('dessert_id')->references('id')->on('desserts')->onDelete('cascade');
         });
     }
 
     public function down(): void
     {
+        Schema::dropIfExists('happening_desserts');
         Schema::dropIfExists('happenings');
     }
 };

@@ -4,7 +4,7 @@
         <div class="mb-6">
             <div>
                 <h1 class="text-2xl font-semibold">{{ __('Evenement Aanvragen') }}</h1>
-                <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">{{ __('Vul het formulier in om je evenement aan te vragen. Onze team zal je snel contacteren.') }}</p>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">{{ __('Vul het formulier in om je evenement aan te vragen.') }}</p>
             </div>
         </div>
 
@@ -71,6 +71,27 @@
                     class="w-full px-4 py-2 bg-white dark:bg-zinc-800 border border-gray-300 dark:border-zinc-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 dark:text-gray-100"
                 >
                 @error('personCount')
+                    <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <!-- Thema -->
+            <div>
+                <label for="theme_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    {{ __('Thema van je evenement') }}
+                    <span class="text-red-500">*</span>
+                </label>
+                <select
+                    wire:model="theme_id"
+                    id="theme_id"
+                    class="w-full px-4 py-2 bg-white dark:bg-zinc-800 border border-gray-300 dark:border-zinc-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 dark:text-gray-100"
+                >
+                    <option value="">{{ __('Selecteer een thema') }}</option>
+                    @foreach($this->themes as $theme)
+                        <option value="{{ $theme->id }}">{{ $theme->name }}</option>
+                    @endforeach
+                </select>
+                @error('theme_id')
                     <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
                 @enderror
             </div>

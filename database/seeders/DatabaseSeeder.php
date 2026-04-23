@@ -57,7 +57,6 @@ class DatabaseSeeder extends Seeder
             DessertSeeder::class,
             WorkshopSeeder::class,
             HappeningSeeder::class, // Added HappeningSeeder
-            ProposalSeeder::class, // Added ProposalSeeder
             IngredientAllergySeeder::class, // Nu wordt deze aangeroepen
 
             // Pivot table seeder for desserts and ingredients

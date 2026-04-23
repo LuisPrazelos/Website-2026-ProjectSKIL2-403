@@ -10,10 +10,10 @@ return new class extends Migration
     {
         Schema::create('reviews', function (Blueprint $table) {
             $table->id('reviewId');
-            $table->smallInteger('score');
+            $table->smallInteger('score')->nullable(false);
             $table->text('content')->nullable();
-            $table->date('date')->nullable();
-            $table->unsignedBigInteger('userId')->nullable();
+            $table->date('date')->nullable(false);
+            $table->unsignedBigInteger('userId')->nullable(false);
             $table->unsignedBigInteger('dessertId')->nullable();
             $table->unsignedBigInteger('workshopId')->nullable();
             $table->timestamps();
@@ -21,7 +21,7 @@ return new class extends Migration
             $table->foreign('userId')
                 ->references('id')
                 ->on('users')
-                ->onDelete('set null');
+                ->onDelete('cascade');
 
             $table->foreign('dessertId')
                 ->references('id')

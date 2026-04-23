@@ -3,12 +3,15 @@
 namespace App\Livewire\Orders;
 
 use Livewire\Component;
-use App\Models\Proposal;
+use App\Models\Happening;
 use App\Models\Dessert;
+use App\Mail\HappeningRemarksNotification;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
 class RespondToOrderRequest extends Component
 {
-    public $proposal;
+    public $happening;
     public $pricePerPerson = '';
     public $remarks = '';
     public $selectedDesserts = [];
@@ -17,16 +20,16 @@ class RespondToOrderRequest extends Component
 
     public function mount($id)
     {
-        $this->proposal = Proposal::with(['user', 'theme', 'desserts'])->findOrFail($id);
+        $this->happening = Happening::with(['user', 'theme', 'desserts'])->findOrFail($id);
 
-        $this->pricePerPerson = $this->proposal->price_per_person ?? '';
-        $this->remarks = $this->proposal->remarks ?? '';
+        $this->pricePerPerson = $this->happening->price_per_person ?? '';
+        $this->remarks = $this->happening->remarks ?? '';
 
         $this->availableDesserts = Dessert::all();
 
         // Load existing desserts if any
-        if ($this->proposal->desserts) {
-             foreach ($this->proposal->desserts as $dessert) {
+        if ($this->happening->desserts) {
+             foreach ($this->happening->desserts as $dessert) {
                 $this->selectedDesserts[] = [
                     'id' => $dessert->id,
                     'name' => $dessert->name,
@@ -108,7 +111,7 @@ class RespondToOrderRequest extends Component
 
     public function saveResponse()
     {
-        $this->proposal->update([
+        $this->happening->update([
             'price_per_person' => $this->pricePerPerson,
             'remarks' => $this->remarks,
         ]);
@@ -121,15 +124,47 @@ class RespondToOrderRequest extends Component
                 'allergies' => $item['allergies'] ?? null
             ];
         }
-        $this->proposal->desserts()->sync($syncData);
+        $this->happening->desserts()->sync($syncData);
+
+        // Send email notification
+        $this->sendRemarksEmail($this->happening);
 
         return redirect()->route('owner.respond-order-requests');
+    }
+
+    /**
+     * Helper-functie om de opmerkingen-e-mail te versturen.
+     */
+    private function sendRemarksEmail(Happening $happening): void
+    {
+        $happening->load('user');
+
+        if (!$happening->user?->email) {
+            Log::warning('No user or email found for happening ' . $happening->id . '. Email not sent.');
+            return;
+        }
+
+        try {
+            // =========================================================================
+            // TIJDELIJK VOOR TESTEN: Stuur de mail altijd naar het geconfigureerde adres
+            // In een productie-omgeving zou je hier $happening->user->email gebruiken.
+            // =========================================================================
+            $testRecipient = config('mail.mailers.smtp.username');
+
+            Mail::to($testRecipient)
+                ->send(new HappeningRemarksNotification($happening, $this->remarks));
+
+            Log::info('Email sent for happening ' . $happening->id . ' to test recipient ' . $testRecipient);
+
+        } catch (\Exception $e) {
+            Log::error('Failed to send email for happening ' . $happening->id . ': ' . $e->getMessage());
+        }
     }
 
     public function render()
     {
         return view('livewire.orders.respond-to-order-request', [
-            'proposal' => $this->proposal,
+            'happening' => $this->happening,
             'totalPrice' => $this->getTotalPriceProperty()
         ])->layout('components.layouts.app', ['title' => 'Beantwoord Voorstel']);
     }
