@@ -40,6 +40,7 @@
                 <flux:navlist.item icon="plus" :href="route('owner.surpluses.index')" :current="request()->routeIs('owner.surpluses.index')" wire:navigate>{{ __('Overschotten Beheren') }}</flux:navlist.item>
                 <flux:navlist.item icon="chart-bar" :href="route('price-evolution')" :current="request()->routeIs('price-evolution')" wire:navigate>{{ __('Prijsevolutie') }}</flux:navlist.item>
                 <flux:navlist.item icon="calendar" :href="route('owner.happenings.index')" :current="request()->routeIs('owner.happenings.index')" wire:navigate>{{ __('Evenementen Beheren') }}</flux:navlist.item>
+                <flux:navlist.item icon="sparkles" :href="route('owner.themes.index')" :current="request()->routeIs('owner.themes.index')" wire:navigate>{{ __('Thema\'s Beheren') }}</flux:navlist.item>
                 <flux:navlist.item icon="clipboard-document-list" :href="route('shopping-list')" :current="request()->routeIs('shopping-list')" wire:navigate>{{ __('Boodschappenlijst') }}</flux:navlist.item>
             </flux:navlist.group>
         @endif

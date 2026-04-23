@@ -5,6 +5,7 @@ use App\Livewire\RecipeManager;
 use App\Livewire\SurplusManager;
 use App\Livewire\ShowRecipe;
 use App\Livewire\EventRequest;
+use App\Livewire\ThemeManager;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
@@ -156,6 +157,7 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/owner/surpluses/{surplus}', SurplusManager::class)->name('owner.surpluses.update');
         Route::delete('/owner/surpluses/{surplus}', SurplusManager::class)->name('owner.surpluses.destroy');
         Route::get('/owner/happenings', ShowHappenings::class)->name('owner.happenings.index');
+        Route::get('/owner/thema', ThemeManager::class)->name('owner.themes.index');
     });
 });
 
