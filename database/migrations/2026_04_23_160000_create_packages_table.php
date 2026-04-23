@@ -14,6 +14,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->decimal('price', 8, 2)->default(0);
             $table->boolean('is_standard')->default(false);
+            $table->json('price_history')->nullable();
             $table->timestamps();
         });
     }

@@ -96,22 +96,55 @@ class PackageManager extends Component
     {
         $validated = $this->validate($this->rules());
 
-        $packageData = [
-            'name' => $validated['packageName'],
-            'description' => $validated['packageDescription'] ?: null,
-            'price' => $validated['isStandard'] ? 0 : $validated['packagePrice'],
-            'is_standard' => $validated['isStandard'],
-        ];
-
-        if ($validated['isStandard']) {
-            Package::where('id', '!=', $this->editingPackageId)->update(['is_standard' => false]);
-        }
+        $newPrice = $validated['isStandard'] ? 0 : (float) $validated['packagePrice'];
+        $today = now()->format('Y-m-d');
 
         if ($this->editingPackageId) {
-            Package::findOrFail($this->editingPackageId)->update($packageData);
+            $package = Package::findOrFail($this->editingPackageId);
+            $history = $package->price_history ?? [];
+
+            // Only add to history if price has changed
+            if ((float) $package->price !== $newPrice) {
+                // Check if we already have an entry for today, if so update it, else append
+                $foundToday = false;
+                foreach ($history as &$entry) {
+                    if ($entry['date'] === $today) {
+                        $entry['price'] = $newPrice;
+                        $foundToday = true;
+                        break;
+                    }
+                }
+                if (!$foundToday) {
+                    $history[] = ['date' => $today, 'price' => $newPrice];
+                }
+            }
+
+            $package->update([
+                'name' => $validated['packageName'],
+                'description' => $validated['packageDescription'] ?: null,
+                'price' => $newPrice,
+                'is_standard' => $validated['isStandard'],
+                'price_history' => $history,
+            ]);
+            
+            if ($validated['isStandard']) {
+                Package::where('id', '!=', $package->id)->update(['is_standard' => false]);
+            }
+
             $this->dispatch('package-updated', 'Pakket succesvol bijgewerkt!');
         } else {
-            Package::create($packageData);
+            $package = Package::create([
+                'name' => $validated['packageName'],
+                'description' => $validated['packageDescription'] ?: null,
+                'price' => $newPrice,
+                'is_standard' => $validated['isStandard'],
+                'price_history' => [['date' => $today, 'price' => $newPrice]],
+            ]);
+
+            if ($validated['isStandard']) {
+                Package::where('id', '!=', $package->id)->update(['is_standard' => false]);
+            }
+
             $this->dispatch('package-created', 'Pakket succesvol aangemaakt!');
         }
 
