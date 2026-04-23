@@ -28,6 +28,7 @@ use App\Models\Dessert;
 use App\Livewire\ShowHappenings;
 use App\Livewire\Checkout;
 use App\Livewire\WorkshopManager;
+use App\Livewire\WorkshopList; // Importeer WorkshopList
 use App\Livewire\ShoppingCartPage;
 use App\Livewire\SurplusManager;
 use App\Livewire\ThemeManager;
@@ -55,6 +56,8 @@ Route::get('/deserts', function () {
     $deserts = Dessert::with('picture')->get();
     return view('deserts.index', compact('deserts'));
 })->middleware('auth')->name('deserts.index');
+
+Route::get('/workshops', WorkshopList::class)->middleware('auth')->name('workshops.index'); // Toegevoegd
 
 Route::get('/evenement-aanvragen', EventRequest::class)->middleware('auth')->name('event.request');
 

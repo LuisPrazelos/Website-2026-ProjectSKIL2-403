@@ -13,6 +13,8 @@ class WorkshopList extends Component
 
     public $search = '';
     public $showRegistrationModal = false;
+    public $showPaymentModal = false;
+    public $showSuccessModal = false;
     public $selectedWorkshop = null;
 
     // Registration form properties
@@ -76,6 +78,24 @@ class WorkshopList extends Component
         ]);
 
         $this->showRegistrationModal = false;
-        session()->flash('success', __('Je bent succesvol ingeschreven voor de workshop!'));
+        $this->showPaymentModal = true;
+    }
+
+    public function completePayment()
+    {
+        $this->showPaymentModal = false;
+        $this->showSuccessModal = true;
+    }
+
+    public function closeSuccessModal()
+    {
+        $this->showSuccessModal = false;
+        $this->selectedWorkshop = null;
+        $this->resetForm();
+    }
+
+    public function resetForm()
+    {
+        $this->reset(['total_adults', 'total_children', 'comment']);
     }
 }

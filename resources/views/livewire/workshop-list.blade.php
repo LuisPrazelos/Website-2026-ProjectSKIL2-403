@@ -7,7 +7,7 @@
                 <p class="text-sm text-zinc-600 mt-1">{{ __('Ontdek onze passie en schrijf je in voor een van onze workshops.') }}</p>
             </div>
 
-            <!-- Success Message -->
+            <!-- Success Message (Optional, as we have a modal now) -->
             @if(session()->has('success'))
                 <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 rounded" role="alert">
                     <p>{{ session('success') }}</p>
@@ -148,10 +148,54 @@
                                 {{ __('Annuleren') }}
                             </button>
                             <button type="submit" class="px-4 py-2 border rounded-md text-sm bg-accent text-white hover:bg-amber-700 dark:bg-accent dark:text-white dark:hover:bg-amber-500">
-                                {{ __('Inschrijven') }}
+                                {{ __('Naar betalen') }}
                             </button>
                         </div>
                     </form>
+                </div>
+            </div>
+        @endif
+
+        <!-- Payment Modal -->
+        @if($showPaymentModal && $selectedWorkshop)
+            <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                <div class="bg-white dark:bg-zinc-800 p-8 rounded-lg shadow-lg w-full max-w-md text-center">
+                    <h2 class="text-2xl font-semibold mb-4">{{ __('Scan om te betalen') }}</h2>
+                    <p class="text-sm text-zinc-600 dark:text-zinc-400 mb-6">
+                        {{ __('Bedankt voor je inschrijving voor') }} <strong>{{ $selectedWorkshop->name }}</strong>.
+                        {{ __('Scan de onderstaande QR-code om de betaling van') }} <strong>€{{ number_format(($total_adults * $selectedWorkshop->price_adults) + ($total_children * $selectedWorkshop->price_children), 2) }}</strong> {{ __('te voltooien.') }}
+                    </p>
+
+                    <div class="flex justify-center mb-8">
+                        <button wire:click="completePayment" class="cursor-pointer transition hover:scale-105">
+                            <img src="{{ asset('pictures/QrCode.png') }}" alt="{{ __('QR Code voor betaling') }}" class="w-64 h-64 shadow-md rounded-lg">
+                        </button>
+                    </div>
+
+                    <p class="text-xs text-zinc-500 mb-6 italic">{{ __('Klik op de QR-code om de betaling te simuleren.') }}</p>
+
+                    <div class="flex justify-center">
+                        <button type="button" wire:click="$set('showPaymentModal', false)" class="px-4 py-2 border border-zinc-300 rounded-md text-sm bg-white text-zinc-700 hover:bg-zinc-50 dark:bg-zinc-700 dark:text-zinc-200 dark:border-zinc-600 dark:hover:bg-zinc-600">
+                            {{ __('Annuleren') }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        @endif
+
+        <!-- Success Modal -->
+        @if($showSuccessModal)
+            <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                <div class="bg-white dark:bg-zinc-800 p-8 rounded-lg shadow-lg w-full max-w-sm text-center">
+                    <div class="flex justify-center mb-4">
+                        <flux:icon.check-circle class="size-16 text-green-500" />
+                    </div>
+                    <h2 class="text-2xl font-bold text-zinc-900 dark:text-white mb-2">{{ __('Betaling Geslaagd!') }}</h2>
+                    <p class="text-zinc-600 dark:text-zinc-400 mb-8">{{ __('Je bent nu officieel ingeschreven voor de workshop. We hebben je een bevestiging gestuurd per e-mail.') }}</p>
+
+                    <button wire:click="closeSuccessModal" class="w-full py-3 bg-accent text-white rounded-lg hover:bg-amber-700 transition font-bold">
+                        {{ __('Terug naar overzicht') }}
+                    </button>
                 </div>
             </div>
         @endif

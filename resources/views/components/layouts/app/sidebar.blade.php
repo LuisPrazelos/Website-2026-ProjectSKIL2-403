@@ -28,7 +28,7 @@
                     :current="request()->routeIs('userSurplusShop.index')" wire:navigate>{{ __('Surpluses') }}
                 </flux:navlist.item>
                 <flux:navlist.item icon="shopping-cart" href="#" wire:navigate>{{ __('Orders') }}</flux:navlist.item>
-                <flux:navlist.item icon="users" href="#" wire:navigate>{{ __('Workshops') }}</flux:navlist.item>
+                <flux:navlist.item icon="users" :href="route('workshops.index')" :current="request()->routeIs('workshops.index')" wire:navigate>{{ __('Workshops') }}</flux:navlist.item>
                 <flux:navlist.item icon="clipboard-document-list" href="#" wire:navigate>{{ __('Shopping List') }}
                 </flux:navlist.item>
                 <flux:navlist.item icon="star" :href="route('dashboard')" :current="request()->routeIs('dashboard')"
