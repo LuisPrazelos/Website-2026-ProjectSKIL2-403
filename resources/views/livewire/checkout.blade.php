@@ -94,6 +94,21 @@
                                 </div>
                                 @error('pickupTime') <span class="text-red-500 text-[10px] mt-2 block font-black uppercase tracking-widest animate-pulse">{{ $message }}</span> @enderror
                             </div>
+                            <div>
+                                <label class="block text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em] mb-3">Thema:</label>
+                                <div class="relative">
+                                    <select
+                                        wire:model="theme_id"
+                                        class="w-full rounded-2xl border-zinc-200 dark:border-zinc-700 dark:bg-zinc-900 dark:text-white shadow-sm focus:border-accent focus:ring-accent py-4 px-5 transition-all font-bold"
+                                    >
+                                        <option value="">{{ __('Selecteer een thema') }}</option>
+                                        @foreach($themes as $theme)
+                                            <option value="{{ $theme->id }}">{{ $theme->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                @error('theme_id') <span class="text-red-500 text-[10px] mt-2 block font-black uppercase tracking-widest animate-pulse">{{ $message }}</span> @enderror
+                            </div>
                             <div class="bg-white/50 dark:bg-zinc-900/50 p-4 rounded-xl border border-dashed border-zinc-300 dark:border-zinc-700">
                                 <p class="text-[10px] text-zinc-500 font-bold flex items-center gap-3">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-accent animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">

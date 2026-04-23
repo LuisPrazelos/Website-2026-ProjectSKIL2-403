@@ -65,7 +65,7 @@ class ManageOrders extends Component
 
     public function render()
     {
-        $query = Order::with('user')
+        $query = Order::with(['user', 'theme'])
             ->orderBy('placed_at', 'desc');
 
         if (!empty($this->search)) {
@@ -97,4 +97,3 @@ class ManageOrders extends Component
         ])->layout('components.layouts.app', ['title' => 'Bestellingen Beheren']);
     }
 }
-

@@ -1,6 +1,5 @@
 <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
     <div class="relative h-full flex-1 overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700 p-6 bg-transparent">
-        <!-- Header area inside big container -->
         <div class="mb-6">
             <div>
                 <h1 class="text-2xl font-semibold">{{ __('Thema\'s Beheren') }}</h1>
@@ -8,7 +7,6 @@
             </div>
         </div>
 
-        <!-- Success/Error Messages -->
         @if($errors->any())
             <div class="mb-6 p-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-md">
                 <div class="flex items-center">
@@ -24,9 +22,7 @@
             </div>
         @endif
 
-        <!-- Main Container -->
         <div class="bg-white dark:bg-zinc-900 rounded-md shadow-sm p-6 space-y-6">
-            <!-- Search Bar and Add Button -->
             <div class="flex gap-4 items-center">
                 <div class="flex-1">
                     <input
@@ -47,7 +43,6 @@
                 </button>
             </div>
 
-            <!-- Create/Edit Form Modal -->
             @if($showForm)
                 <div class="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-[9999] p-4 animate-fade-in">
                     <div class="bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl p-8 w-full max-w-md border border-white/10 dark:border-zinc-700/50 backdrop-blur-xl animate-scale-in max-h-[90vh] overflow-y-auto">
@@ -85,25 +80,6 @@
                                     class="w-full px-4 py-3 bg-gray-50 dark:bg-zinc-800/50 border border-gray-300 dark:border-zinc-600/50 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent dark:focus:ring-orange-400 text-gray-900 dark:text-gray-100 transition-all"
                                 ></textarea>
                                 @error('themeDescription')
-                                    <span class="text-red-500 text-sm mt-2 block">{{ $message }}</span>
-                                @enderror
-                            </div>
-
-                            <div>
-                                <label for="themePrice" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
-                                    {{ __('Prijs') }}
-                                    <span class="text-red-500">*</span>
-                                </label>
-                                <input
-                                    wire:model="themePrice"
-                                    type="number"
-                                    id="themePrice"
-                                    min="0"
-                                    step="0.01"
-                                    placeholder="{{ __('Bijv: 24.99') }}"
-                                    class="w-full px-4 py-3 bg-gray-50 dark:bg-zinc-800/50 border border-gray-300 dark:border-zinc-600/50 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent dark:focus:ring-orange-400 text-gray-900 dark:text-gray-100 transition-all"
-                                >
-                                @error('themePrice')
                                     <span class="text-red-500 text-sm mt-2 block">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -158,7 +134,6 @@
                 </style>
             @endif
 
-            <!-- Themes Table -->
             <div class="overflow-x-auto">
                 @if(count($themes) > 0)
                     <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
@@ -169,9 +144,6 @@
                                 </th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                     {{ __('Beschrijving') }}
-                                </th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                    {{ __('Prijs') }}
                                 </th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                     {{ __('Aangemaakt op') }}
@@ -189,9 +161,6 @@
                                     </td>
                                     <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400 max-w-md">
                                         {{ $theme['description'] ?? __('Geen beschrijving') }}
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                                        €{{ number_format((float) ($theme['price'] ?? 0), 2, ',', '.') }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                                         {{ \Carbon\Carbon::parse($theme['created_at'])->format('d-m-Y H:i') }}
