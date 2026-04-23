@@ -24,6 +24,7 @@ class Happening extends Model
         'price_per_person',
         'user_id',
         'theme_id',
+        'package_id',
         'status_id',
         'on_location',
         'location',
@@ -56,6 +57,11 @@ class Happening extends Model
     public function theme()
     {
         return $this->belongsTo(Theme::class);
+    }
+
+    public function package()
+    {
+        return $this->belongsTo(Package::class);
     }
 
     public function status()

@@ -132,6 +132,28 @@
                 @enderror
             </div>
 
+            <div>
+                <label for="package_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    {{ __('Pakket') }}
+                    <span class="text-red-500">*</span>
+                </label>
+                <select
+                    wire:model="package_id"
+                    id="package_id"
+                    class="w-full px-4 py-2 bg-white dark:bg-zinc-800 border border-gray-300 dark:border-zinc-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 dark:text-gray-100"
+                >
+                    <option value="">{{ __('Selecteer een pakket') }}</option>
+                    @foreach($this->packages as $package)
+                        <option value="{{ $package->id }}">
+                            {{ $package->name }} - {{ $package->is_standard ? __('Gratis') : '€' . number_format((float) $package->price, 2, ',', '.') }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('package_id')
+                    <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+                @enderror
+            </div>
+
             <!-- Beschrijving -->
             <div>
                 <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">

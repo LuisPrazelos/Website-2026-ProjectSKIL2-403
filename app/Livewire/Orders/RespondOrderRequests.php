@@ -21,7 +21,7 @@ class RespondOrderRequests extends Component
 
     public function render()
     {
-        $query = Happening::with(['user', 'theme'])
+        $query = Happening::with(['user', 'theme', 'package'])
             ->latest('event_date');
 
         if ($this->searchQuery) {
