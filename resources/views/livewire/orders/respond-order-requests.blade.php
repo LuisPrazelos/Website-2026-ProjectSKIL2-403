@@ -26,13 +26,14 @@
                     <th class="px-4 py-3 font-semibold text-gray-900 dark:text-white">Klantnaam</th>
                     <th class="px-4 py-3 font-semibold text-gray-900 dark:text-white">Boodschap</th>
                     <th class="px-4 py-3 font-semibold text-gray-900 dark:text-white">Aantal / datum</th>
+                    <th class="px-4 py-3 font-semibold text-gray-900 dark:text-white">Locatie</th>
                     <th class="px-4 py-3 font-semibold text-gray-900 dark:text-white">Thema</th>
                     <th class="px-4 py-3 font-semibold text-gray-900 dark:text-white">Acties</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($happenings as $happening)
-                    <tr wire:key="{{ $happening->id }}" class="border-b border-gray-200 dark:border-zinc-700 hover:bg-gray-50 dark:hover:bg-zinc-800 transition">
+                    <tr wire:key="{{ $happening->id }}" class="border-b border-gray-200 dark:border-zinc-700 hover:bg-gray-50 dark:hover:bg-zinc-800 transition {{ $happening->has_owner_response ? 'border-l-4 border-l-green-500 bg-green-50/40 dark:bg-green-900/10' : '' }}">
                         <td class="px-4 py-3 text-blue-600 dark:text-blue-400 font-semibold">#{{ $happening->id }}</td>
                         <td class="px-4 py-3 text-gray-900 dark:text-gray-100">{{ $happening->user->first_name ?? '' }} {{ $happening->user->last_name ?? 'Onbekend' }}</td>
                         <td class="px-4 py-3 text-gray-700 dark:text-gray-300">
@@ -40,6 +41,13 @@
                         </td>
                         <td class="px-4 py-3 text-gray-700 dark:text-gray-300">
                             {{ $happening->person_count }} pers - {{ $happening->event_date->format('d/m/Y') }}
+                        </td>
+                        <td class="px-4 py-3 text-gray-700 dark:text-gray-300">
+                            @if($happening->on_location)
+                                {{ $happening->location ?: __('Locatie niet ingevuld') }}
+                            @else
+                                {{ __('Niet op locatie') }}
+                            @endif
                         </td>
                         <td class="px-4 py-3">
                             @php
@@ -80,7 +88,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td class="px-4 py-8 text-center" colspan="6">
+                        <td class="px-4 py-8 text-center" colspan="7">
                             <h2 class="text-gray-500 dark:text-gray-400">Geen evenementen gevonden.</h2>
                         </td>
                     </tr>
