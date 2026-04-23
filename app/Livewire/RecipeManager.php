@@ -11,7 +11,9 @@ use Livewire\WithPagination;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Url;
+use Livewire\Attributes\Middleware;
 
+#[Middleware('admin')]
 class RecipeManager extends Component
 {
     use WithPagination;

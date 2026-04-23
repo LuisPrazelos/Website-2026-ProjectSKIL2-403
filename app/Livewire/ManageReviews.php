@@ -5,7 +5,9 @@ namespace App\Livewire;
 use App\Models\Review;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Livewire\Attributes\Middleware;
 
+#[Middleware('admin')]
 class ManageReviews extends Component
 {
     use WithPagination;
@@ -33,6 +35,6 @@ class ManageReviews extends Component
     {
         return view('livewire.manage-reviews', [
             'reviews' => Review::with(['user', 'dessert', 'workshop'])->orderBy('date', 'desc')->paginate(10),
-        ]);
+        ])->layout('components.layouts.app');
     }
 }
