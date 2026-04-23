@@ -6,13 +6,16 @@ use App\Models\Dessert;
 use App\Models\Surplus;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Livewire\Attributes\Url;
 use Carbon\Carbon;
 
 class SurplusManager extends Component
 {
     use WithPagination;
 
+    #[Url]
     public $search = '';
+
     public $showAddModal = false;
     public $showEditModal = false;
     public $editingSurplus = null;
@@ -23,7 +26,7 @@ class SurplusManager extends Component
     public $total_amount;
     public $sale;
     public $comment;
-    public $status; // For editing status
+    public $status;
 
     protected $rules = [
         'dessert_id' => 'required|exists:desserts,id',
@@ -31,13 +34,13 @@ class SurplusManager extends Component
         'total_amount' => 'required|integer|min:1',
         'sale' => 'required|numeric|min:0|max:100',
         'comment' => 'nullable|string',
-        'status' => 'required|string', // Added for update
+        'status' => 'required|string',
     ];
 
     public function mount()
     {
-        $this->date = now()->toDateString(); // Default date for new surplus
-        $this->status = 'available'; // Default status
+        $this->date = now()->toDateString();
+        $this->status = 'available';
     }
 
     public function render()
@@ -72,7 +75,7 @@ class SurplusManager extends Component
         Surplus::create([
             'dessert_id' => $this->dessert_id,
             'date' => $this->date,
-            'expiration_date' => $this->date, // Assuming expiration date is the same as creation date for now
+            'expiration_date' => $this->date,
             'total_amount' => $this->total_amount,
             'sale' => $this->sale,
             'status' => 'available',
@@ -104,7 +107,7 @@ class SurplusManager extends Component
         $this->editingSurplus->update([
             'dessert_id' => $this->dessert_id,
             'date' => $this->date,
-            'expiration_date' => $this->date, // Assuming expiration date is the same as creation date for now
+            'expiration_date' => $this->date,
             'total_amount' => $this->total_amount,
             'sale' => $this->sale,
             'status' => $this->status,
