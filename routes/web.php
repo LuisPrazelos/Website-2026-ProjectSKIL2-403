@@ -29,6 +29,8 @@ use App\Livewire\ShowHappenings;
 use App\Livewire\Checkout;
 use App\Livewire\WorkshopManager;
 use App\Livewire\ShoppingCartPage;
+use App\Livewire\SurplusManager;
+use App\Livewire\ThemeManager;
 
 Route::get('/', fn () => view('welcome'))->name('home');
 
