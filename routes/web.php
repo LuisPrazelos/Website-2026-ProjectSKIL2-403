@@ -18,6 +18,8 @@ use App\Livewire\Orders\CreateOrder;
 use App\Livewire\Orders\RespondOrderRequests;
 use App\Livewire\Orders\ViewOrderRequest;
 use App\Livewire\Orders\RespondToOrderRequest;
+use App\Livewire\Ingredient as LivewireIngredient;
+use App\Livewire\ManageReviews;
 use App\Livewire\IngredientsManager;
 use App\Models\Order;
 use App\Models\Surplus;
@@ -103,6 +105,9 @@ Route::middleware(['auth'])->group(function () {
             $deserts = Dessert::with('picture')->paginate(10);
             return view('deserts.owner-index', compact('deserts'));
         })->name('owner.deserts.index');
+
+        Route::get('/owner/reviews', ManageReviews::class)->name('owner.reviews.index');
+
 
         // Surpluses (Using Livewire SurplusManager)
         Route::get('/owner/surpluses', SurplusManager::class)->name('owner.surpluses.index');
