@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Surplus;
+use App\Models\Dessert;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
@@ -14,11 +15,18 @@ class Checkout extends Component
     public $cart = [];
     public $totalPrice = 0;
     public $pickupDate;
+    public $pickupTime; // Added pickupTime property
+
+    protected $rules = [
+        'pickupDate' => 'required|date|after_or_equal:today',
+        'pickupTime' => 'required', // Validation for pickupTime
+    ];
 
     public function mount()
     {
         $this->cart = session()->get('cart', []);
         $this->pickupDate = now()->toDateString();
+        $this->pickupTime = now()->addHour()->format('H:00'); // Default to 1 hour from now, rounded
         $this->calculateTotal();
     }
 
@@ -26,14 +34,28 @@ class Checkout extends Component
     {
         $this->totalPrice = 0;
         foreach ($this->cart as $item) {
-            $this->totalPrice += $item['price'] * $item['quantity'];
+            $price = $item['price'];
+            if (isset($item['discount']) && $item['discount'] > 0) {
+                $price = $price * (1 - ($item['discount'] / 100));
+            }
+            $this->totalPrice += $price * $item['quantity'];
         }
     }
 
     public function placeOrder()
     {
+        $this->validate();
+
         if (empty($this->cart)) {
             session()->flash('error', 'Je winkelwagen is leeg!');
+            return;
+        }
+
+        // Combine date and time
+        try {
+            $pickupAt = Carbon::parse($this->pickupDate . ' ' . $this->pickupTime);
+        } catch (\Exception $e) {
+            session()->flash('error', 'Ongeldige ophaaldatum of -tijd.');
             return;
         }
 
@@ -43,15 +65,28 @@ class Checkout extends Component
             'total_price' => $this->totalPrice,
             'status'      => 'pending',
             'placed_at'   => Carbon::now(),
+            'pickup_at'   => $pickupAt, // Save the combined pickup datetime
         ]);
 
         // Sla elk cart item op
-        foreach ($this->cart as $surplusId => $item) {
-            $surplus = Surplus::find($surplusId);
+        foreach ($this->cart as $cartKey => $item) {
+            $dessertId = null;
+
+            if ($item['type'] === 'dessert') {
+                $dessertId = $item['id'];
+            } elseif ($item['type'] === 'surplus') {
+                $surplus = Surplus::find($item['id']);
+                if ($surplus) {
+                    $dessertId = $surplus->dessert_id;
+                    // Reduction logic for surplus
+                    $surplus->total_amount -= $item['quantity'];
+                    $surplus->save();
+                }
+            }
 
             OrderItem::create([
                 'orderId'   => $order->id,
-                'dessertId' => $surplus ? $surplus->dessert_id : null,
+                'dessertId' => $dessertId,
                 'amount'    => $item['quantity'],
             ]);
         }
