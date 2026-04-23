@@ -26,7 +26,7 @@
             <flux:navlist.item icon="users" href="#" wire:navigate>{{ __('Workshops') }}</flux:navlist.item>
             <flux:navlist.item icon="clipboard-document-list" href="#"
                                wire:navigate>{{ __('Shopping List') }}</flux:navlist.item>
-            <flux:navlist.item icon="star" href="#" wire:navigate>{{ __('Reviews') }}</flux:navlist.item>
+            <flux:navlist.item icon="star" :href="route('review.submit')" :current="request()->routeIs('review.submit')" wire:navigate>{{ __('Reviews') }}</flux:navlist.item>
         </flux:navlist.group>
 
         @if(auth()->check() && auth()->user()->isAdmin())

@@ -26,7 +26,7 @@ use Laravel\Fortify\Features;
 use App\Models\Dessert;
 use App\Livewire\Checkout;
 use App\Livewire\ShoppingCartPage;
-use App\Livewire\ShowHappenings;
+use App\Livewire\SubmitReview;
 use Illuminate\Http\Request;
 
 Route::get('/', function () {
@@ -64,6 +64,9 @@ Route::middleware(['auth'])->group(function () {
 
     // Checkout route
     Route::get('checkout', Checkout::class)->name('checkout');
+
+    // Review route
+    Route::get('review-schrijven', SubmitReview::class)->name('review.submit');
 
     // Payment route
     Route::get('payment', function () {
@@ -103,7 +106,6 @@ Route::middleware(['auth'])->group(function () {
 
         // Surpluses (Using Livewire SurplusManager)
         Route::get('/owner/surpluses', SurplusManager::class)->name('owner.surpluses.index');
-
     });
 });
 
