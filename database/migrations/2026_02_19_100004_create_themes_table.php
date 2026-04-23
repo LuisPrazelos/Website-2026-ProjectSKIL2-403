@@ -10,7 +10,8 @@ return new class extends Migration
     {
         Schema::create('themes', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->nullable(false);
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }
@@ -20,4 +21,3 @@ return new class extends Migration
         Schema::dropIfExists('themes');
     }
 };
-

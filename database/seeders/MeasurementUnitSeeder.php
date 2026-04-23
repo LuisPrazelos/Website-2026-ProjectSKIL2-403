@@ -9,6 +9,10 @@ class MeasurementUnitSeeder extends Seeder
 {
     public function run(): void
     {
-        MeasurementUnit::factory(5)->create();
+        $units = ['gram', 'kg', 'ml', 'liter', 'stuks'];
+
+        foreach ($units as $unit) {
+            MeasurementUnit::firstOrCreate(['name' => $unit]);
+        }
     }
 }

@@ -44,7 +44,7 @@ class Ingredient extends Component
     private function resetInputFields()
     {
         $this->name = '';
-        $this->unit_id = MeasurementUnit::first()?->id;
+        $this->unit_id = MeasurementUnit::where('name', 'kg')->value('id') ?? MeasurementUnit::first()?->id;
         $this->selectedAllergens = [];
         $this->editingIngredientId = null;
         $this->isEditMode = false;

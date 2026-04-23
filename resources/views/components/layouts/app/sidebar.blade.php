@@ -36,11 +36,11 @@
                 <flux:navlist.item icon="beaker" :href="route('owner.ingredients.index')" :current="request()->routeIs('owner.ingredients.index')" wire:navigate>{{ __('Ingrediënten Beheren') }}</flux:navlist.item>
                 <flux:navlist.item icon="users" :href="route('owner.workshops.index')" :current="request()->routeIs('owner.workshops.index')" wire:navigate>{{ __('Workshops Beheren') }}</flux:navlist.item>
 
+                <flux:navlist.item icon="paint-brush" :href="route('owner.themes.index')" :current="request()->routeIs('owner.themes.index')" wire:navigate>{{ __('Thema\'s Beheren') }}</flux:navlist.item>
                 <flux:navlist.item icon="shopping-cart" :href="route('owner.orders.index')" :current="request()->routeIs('owner.orders.index')" wire:navigate>{{ __('Bestellingen Beheren') }}</flux:navlist.item>
                 <flux:navlist.item icon="envelope" :href="route('owner.respond-order-requests')" :current="request()->routeIs('owner.respond-order-requests')" wire:navigate>{{ __('Reageren op aanvragen') }}</flux:navlist.item>
                 <flux:navlist.item icon="plus" :href="route('owner.surpluses.index')" :current="request()->routeIs('owner.surpluses.index')" wire:navigate>{{ __('Overschotten Beheren') }}</flux:navlist.item>
                 <flux:navlist.item icon="chart-bar" :href="route('price-evolution')" :current="request()->routeIs('price-evolution')" wire:navigate>{{ __('Prijsevolutie') }}</flux:navlist.item>
-                <flux:navlist.item icon="calendar" :href="route('owner.happenings.index')" :current="request()->routeIs('owner.happenings.index')" wire:navigate>{{ __('Evenementen Beheren') }}</flux:navlist.item>
                 <flux:navlist.item icon="clipboard-document-list" :href="route('shopping-list')" :current="request()->routeIs('shopping-list')" wire:navigate>{{ __('Boodschappenlijst') }}</flux:navlist.item>
             </flux:navlist.group>
         @endif

@@ -19,6 +19,7 @@ class Order extends Model
         'total_price',
         'status',
         'placed_at',
+        'pickup_at', // Added pickup_at
     ];
 
     /**
@@ -28,6 +29,7 @@ class Order extends Model
      */
     protected $casts = [
         'placed_at' => 'datetime',
+        'pickup_at' => 'datetime', // Cast to datetime
     ];
 
     /**

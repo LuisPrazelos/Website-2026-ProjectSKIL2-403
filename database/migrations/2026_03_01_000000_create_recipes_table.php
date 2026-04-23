@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('recipes', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->integer('preparation_time');
+            $table->string('name')->nullable(false);
+            $table->integer('preparation_time')->nullable(false);
             $table->text('description')->nullable();
             $table->timestamps();
         });

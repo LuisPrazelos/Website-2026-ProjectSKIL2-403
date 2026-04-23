@@ -1,10 +1,11 @@
 <?php
 
-use App\Http\Controllers\SurplusController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Livewire\RecipeManager;
+use App\Livewire\SurplusManager;
 use App\Livewire\ShowRecipe;
 use App\Livewire\EventRequest;
+use App\Livewire\ThemeManager;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
@@ -17,15 +18,16 @@ use App\Livewire\Orders\CreateOrder;
 use App\Livewire\Orders\RespondOrderRequests;
 use App\Livewire\Orders\ViewOrderRequest;
 use App\Livewire\Orders\RespondToOrderRequest;
-use App\Livewire\Ingredient as LivewireIngredient;
+use App\Livewire\IngredientsManager;
 use App\Models\Order;
 use App\Models\Surplus;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use App\Models\Dessert;
-use App\Livewire\ShowHappenings;
 use App\Livewire\Checkout;
 use App\Livewire\WorkshopManager;
+use App\Livewire\ShoppingCartPage;
+use App\Livewire\ShowHappenings;
 use Illuminate\Http\Request;
 
 Route::get('/', function () {
@@ -54,68 +56,12 @@ Route::middleware(['auth'])->group(function () {
         )
         ->name('two-factor.show');
 
-    // Route for the surplus shop (for buying)
-    Route::get('/surplus-shop', [SurplusController::class, 'shopIndex'])->name('userSurplusShop.index');
+    // Route for the surplus shop (using Livewire SurplusManager)
+    Route::get('/surplus-shop', SurplusManager::class)->name('userSurplusShop.index');
 
-    // Cart routes implemented with closures
-    Route::get('cart', function () {
-        return view('surpluses.cart');
-    })->name('cart.index');
-
-    Route::get('shopping-cart', function () {
-        return view('surpluses.cart');
-    })->name('shopping-cart');
-
-    Route::post('cart/add/{id}', function (Request $request, $id) {
-        $surplus = Surplus::with('dessert')->findOrFail($id);
-        $quantity = (int) $request->input('quantity', 1);
-        $quantity = max(1, min($quantity, $surplus->total_amount));
-
-        $cart = session()->get('cart', []);
-
-        if(isset($cart[$id])) {
-            $cart[$id]['quantity'] += $quantity;
-            $cart[$id]['quantity'] = min($cart[$id]['quantity'], $surplus->total_amount);
-        } else {
-            $cart[$id] = [
-                "dessert_name" => $surplus->dessert->name,
-                "surplus_id" => $surplus->id,
-                "quantity" => $quantity,
-                "price" => $surplus->dessert->price,
-                "discount" => $surplus->sale,
-            ];
-        }
-
-        session()->put('cart', $cart);
-        return redirect()->back()->with('success', 'Product toegevoegd aan winkelwagen!');
-    })->name('cart.add');
-
-    Route::patch('cart/update/{id}', function (Request $request, $id) {
-        $quantity = (int) $request->input('quantity', 1);
-        $cart = session()->get('cart', []);
-
-        if(isset($cart[$id])) {
-            if($quantity <= 0) {
-                unset($cart[$id]);
-                session()->put('cart', $cart);
-                return redirect()->back()->with('success', 'Product verwijderd uit winkelwagen!');
-            } else {
-                $cart[$id]['quantity'] = $quantity;
-                session()->put('cart', $cart);
-                return redirect()->back()->with('success', 'Hoeveelheid bijgewerkt!');
-            }
-        }
-        return redirect()->back()->with('error', 'Product niet gevonden in winkelwagen!');
-    })->name('cart.update');
-
-    Route::delete('cart/remove/{id}', function ($id) {
-        $cart = session()->get('cart', []);
-        if(isset($cart[$id])) {
-            unset($cart[$id]);
-            session()->put('cart', $cart);
-        }
-        return redirect()->back()->with('success', 'Product verwijderd uit winkelwagen!');
-    })->name('cart.remove');
+    // Cart routes (Using Livewire component)
+    Route::get('shopping-cart', ShoppingCartPage::class)->name('shopping-cart');
+    Route::get('cart', ShoppingCartPage::class)->name('cart.index');
 
     // Checkout route
     Route::get('checkout', Checkout::class)->name('checkout');
@@ -125,7 +71,7 @@ Route::middleware(['auth'])->group(function () {
         return view('surpluses.payment');
     })->name('payment.page');
 
-    // User overview for deserts
+    // User overview for desserts
     Route::get('/deserts', function () {
         $deserts = Dessert::with('picture')->get();
         return view('deserts.index', compact('deserts'));
@@ -134,6 +80,7 @@ Route::middleware(['auth'])->group(function () {
     // User event request route
     Route::get('/evenement-aanvragen', EventRequest::class)->name('event.request');
 
+    // Owner management routes
     Route::middleware([AdminMiddleware::class])->group(function () {
         Route::get('/owner/recipes', RecipeManager::class)->name('owner.recipes.index');
         Route::get('/owner/recipes/{recipe}', ShowRecipe::class)->name('owner.recipes.show');
@@ -145,20 +92,23 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/owner/aanvragen', RespondOrderRequests::class)->name('owner.respond-order-requests');
         Route::get('/owner/aanvragen/{id}', ViewOrderRequest::class)->name('owner.respond-order-requests.view');
         Route::get('/owner/aanvragen/{id}/beantwoorden', RespondToOrderRequest::class)->name('owner.respond-order-requests.respond');
-        Route::get('/owner/ingredients', LivewireIngredient::class)->name('owner.ingredients.index');
+
+        // Ingredients (Using Livewire IngredientsManager)
+        Route::get('/owner/ingredients', IngredientsManager::class)->name('owner.ingredients.index');
+
+        // Desserts
         Route::get('/owner/deserts', function () {
             $deserts = Dessert::with('picture')->paginate(10);
             return view('deserts.owner-index', compact('deserts'));
         })->name('owner.deserts.index');
-        Route::get('/owner/surpluses', [SurplusController::class, 'ownerIndex'])->name('owner.surpluses.index');
-        Route::post('/owner/surpluses', [SurplusController::class, 'store'])->name('owner.surpluses.store');
-        Route::get('/owner/surpluses/{surplus}/edit', [SurplusController::class, 'edit'])->name('owner.surpluses.edit');
-        Route::put('/owner/surpluses/{surplus}', [SurplusController::class, 'update'])->name('owner.surpluses.update');
-        Route::delete('/owner/surpluses/{surplus}', [SurplusController::class, 'destroy'])->name('owner.surpluses.destroy');
-        Route::get('/owner/happenings', ShowHappenings::class)->name('owner.happenings.index');
 
-        // Owner management view for workshops
-        Route::get('/owner/workshops', WorkshopManager::class)->name('owner.workshops.index');
+        // Surpluses (Using Livewire SurplusManager)
+        Route::get('/owner/surpluses', SurplusManager::class)->name('owner.surpluses.index');
+        Route::post('/owner/surpluses', SurplusManager::class)->name('owner.surpluses.store');
+        Route::get('/owner/surpluses/{surplus}/edit', SurplusManager::class)->name('owner.surpluses.edit');
+        Route::put('/owner/surpluses/{surplus}', SurplusManager::class)->name('owner.surpluses.update');
+        Route::delete('/owner/surpluses/{surplus}', SurplusManager::class)->name('owner.surpluses.destroy');
+        Route::get('/owner/themes', ThemeManager::class)->name('owner.themes.index');
     });
 });
 
