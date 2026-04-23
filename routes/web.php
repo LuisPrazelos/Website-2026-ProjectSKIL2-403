@@ -93,6 +93,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/owner/aanvragen/{id}', ViewOrderRequest::class)->name('owner.respond-order-requests.view');
         Route::get('/owner/aanvragen/{id}/beantwoorden', RespondToOrderRequest::class)->name('owner.respond-order-requests.respond');
 
+        // Owner management view for workshops
+        Route::get('/owner/workshops', WorkshopManager::class)->name('owner.workshops.index');
         // Ingredients (Using Livewire IngredientsManager)
         Route::get('/owner/ingredients', IngredientsManager::class)->name('owner.ingredients.index');
 
