@@ -47,6 +47,12 @@
                         <p class="text-gray-900 dark:text-white font-semibold mt-1">{{ $happening->on_location ? 'Ja' : 'Nee' }}</p>
                     </div>
                     <div>
+                        <label class="text-sm font-medium text-gray-600 dark:text-gray-400">{{ __('Locatie') }}</label>
+                        <p class="text-gray-900 dark:text-white font-semibold mt-1">
+                            {{ $happening->on_location ? ($happening->location ?: __('Locatie niet ingevuld')) : __('Niet op locatie') }}
+                        </p>
+                    </div>
+                    <div>
                         <label class="text-sm font-medium text-gray-600 dark:text-gray-400">{{ __('Thema') }}</label>
                         <p class="text-gray-900 dark:text-white font-semibold mt-1">{{ $happening->theme->name ?? '-' }}</p>
                     </div>
