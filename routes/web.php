@@ -103,7 +103,11 @@ Route::middleware(['auth'])->group(function () {
 
         // Surpluses (Using Livewire SurplusManager)
         Route::get('/owner/surpluses', SurplusManager::class)->name('owner.surpluses.index');
-
+        Route::post('/owner/surpluses', SurplusManager::class)->name('owner.surpluses.store');
+        Route::get('/owner/surpluses/{surplus}/edit', SurplusManager::class)->name('owner.surpluses.edit');
+        Route::put('/owner/surpluses/{surplus}', SurplusManager::class)->name('owner.surpluses.update');
+        Route::delete('/owner/surpluses/{surplus}', SurplusManager::class)->name('owner.surpluses.destroy');
+        Route::get('/owner/themes', ThemeManager::class)->name('owner.themes.index');
     });
 });
 
