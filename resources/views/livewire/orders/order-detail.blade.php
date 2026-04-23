@@ -55,7 +55,15 @@
                     {{ __('Afhaalatum') }}
                 </label>
                 <p class="text-gray-900 dark:text-gray-100 font-medium">
-                    <span class="text-gray-500">{{ __('Niet ingesteld') }}</span>
+                    {{ !empty($orderData['pickup_at']) ? \Carbon\Carbon::parse($orderData['pickup_at'])->format('d-m-Y') : __('Niet ingesteld') }}
+                </p>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    {{ __('Afhaaluur') }}
+                </label>
+                <p class="text-gray-900 dark:text-gray-100 font-medium">
+                    {{ !empty($orderData['pickup_at']) ? \Carbon\Carbon::parse($orderData['pickup_at'])->format('H:i') : __('Niet ingesteld') }}
                 </p>
             </div>
             <div>

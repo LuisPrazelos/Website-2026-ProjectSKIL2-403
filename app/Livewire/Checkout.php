@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Surplus;
 use App\Models\Dessert;
+use App\Models\Theme;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
@@ -16,10 +17,12 @@ class Checkout extends Component
     public $totalPrice = 0;
     public $pickupDate;
     public $pickupTime; // Added pickupTime property
+    public $theme_id;
 
     protected $rules = [
         'pickupDate' => 'required|date|after_or_equal:today',
         'pickupTime' => 'required', // Validation for pickupTime
+        'theme_id' => 'required|exists:themes,id',
     ];
 
     public function mount()
@@ -27,6 +30,7 @@ class Checkout extends Component
         $this->cart = session()->get('cart', []);
         $this->pickupDate = now()->toDateString();
         $this->pickupTime = now()->addHour()->format('H:00'); // Default to 1 hour from now, rounded
+        $this->theme_id = Theme::query()->orderBy('name')->value('id');
         $this->calculateTotal();
     }
 
@@ -62,6 +66,7 @@ class Checkout extends Component
         // Maak de order aan
         $order = Order::create([
             'user_id'     => Auth::id(),
+            'theme_id'    => $this->theme_id,
             'total_price' => $this->totalPrice,
             'status'      => 'pending',
             'placed_at'   => Carbon::now(),
@@ -101,7 +106,9 @@ class Checkout extends Component
 
     public function render()
     {
-        return view('livewire.checkout')
+        return view('livewire.checkout', [
+            'themes' => Theme::orderBy('name')->get(),
+        ])
             ->layout('components.layouts.app', ['title' => 'Checkout']);
     }
 }

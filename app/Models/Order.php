@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Theme;
 
 class Order extends Model
 {
@@ -16,6 +17,7 @@ class Order extends Model
      */
     protected $fillable = [
         'user_id',
+        'theme_id',
         'total_price',
         'status',
         'placed_at',
@@ -47,5 +49,10 @@ class Order extends Model
     public function items()
     {
         return $this->hasMany(OrderItem::class, 'orderId');
+    }
+
+    public function theme()
+    {
+        return $this->belongsTo(Theme::class);
     }
 }

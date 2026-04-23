@@ -12,7 +12,6 @@
         <!-- Filters Section -->
         <div class="mb-6 space-y-4">
             <div class="flex flex-col md:flex-row gap-4 items-end">
-                <!-- Search -->
                 <div class="flex-1">
                     <input
                         wire:model.live.debounce.500ms="search"
@@ -22,7 +21,6 @@
                     >
                 </div>
 
-                <!-- Status Filter -->
                 <div class="w-full md:w-auto">
                     <select
                         wire:model.live="status"
@@ -36,7 +34,6 @@
                     </select>
                 </div>
 
-                <!-- Date From -->
                 <div class="w-full md:w-auto">
                     <input
                         wire:model.live="dateFrom"
@@ -48,7 +45,6 @@
 
                 <div class="text-gray-500 dark:text-gray-400">{{ __('tot') }}</div>
 
-                <!-- Date To -->
                 <div class="w-full md:w-auto">
                     <input
                         wire:model.live="dateTo"
@@ -60,7 +56,6 @@
             </div>
         </div>
 
-        <!-- Add Button -->
         <div class="flex justify-end mb-4">
             <a href="{{ route('owner.orders.create') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-gray-800 dark:bg-gray-700 text-white rounded-md hover:bg-gray-900 dark:hover:bg-gray-600 transition-colors font-medium" wire:navigate>
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -70,7 +65,6 @@
             </a>
         </div>
 
-        <!-- Table -->
         <div class="overflow-x-auto bg-white dark:bg-zinc-900 rounded-md shadow-sm p-4 flex-1">
             <table class="min-w-full text-left text-sm">
                 <thead class="border-b border-gray-200 dark:border-zinc-700">
@@ -78,6 +72,9 @@
                         <th class="px-4 py-3 font-semibold text-gray-900 dark:text-gray-100">{{ __('Ordernummer') }}</th>
                         <th class="px-4 py-3 font-semibold text-gray-900 dark:text-gray-100">{{ __('Klantnaam') }}</th>
                         <th class="px-4 py-3 font-semibold text-gray-900 dark:text-gray-100">{{ __('Datum') }}</th>
+                        <th class="px-4 py-3 font-semibold text-gray-900 dark:text-gray-100">{{ __('Afhaaldatum') }}</th>
+                        <th class="px-4 py-3 font-semibold text-gray-900 dark:text-gray-100">{{ __('Afhaaluur') }}</th>
+                        <th class="px-4 py-3 font-semibold text-gray-900 dark:text-gray-100">{{ __('Thema') }}</th>
                         <th class="px-4 py-3 font-semibold text-gray-900 dark:text-gray-100">{{ __('Totaalbedrag (€)') }}</th>
                         <th class="px-4 py-3 font-semibold text-gray-900 dark:text-gray-100">{{ __('Status') }}</th>
                         <th class="px-4 py-3 font-semibold text-gray-900 dark:text-gray-100">{{ __('Acties') }}</th>
@@ -95,12 +92,11 @@
                                 </span>
                             </td>
                             <td class="px-4 py-3 text-gray-900 dark:text-gray-100">{{ $order->user->name }}</td>
-                            <td class="px-4 py-3 text-gray-900 dark:text-gray-100">
-                                {{ $order->placed_at->format('d-m-Y') }}
-                            </td>
-                            <td class="px-4 py-3 text-gray-900 dark:text-gray-100 font-medium">
-                                € {{ number_format($order->total_price, 2, ',', '.') }}
-                            </td>
+                            <td class="px-4 py-3 text-gray-900 dark:text-gray-100">{{ $order->placed_at->format('d-m-Y') }}</td>
+                            <td class="px-4 py-3 text-gray-900 dark:text-gray-100">{{ $order->pickup_at?->format('d-m-Y') ?? '-' }}</td>
+                            <td class="px-4 py-3 text-gray-900 dark:text-gray-100">{{ $order->pickup_at?->format('H:i') ?? '-' }}</td>
+                            <td class="px-4 py-3 text-gray-900 dark:text-gray-100">{{ $order->theme->name ?? '-' }}</td>
+                            <td class="px-4 py-3 text-gray-900 dark:text-gray-100 font-medium">€ {{ number_format($order->total_price, 2, ',', '.') }}</td>
                             <td class="px-4 py-3">
                                 <span class="inline-block px-3 py-1 rounded-full text-sm font-medium
                                     @switch($order->status)
@@ -140,7 +136,6 @@
                             </td>
                             <td class="px-4 py-3">
                                 <div class="flex items-center gap-2">
-                                    <!-- More Info Button -->
                                     <a href="{{ route('owner.orders.show', $order) }}" class="inline-flex items-center gap-1 px-3 py-1 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded transition-colors" wire:navigate>
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -148,7 +143,6 @@
                                         {{ __('Meer info') }}
                                     </a>
 
-                                    <!-- Status Dropdown -->
                                     <div class="relative group inline-block">
                                         <button class="inline-flex items-center gap-1 px-3 py-1 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded transition-colors">
                                             {{ __('Pas status aan') }}
@@ -188,7 +182,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="px-4 py-8 text-center text-gray-500 dark:text-gray-400">
+                            <td colspan="9" class="px-4 py-8 text-center text-gray-500 dark:text-gray-400">
                                 {{ __('Geen bestellingen gevonden.') }}
                             </td>
                         </tr>
@@ -197,7 +191,6 @@
             </table>
         </div>
 
-        <!-- Pagination -->
         @if($orders->hasPages())
             <div class="mt-6 flex items-center justify-between">
                 <span class="text-sm text-gray-600 dark:text-gray-400">
@@ -219,10 +212,8 @@
             </div>
         @endif
 
-        <!-- Info text -->
         <p class="text-sm text-gray-500 dark:text-gray-400 mt-6">
             {{ __('Wanneer een bestelling wordt geannuleerd, ontvangt de klant automatisch een bevestigingsmail.') }}
         </p>
     </div>
 </div>
-

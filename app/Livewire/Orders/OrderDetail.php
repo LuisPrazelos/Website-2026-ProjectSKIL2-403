@@ -21,6 +21,7 @@ class OrderDetail extends Component
     public function mount(Order $order)
     {
         $this->orderId = $order->id;
+        $order->load(['user', 'theme']);
 
         // Load and store order data as array to avoid serialization issues
         $this->orderData = [
@@ -30,15 +31,14 @@ class OrderDetail extends Component
             'status' => $order->status,
             'availability_id' => $order->availability_id,
             'placed_at' => $order->placed_at,
+            'pickup_at' => $order->pickup_at,
             'created_at' => $order->created_at,
             'updated_at' => $order->updated_at,
-            'theme' => $order->theme,
         ];
 
-        $this->theme = $order->theme;
+        $this->theme = $order->theme?->name;
 
         // Load user data
-        $order->load('user');
         if ($order->user) {
             $this->userData = [
                 'id' => $order->user->id,

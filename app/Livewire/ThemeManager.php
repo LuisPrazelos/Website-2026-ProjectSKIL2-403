@@ -13,7 +13,6 @@ class ThemeManager extends Component
     public $editingThemeId = null;
     public $themeName = '';
     public $themeDescription = '';
-    public $themePrice = '';
     public $searchQuery = '';
 
     public function mount()
@@ -35,7 +34,6 @@ class ThemeManager extends Component
                 'id' => $theme->id,
                 'name' => $theme->name,
                 'description' => $theme->description,
-                'price' => $theme->price,
                 'created_at' => $theme->created_at,
             ])
             ->toArray();
@@ -52,7 +50,6 @@ class ThemeManager extends Component
         $this->editingThemeId = null;
         $this->themeName = '';
         $this->themeDescription = '';
-        $this->themePrice = '';
     }
 
     public function editTheme($themeId)
@@ -61,7 +58,6 @@ class ThemeManager extends Component
         $this->editingThemeId = $themeId;
         $this->themeName = $theme->name;
         $this->themeDescription = $theme->description ?? '';
-        $this->themePrice = $theme->price !== null ? number_format((float) $theme->price, 2, '.', '') : '';
         $this->showForm = true;
     }
 
@@ -71,7 +67,6 @@ class ThemeManager extends Component
         $this->editingThemeId = null;
         $this->themeName = '';
         $this->themeDescription = '';
-        $this->themePrice = '';
     }
 
     public function saveTheme()
@@ -80,7 +75,6 @@ class ThemeManager extends Component
         $themeData = [
             'name' => $validated['themeName'],
             'description' => $validated['themeDescription'] ?: null,
-            'price' => $validated['themePrice'],
         ];
 
         if ($this->editingThemeId) {
@@ -124,7 +118,6 @@ class ThemeManager extends Component
                 Rule::unique('themes', 'name')->ignore($this->editingThemeId),
             ],
             'themeDescription' => 'nullable|string',
-            'themePrice' => 'required|numeric|min:0',
         ];
     }
 }
