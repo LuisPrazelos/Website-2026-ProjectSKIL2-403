@@ -11,7 +11,7 @@ class ViewOrderRequest extends Component
 
     public function mount($id)
     {
-        $this->happening = Happening::with(['user', 'theme', 'desserts'])->findOrFail($id);
+        $this->happening = Happening::with(['user', 'theme', 'package', 'desserts'])->findOrFail($id);
     }
 
     public function render()

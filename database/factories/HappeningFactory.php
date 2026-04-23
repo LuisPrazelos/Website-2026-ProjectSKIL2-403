@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Happening;
+use App\Models\Package;
 use App\Models\State;
 use App\Models\Theme;
 use App\Models\User;
@@ -30,6 +31,7 @@ class HappeningFactory extends Factory
             'price_per_person' => 0,
             'user_id' => User::query()->inRandomOrder()->value('id') ?? User::factory(),
             'theme_id' => Theme::query()->inRandomOrder()->value('id'),
+            'package_id' => Package::query()->inRandomOrder()->value('id'),
             'status_id' => State::query()->inRandomOrder()->value('id'),
             'on_location' => $onLocation,
             'location' => $onLocation ? fake()->address() : null,

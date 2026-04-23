@@ -28,6 +28,7 @@
                     <th class="px-4 py-3 font-semibold text-gray-900 dark:text-white">Aantal / datum</th>
                     <th class="px-4 py-3 font-semibold text-gray-900 dark:text-white">Locatie</th>
                     <th class="px-4 py-3 font-semibold text-gray-900 dark:text-white">Thema</th>
+                    <th class="px-4 py-3 font-semibold text-gray-900 dark:text-white">Pakket</th>
                     <th class="px-4 py-3 font-semibold text-gray-900 dark:text-white">Acties</th>
                 </tr>
             </thead>
@@ -71,6 +72,9 @@
                                 {{ $happening->theme->name ?? '-' }}
                             </span>
                         </td>
+                        <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-nowrap">
+                            {{ $happening->package->name ?? '-' }}
+                        </td>
 
                         <td class="px-4 py-3 flex items-center gap-2">
                             <a href="{{ route('owner.respond-order-requests.respond', $happening->id) }}" wire:navigate class="text-gray-500 hover:text-green-600 transition" title="Beantwoorden">
@@ -88,7 +92,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td class="px-4 py-8 text-center" colspan="7">
+                        <td class="px-4 py-8 text-center" colspan="8">
                             <h2 class="text-gray-500 dark:text-gray-400">Geen evenementen gevonden.</h2>
                         </td>
                     </tr>

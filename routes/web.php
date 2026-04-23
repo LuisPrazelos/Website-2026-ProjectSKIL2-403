@@ -32,6 +32,7 @@ use App\Livewire\WorkshopList; // Importeer WorkshopList
 use App\Livewire\ShoppingCartPage;
 use App\Livewire\SurplusManager;
 use App\Livewire\ThemeManager;
+use App\Http\Livewire\PackageManager;
 
 Route::get('/', fn () => view('welcome'))->name('home');
 
@@ -81,5 +82,6 @@ Route::get('/owner/deserts', function () {
 Route::get('/owner/reviews', ManageReviews::class)->middleware('admin')->name('owner.reviews.index');
 Route::get('/owner/surpluses', SurplusManager::class)->middleware('admin')->name('owner.surpluses.index');
 Route::get('/owner/themes', ThemeManager::class)->middleware('admin')->name('owner.themes.index');
+Route::get('/owner/packages', PackageManager::class)->middleware('admin')->name('owner.packages.index');
 
 require __DIR__ . '/auth.php';

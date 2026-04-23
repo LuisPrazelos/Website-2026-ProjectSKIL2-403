@@ -47,6 +47,7 @@ class DatabaseSeeder extends Seeder
             TablePictureSeeder::class,
             StateSeeder::class,
             ThemeSeeder::class,
+            PackageSeeder::class,
             AllergySeeder::class, // AllergySeeder moet voor IngredientAllergySeeder komen
             DecorationSeeder::class,
 

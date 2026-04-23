@@ -70,6 +70,9 @@
                     <flux:navlist.item icon="paint-brush" :href="route('owner.themes.index')"
                         :current="request()->routeIs('owner.themes.index')" wire:navigate>{{ __('Thema\'s Beheren') }}
                     </flux:navlist.item>
+                    <flux:navlist.item icon="archive-box" :href="route('owner.packages.index')"
+                        :current="request()->routeIs('owner.packages.index')" wire:navigate>{{ __('Pakketten Beheren') }}
+                    </flux:navlist.item>
                 </flux:navlist.group>
             @endif
         </flux:navlist>

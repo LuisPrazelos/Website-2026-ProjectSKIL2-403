@@ -20,7 +20,7 @@ class RespondToOrderRequest extends Component
 
     public function mount($id)
     {
-        $this->happening = Happening::with(['user', 'theme', 'desserts'])->findOrFail($id);
+        $this->happening = Happening::with(['user', 'theme', 'package', 'desserts'])->findOrFail($id);
 
         $this->pricePerPerson = $this->happening->price_per_person ?? '';
         $this->remarks = $this->happening->remarks ?? '';

@@ -56,6 +56,10 @@
                         <label class="text-sm font-medium text-gray-600 dark:text-gray-400">{{ __('Thema') }}</label>
                         <p class="text-gray-900 dark:text-white font-semibold mt-1">{{ $happening->theme->name ?? '-' }}</p>
                     </div>
+                    <div>
+                        <label class="text-sm font-medium text-gray-600 dark:text-gray-400">{{ __('Pakket') }}</label>
+                        <p class="text-gray-900 dark:text-white font-semibold mt-1">{{ $happening->package->name ?? '-' }}</p>
+                    </div>
                 </div>
             </div>
 
