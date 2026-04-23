@@ -7,8 +7,15 @@
     </div>
 
     <!-- Main Section -->
-    <div class="relative flex flex-1 flex-col rounded-xl border border-neutral-200 bg-white p-6 shadow-sm dark:border-neutral-700 dark:bg-neutral-800 overflow-hidden">
-
+    <div 
+        class="relative flex flex-1 flex-col rounded-xl border border-neutral-200 bg-white p-6 shadow-sm dark:border-neutral-700 dark:bg-neutral-800 overflow-hidden"
+        x-data="priceEvolutionChart({
+            labels: @js($chartData['labels']),
+            datasets: @js($chartData['datasets']),
+            itemName: @js($itemName)
+        })"
+        @chart-updated.window="updateChart($event.detail[0])"
+    >
         <!-- Mode Tabs -->
         <div class="mb-6 flex gap-2 border-b border-gray-200 dark:border-neutral-700">
             <button
@@ -89,38 +96,31 @@
         </div>
 
         <!-- Chart Container -->
-        <div
-            wire:key="chart-container-{{ $mode }}-{{ $selectedId }}"
-            class="flex-1 min-h-[420px] w-full relative"
-            x-data="priceEvolutionChart({
-                labels: @js($chartData['labels']),
-                datasets: @js($chartData['datasets']),
-                itemName: @js($itemName),
-                mode: @js($mode)
-            })"
-            @chart-updated.window="updateChart($event.detail)"
-        >
-            <!-- Canvas: toon enkel als er data is -->
-            <div class="w-full h-full" x-show="labels.length > 0">
+        <div class="flex-1 min-h-[420px] w-full relative">
+            <!-- Canvas -->
+            <div 
+                class="w-full h-full" 
+                x-show="labels && labels.length > 0" 
+                wire:ignore
+                x-transition:enter="transition ease-out duration-500"
+                x-transition:enter-start="opacity-0 transform scale-[0.98]"
+                x-transition:enter-end="opacity-100 transform scale-100"
+            >
                 <canvas x-ref="canvas"></canvas>
             </div>
 
             <!-- Lege staat -->
-            <div x-show="labels.length === 0" class="absolute inset-0 flex flex-col items-center justify-center text-gray-400 dark:text-gray-500 bg-white dark:bg-neutral-800">
+            <div x-show="!labels || labels.length === 0" class="absolute inset-0 flex flex-col items-center justify-center text-gray-400 dark:text-gray-500 bg-white dark:bg-neutral-800">
                 <svg class="w-16 h-16 mb-4 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                 </svg>
                 <span class="text-sm">
-                    @if($selectedId)
-                        Geen prijsgegevens beschikbaar voor "{{ $itemName }}".
-                    @else
-                        Selecteer een {{ $mode === 'packages' ? 'pakket' : 'ingrediënt' }} om de grafiek te zien.
-                    @endif
+                    Selecteer een item om de grafiek te zien.
                 </span>
             </div>
         </div>
 
-        <!-- Package price history table (only for packages mode with single package selected) -->
+        <!-- Package price history table -->
         @if($mode === 'packages' && $selectedId && $selectedId !== 'all' && count($chartData['datasets']) > 0)
             <div class="mt-6 border-t border-gray-200 dark:border-neutral-700 pt-4">
                 <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Prijshistoriek</h3>
@@ -154,133 +154,151 @@
     </div>
 
     <!-- Alpine Component Definition -->
-    <script>
-        document.addEventListener('alpine:init', () => {
-            Alpine.data('priceEvolutionChart', (config) => ({
-                chart: null,
-                labels: config.labels || [],
-                datasets: config.datasets || [],
-                itemName: config.itemName || '',
-                mode: config.mode || 'ingredients',
+    <script data-navigate-once>
+        (function() {
+            const registerChart = () => {
+                if (window.priceEvolutionChartRegistered) return;
+                window.priceEvolutionChartRegistered = true;
 
-                init() {
-                    if (typeof Chart === 'undefined') {
-                        const script = document.createElement('script');
-                        script.src = 'https://cdn.jsdelivr.net/npm/chart.js';
-                        script.onload = () => {
-                            if (this.labels.length > 0) this.initChart();
-                        };
-                        document.head.appendChild(script);
-                    } else {
-                        if (this.labels.length > 0) this.initChart();
-                    }
-                },
+                Alpine.data('priceEvolutionChart', (config) => {
+                    let chartInstance = null;
 
-                updateChart(detail) {
-                    this.labels = detail.labels || [];
-                    this.datasets = detail.datasets || [];
+                    return {
+                        labels: config.labels || [],
+                        datasets: config.datasets || [],
+                        itemName: config.itemName || '',
 
-                    if (this.labels.length === 0) {
-                        if (this.chart) {
-                            this.chart.destroy();
-                            this.chart = null;
-                        }
-                        return;
-                    }
-
-                    if (!this.chart) {
-                        this.$nextTick(() => this.initChart());
-                    } else {
-                        this.chart.data.labels = this.labels;
-                        this.chart.data.datasets = this.buildDatasets();
-                        this.chart.options.plugins.title.text = this.chartTitle();
-                        this.chart.update();
-                    }
-                },
-
-                buildDatasets() {
-                    return this.datasets.map(ds => ({
-                        label: ds.label,
-                        data: ds.data,
-                        borderColor: ds.borderColor,
-                        backgroundColor: ds.backgroundColor,
-                        borderWidth: ds.borderWidth ?? 2,
-                        fill: ds.fill ?? false,
-                        tension: ds.tension ?? 0.3,
-                        spanGaps: ds.spanGaps ?? true,
-                        pointRadius: 5,
-                        pointHoverRadius: 7,
-                    }));
-                },
-
-                chartTitle() {
-                    return this.itemName ? 'Prijsverloop voor ' + this.itemName : 'Prijsevolutie';
-                },
-
-                initChart() {
-                    if (!this.$refs.canvas || this.labels.length === 0) return;
-
-                    const ctx = this.$refs.canvas.getContext('2d');
-                    if (this.chart) {
-                        this.chart.destroy();
-                    }
-
-                    this.chart = new Chart(ctx, {
-                        type: 'line',
-                        data: {
-                            labels: this.labels,
-                            datasets: this.buildDatasets(),
+                        init() {
+                            if (this.labels && this.labels.length > 0) {
+                                this.$nextTick(() => this.initChart());
+                            }
                         },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            interaction: {
-                                intersect: false,
-                                mode: 'index',
-                            },
-                            scales: {
-                                x: {
-                                    grid: { display: false },
-                                    ticks: { maxRotation: 45 }
+
+                        updateChart(data) {
+                            this.labels = data.labels || [];
+                            this.datasets = data.datasets || [];
+                            this.itemName = data.itemName || '';
+
+                            this.$nextTick(() => {
+                                this.initChart();
+                            });
+                        },
+
+                        buildDatasets() {
+                            return this.datasets.map(ds => ({
+                                label: ds.label,
+                                data: ds.data,
+                                borderColor: ds.borderColor,
+                                backgroundColor: ds.backgroundColor,
+                                borderWidth: ds.borderWidth ?? 2,
+                                fill: ds.fill ?? false,
+                                tension: ds.tension ?? 0.3,
+                                spanGaps: ds.spanGaps ?? true,
+                                pointRadius: 5,
+                                pointHoverRadius: 7,
+                            }));
+                        },
+
+                        chartTitle() {
+                            return this.itemName ? 'Prijsverloop voor ' + this.itemName : 'Prijsevolutie';
+                        },
+
+                        initChart() {
+                            if (!this.$refs.canvas || typeof Chart === 'undefined') return;
+
+                            // STAP 1: Ruim ALLES op wat op dit canvas staat (zeer belangrijk!)
+                            const existingChart = Chart.getChart(this.$refs.canvas);
+                            if (existingChart) {
+                                existingChart.destroy();
+                            }
+
+                            if (chartInstance) {
+                                chartInstance.destroy();
+                                chartInstance = null;
+                            }
+
+                            // STAP 2: Als we geen data hebben, stoppen we hier (grafiek is nu leeg)
+                            if (!this.labels || this.labels.length === 0) {
+                                return;
+                            }
+
+                            // STAP 3: Teken de nieuwe grafiek
+                            const ctx = this.$refs.canvas.getContext('2d');
+                            chartInstance = new Chart(ctx, {
+                                type: 'line',
+                                data: {
+                                    labels: this.labels,
+                                    datasets: this.buildDatasets(),
                                 },
-                                y: {
-                                    beginAtZero: true,
-                                    ticks: {
-                                        callback: (value) => '€ ' + value.toFixed(2)
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    animation: {
+                                        duration: 1000,
+                                        easing: 'easeOutQuart',
                                     },
-                                    grid: {
-                                        color: 'rgba(150,150,150,0.1)'
-                                    }
-                                }
-                            },
-                            plugins: {
-                                legend: {
-                                    display: true,
-                                    position: 'top',
-                                },
-                                title: {
-                                    display: true,
-                                    text: this.chartTitle(),
-                                    font: { size: 15, weight: 'bold' },
-                                    padding: { bottom: 16 }
-                                },
-                                tooltip: {
-                                    callbacks: {
-                                        label: (context) => {
-                                            if (context.parsed.y === null) return null;
-                                            const price = new Intl.NumberFormat('nl-NL', {
-                                                style: 'currency',
-                                                currency: 'EUR'
-                                            }).format(context.parsed.y);
-                                            return ` ${context.dataset.label}: ${price}`;
+                                    transitions: {
+                                        active: {
+                                            animation: {
+                                                duration: 400
+                                            }
+                                        }
+                                    },
+                                    interaction: {
+                                        intersect: false,
+                                        mode: 'index',
+                                    },
+                                    scales: {
+                                        x: {
+                                            grid: { display: false },
+                                            ticks: { maxRotation: 45 }
+                                        },
+                                        y: {
+                                            beginAtZero: true,
+                                            ticks: {
+                                                callback: (value) => '€ ' + value.toFixed(2)
+                                            },
+                                            grid: {
+                                                color: 'rgba(150,150,150,0.1)'
+                                            }
+                                        }
+                                    },
+                                    plugins: {
+                                        legend: {
+                                            display: true,
+                                            position: 'top',
+                                        },
+                                        title: {
+                                            display: true,
+                                            text: this.chartTitle(),
+                                            font: { size: 15, weight: 'bold' },
+                                            padding: { bottom: 16 }
+                                        },
+                                        tooltip: {
+                                            callbacks: {
+                                                label: (context) => {
+                                                    if (context.parsed.y === null) return null;
+                                                    const price = new Intl.NumberFormat('nl-NL', {
+                                                        style: 'currency',
+                                                        currency: 'EUR'
+                                                    }).format(context.parsed.y);
+                                                    return ` ${context.dataset.label}: ${price}`;
+                                                }
+                                            }
                                         }
                                     }
                                 }
-                            }
+                            });
                         }
-                    });
-                }
-            }));
-        });
+                    };
+                });
+            };
+
+            if (window.Alpine) {
+                registerChart();
+            } else {
+                document.addEventListener('alpine:init', registerChart);
+            }
+        })();
     </script>
 </div>
