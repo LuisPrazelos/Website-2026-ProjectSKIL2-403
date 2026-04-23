@@ -1,4 +1,3 @@
-<<<<<<< WB-Dessert-UurEnPortie
 <div class="flex h-full w-full flex-1 flex-col gap-6 p-6">
     <div class="relative h-full flex-1 overflow-hidden rounded-[2.5rem] border border-zinc-100 dark:border-zinc-800 p-8 bg-white dark:bg-zinc-900 shadow-sm transition-all duration-500 hover:shadow-2xl">
         <!-- Header area -->
@@ -164,7 +163,7 @@
                         <button type="submit" class="flex-2 px-8 py-4 rounded-2xl bg-accent text-white font-black uppercase italic tracking-widest text-xs hover:bg-amber-700 transition-all shadow-xl shadow-accent/20 active:scale-[0.98]">
                             {{ __('Opslaan') }}
                         </button>
-=======
+
 @if ($mode === 'shop')
     {{-- Shop View (Original Layout) --}}
     <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl p-6">
@@ -349,16 +348,15 @@
                     <div class="flex justify-end">
                         <button type="button" @click="showModal = false" class="mr-2 inline-flex items-center px-4 py-2 border rounded-md text-sm bg-zinc-200 text-zinc-800 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-600">{{ __('Annuleren') }}</button>
                         <button type="submit" class="inline-flex items-center px-4 py-2 border rounded-md text-sm bg-accent text-white hover:bg-amber-700 dark:bg-accent dark:text-white dark:hover:bg-amber-500">{{ $this->editingSurplus ? __('Bijwerken') : __('Toevoegen') }}</button>
->>>>>>> main
+
                     </div>
                 </form>
             </div>
         </div>
-<<<<<<< WB-Dessert-UurEnPortie
+
     @endif
 </div>
-=======
+
     </div>
 @endif
 
->>>>>>> main
