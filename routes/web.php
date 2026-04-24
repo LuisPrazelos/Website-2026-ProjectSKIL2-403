@@ -46,7 +46,14 @@ Route::get('settings/appearance', Appearance::class)->middleware('auth')->name('
 Route::get('settings/two-factor', TwoFactor::class)->middleware(['auth', 'password.confirm'])->name('two-factor.show');
 
 // Shop & Cart
-Route::get('/surplus-shop', SurplusManager::class)->middleware('auth')->name('userSurplusShop.index');
+Route::get('/surplus-shop', function () {
+    $surpluses = Surplus::with('dessert.picture')
+        ->where('expiration_date', '>=', now())
+        ->where('total_amount', '>', 0)
+        ->orderBy('date', 'asc')
+        ->get();
+    return view('surpluses.shop', compact('surpluses'));
+})->middleware('auth')->name('userSurplusShop.index');
 Route::get('shopping-cart', ShoppingCartPage::class)->middleware('auth')->name('shopping-cart');
 Route::get('cart', ShoppingCartPage::class)->middleware('auth')->name('cart.index');
 Route::get('checkout', Checkout::class)->middleware('auth')->name('checkout');
@@ -58,7 +65,7 @@ Route::get('/deserts', function () {
     return view('deserts.index', compact('deserts'));
 })->middleware('auth')->name('deserts.index');
 
-Route::get('/workshops', WorkshopList::class)->middleware('auth')->name('workshops.index'); // Toegevoegd
+Route::get('/workshops', WorkshopList::class)->middleware('auth')->name('workshops.index');
 
 Route::get('/evenement-aanvragen', EventRequest::class)->middleware('auth')->name('event.request');
 
