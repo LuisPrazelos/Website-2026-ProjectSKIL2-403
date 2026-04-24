@@ -31,8 +31,7 @@
                 <flux:navlist.item icon="users" :href="route('workshops.index')" :current="request()->routeIs('workshops.index')" wire:navigate>{{ __('Workshops') }}</flux:navlist.item>
                 <flux:navlist.item icon="clipboard-document-list" href="#" wire:navigate>{{ __('Shopping List') }}
                 </flux:navlist.item>
-                <flux:navlist.item icon="star" :href="route('dashboard')" :current="request()->routeIs('dashboard')"
-                    wire:navigate>{{ __('Reviews') }}</flux:navlist.item>
+
             </flux:navlist.group>
 
             @if(auth()->check() && auth()->user()->isAdmin())
@@ -58,9 +57,7 @@
                     <flux:navlist.item icon="calendar" :href="route('owner.respond-order-requests')"
                         :current="request()->routeIs('owner.respond-order-requests*')" wire:navigate>
                         {{ __('Evenementen Beheren') }}</flux:navlist.item>
-                    <flux:navlist.item icon="star" :href="route('owner.reviews.index')"
-                        :current="request()->routeIs('owner.reviews.index')" wire:navigate>{{ __('Reviews Beheren') }}
-                    </flux:navlist.item>
+
                     <flux:navlist.item icon="clipboard-document-list" :href="route('shopping-list')"
                         :current="request()->routeIs('shopping-list')" wire:navigate>{{ __('Boodschappenlijst') }}
                     </flux:navlist.item>
