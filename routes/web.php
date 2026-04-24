@@ -108,3 +108,13 @@ Route::get('/setup-admin', function () {
 
     return "Admin user created successfully! You can now log in.";
 });
+
+// Temporary Migration Route - DELETE AFTER USE
+Route::get('/run-migrations', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+        return "Migrations ran successfully!<br><pre>" . \Illuminate\Support\Facades\Artisan::output() . "</pre>";
+    } catch (\Exception $e) {
+        return "Error running migrations: " . $e->getMessage();
+    }
+});
