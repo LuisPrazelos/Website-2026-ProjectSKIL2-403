@@ -5,7 +5,7 @@ namespace Database\Factories;
 use App\Models\ShoppingList;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class ShoppinglistFactory extends Factory
+class ShoppingListFactory extends Factory
 {
     protected $model = ShoppingList::class;
 
