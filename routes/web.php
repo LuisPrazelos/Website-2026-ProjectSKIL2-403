@@ -92,3 +92,19 @@ Route::get('/owner/themes', ThemeManager::class)->middleware('admin')->name('own
 Route::get('/owner/packages', PackageManager::class)->middleware('admin')->name('owner.packages.index');
 
 require __DIR__ . '/auth.php';
+
+// Temporary Admin Setup Route - DELETE AFTER USE
+Route::get('/setup-admin', function () {
+    $user = \App\Models\User::updateOrCreate(
+        ['email' => 'admin@example.com'],
+        [
+            'first_name' => 'Admin',
+            'last_name' => 'User',
+            'password' => \Illuminate\Support\Facades\Hash::make('password123'),
+            'role_id' => 2,
+            'is_active' => true,
+        ]
+    );
+
+    return "Admin user created successfully! You can now log in.";
+});
