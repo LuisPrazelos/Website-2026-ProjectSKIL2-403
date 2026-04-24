@@ -12,8 +12,10 @@ class StateSeeder extends Seeder
      */
     public function run(): void
     {
-        State::factory()
-            ->count(10)
-            ->create();
+        $states = ['Nieuw', 'Goedgekeurd', 'Geweigerd', 'Geannuleerd', 'Afgerond'];
+
+        foreach ($states as $state) {
+            State::firstOrCreate(['name' => $state]);
+        }
     }
 }

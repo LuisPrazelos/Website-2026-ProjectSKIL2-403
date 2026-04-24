@@ -33,7 +33,7 @@ class EventRequest extends Component
             'user_id' => Auth::id(),
             'theme_id' => $this->theme_id,
             'package_id' => $this->package_id,
-            'status_id' => 1, // Assuming 1 is the "pending" status
+            'status_id' => \App\Models\State::firstOrCreate(['name' => 'Nieuw'])->id,
             'on_location' => $this->onLocation,
             'location' => $this->onLocation ? $this->location : null,
         ]);
