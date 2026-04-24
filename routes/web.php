@@ -112,9 +112,9 @@ Route::get('/setup-admin', function () {
 // Temporary Migration Route - DELETE AFTER USE
 Route::get('/run-migrations', function () {
     try {
-        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
-        return "Migrations ran successfully!<br><pre>" . \Illuminate\Support\Facades\Artisan::output() . "</pre>";
+        \Illuminate\Support\Facades\Artisan::call('migrate:fresh', ['--seed' => true, '--force' => true]);
+        return "Database reset and seeded successfully!<br><pre>" . \Illuminate\Support\Facades\Artisan::output() . "</pre>";
     } catch (\Exception $e) {
-        return "Error running migrations: " . $e->getMessage();
+        return "Error resetting database: " . $e->getMessage();
     }
 });
