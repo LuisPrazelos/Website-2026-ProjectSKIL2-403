@@ -15,19 +15,20 @@
     
     <style>
         :root {
-            --primary: #c5a059;
-            --primary-dark: #a68545;
-            --dark: #0f1115;
-            --darker: #08090c;
-            --light: #f8f9fa;
-            --glass: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.1);
+            --primary: #ff8b6b; /* Soft Orange */
+            --primary-dark: #e87a5a;
+            --secondary: #ffccd5; /* Light Pink */
+            --accent: #ff4d6d; /* Vibrant Pink */
+            --dark: #2d3436;
+            --light: #ffffff;
+            --glass: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 139, 107, 0.2);
         }
 
         body {
             font-family: 'Outfit', sans-serif;
-            background-color: var(--darker);
-            color: var(--light);
+            background-color: var(--light);
+            color: var(--dark);
             overflow-x: hidden;
         }
 
@@ -42,15 +43,15 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.8)), url('/images/hero.png');
+            background: linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.2)), url('/images/hero.png');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
         }
 
         .glass-nav {
-            background: rgba(15, 17, 21, 0.8);
-            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(15px);
             border-bottom: 1px solid var(--glass-border);
             position: fixed;
             top: 0;
@@ -58,35 +59,22 @@
             z-index: 1000;
         }
 
-        .glass-card {
-            background: var(--glass);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            transition: transform 0.3s ease, border-color 0.3s ease;
-        }
-
-        .glass-card:hover {
-            transform: translateY(-10px);
-            border-color: var(--primary);
-            background: rgba(255, 255, 255, 0.05);
-        }
-
         .btn-primary {
-            background: var(--primary);
-            color: var(--darker);
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            color: white;
             font-weight: 600;
             padding: 12px 30px;
             border-radius: 50px;
             transition: all 0.3s ease;
             text-decoration: none;
             display: inline-block;
+            border: none;
         }
 
         .btn-primary:hover {
-            background: var(--primary-dark);
-            box-shadow: 0 0 20px rgba(197, 160, 89, 0.4);
-            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(255, 77, 109, 0.3);
+            transform: translateY(-2px);
+            color: white;
         }
 
         .btn-outline {
@@ -102,23 +90,13 @@
 
         .btn-outline:hover {
             background: var(--primary);
-            color: var(--darker);
+            color: white;
         }
 
         .text-gradient {
-            background: linear-gradient(45deg, #fff, var(--primary));
+            background: linear-gradient(45deg, var(--accent), var(--primary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-        }
-
-        .section-padding {
-            padding: 100px 0;
-        }
-
-        .feature-icon {
-            font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 1.5rem;
         }
 
         @keyframes fadeIn {
@@ -132,7 +110,6 @@
 
         .delay-1 { animation-delay: 0.2s; }
         .delay-2 { animation-delay: 0.4s; }
-        .delay-3 { animation-delay: 0.6s; }
     </style>
 </head>
 <body>
@@ -145,7 +122,7 @@
                 @auth
                     <a href="{{ url('/dashboard') }}" class="btn-outline py-2 px-6 text-sm">Dashboard</a>
                 @else
-                    <a href="{{ route('login') }}" class="hover:text-primary transition-colors text-sm font-semibold">Log in</a>
+                    <a href="{{ route('login') }}" class="text-dark hover:text-accent transition-colors text-sm font-semibold">Log in</a>
                     <a href="{{ route('register') }}" class="btn-primary py-2 px-6 text-sm">Registreer</a>
                 @endauth
             </div>
@@ -155,14 +132,14 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="container mx-auto px-6 text-center">
-            <h1 class="text-5xl md:text-7xl font-bold mb-6 animate-fade opacity-0">
-                Maak van elke maaltijd <br><span class="text-gradient">een onvergetelijk feest</span>
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 animate-fade opacity-0 text-dark">
+                Vier het leven met <br><span class="text-gradient">iets lekkers op tafel</span>
             </h1>
-            <p class="text-xl md:text-2xl mb-10 max-w-2xl mx-auto text-gray-300 animate-fade delay-1 opacity-0">
-                Ambachtelijke desserts, inspirerende workshops en complete arrangementen.
+            <p class="text-xl md:text-2xl mb-10 max-w-2xl mx-auto text-gray-700 animate-fade delay-1 opacity-0">
+                De mooiste desserts en leukste workshops voor een onvergetelijk feest.
             </p>
             <div class="flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-6 animate-fade delay-2 opacity-0">
-                <a href="{{ route('deserts.index') }}" class="btn-primary">Bekijk aanbod</a>
+                <a href="{{ route('deserts.index') }}" class="btn-primary shadow-lg">Bekijk ons aanbod</a>
                 @guest
                     <a href="{{ route('register') }}" class="btn-outline">Account aanmaken</a>
                 @endguest
@@ -170,42 +147,28 @@
         </div>
     </section>
 
-
-
     <!-- Footer -->
-    <footer class="py-12 border-t border-glass-border">
+    <footer class="py-12 bg-white border-t border-pink-100">
         <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
             <div class="mb-6 md:mb-0 text-gradient font-bold text-xl tracking-wider">
                 FEEST OP TAFEL
             </div>
-            <div class="flex space-x-6 text-gray-400">
-                <a href="#" class="hover:text-primary transition-colors">Algemene Voorwaarden</a>
-                <a href="#" class="hover:text-primary transition-colors">Privacy Beleid</a>
-                <a href="#" class="hover:text-primary transition-colors">Contact</a>
+            <div class="flex space-x-6 text-gray-500 text-sm">
+                <a href="#" class="hover:text-accent transition-colors">Algemene Voorwaarden</a>
+                <a href="#" class="hover:text-accent transition-colors">Privacy Beleid</a>
+                <a href="#" class="hover:text-accent transition-colors">Contact</a>
             </div>
-            <div class="mt-6 md:mt-0 text-gray-500 text-sm">
+            <div class="mt-6 md:mt-0 text-gray-400 text-xs">
                 &copy; {{ date('Y') }} Feest op Tafel. Alle rechten voorbehouden.
             </div>
         </div>
     </footer>
 
     <script>
-        // Simple scroll animation trigger
         document.addEventListener('DOMContentLoaded', function() {
-            const observerOptions = {
-                threshold: 0.1
-            };
-
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('animate-fade');
-                        entry.target.style.opacity = "1";
-                    }
-                });
-            }, observerOptions);
-
-            document.querySelectorAll('.animate-fade').forEach(el => observer.observe(el));
+            document.querySelectorAll('.animate-fade').forEach(el => {
+                el.style.opacity = "1";
+            });
         });
     </script>
 </body>
