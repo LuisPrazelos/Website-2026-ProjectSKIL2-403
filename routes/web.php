@@ -32,7 +32,7 @@ use App\Livewire\WorkshopList; // Importeer WorkshopList
 use App\Livewire\ShoppingCartPage;
 use App\Livewire\SurplusManager;
 use App\Livewire\ThemeManager;
-use App\Http\Livewire\PackageManager;
+use App\Livewire\PackageManager;
 
 Route::get('/', fn () => view('welcome'))->name('home');
 
